@@ -130,7 +130,7 @@
               </span>
               <!-- Video Link. -->
               <span class="link-block">
-                <a href="https://www.youtube.com/embed/VkBey2ZHA6E"
+                <a href="https://youtu.be/aKfmzxTyU_I"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-youtube"></i>
@@ -167,11 +167,8 @@
       -->
       <img src="teaser_final.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
       <h2 class="subtitle has-text-centered">
-        We present <span class="dnerf">DiffuScene</span>, a diffusion model for diverse and realistic indoor scene synthesis.
-        <p> </p>
-         It can facilitate
-various down-stream applications: scene completion from partial scenes (left); scene arrangements of given objects (middle);
-scene generation from a text prompt describing partial scene configurations. (right)
+        We present Motion2VecSets, a 4D diffusion model for dynamic surface reconstruction from sparse, noisy, or partial \textcolor[RGB]{108, 198, 111}{point cloud sequences}. Compared to the existing state-of-the-art method CaDeX, our method can reconstruct more plausible non-rigid object surfaces with complicated structures and achieve more robust motion tracking. 
+
       </h2>
     </div>
   </div>
@@ -270,22 +267,13 @@ scene generation from a text prompt describing partial scene configurations. (ri
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            We present DiffuScene for indoor 3D scene synthesis
-            based on a novel scene graph denoising diffusion prob-
-            abilistic model, which generates 3D instance properties
-            stored in a fully-connected scene graph and then retrieves
-            the most similar object geometry for each graph node i.e.
-            object instance which is characterized as a concatenation of
-            different attributes, including location, size, orientation, se-
-            mantic, and geometry features. Based on this scene graph,
-            we designed a diffusion model to determine the placements
-            and types of 3D instances. Our method can facilitate
-            many downstream applications, including scene comple-
-            tion, scene arrangement, and text-conditioned scene syn-
-            thesis. Experiments on the 3D-FRONT dataset show that
-            our method can synthesize more physically plausible and
-            diverse indoor scenes than state-of-the-art methods. Extensive ablation studies verify the effectiveness of our design
-            choice in scene diffusion models.
+          We introduce Motion2VecSets, a 4D diffusion model for dynamic surface reconstruction from point cloud sequences. 
+          While existing state-of-the-art methods have demonstrated success in reconstructing non-rigid objects using neural field representations, conventional feed-forward networks encounter challenges with ambiguous observations from noisy, partial, or sparse point clouds.
+          To address these challenges,  we introduce a diffusion model that explicitly learns the shape and motion distribution of non-rigid objects through an iterative denoising process of compressed latent representations. The diffusion-based prior enables more plausible and probabilistic reconstructions when handling ambiguous inputs.
+          We parameterize 4D dynamics with latent vector sets instead of using a global latent. This novel 4D representation allows us to learn local surface shape and deformation patterns, leading to more accurate non-linear motion capture and significantly improving generalizability to unseen motions and identities.
+          For more temporal-coherent object tracking, we synchronously denoise deformation latent sets and exchange information across multiple frames.
+          To avoid the computational overhead, we design an interleaved space and time attention block to alternately aggregate deformation latents along spatial and temporal domains.  
+          Extensive comparisons against the state-of-the-art methods demonstrate the superiority of our Motion2VecSets in 4D reconstruction from various imperfect observations, notably achieving a 19% improvement in Intersection over Union (IoU) compared to CaDex for reconstructing unseen individuals from sparse point clouds on the DeformingThings4D-Animals dataset 
           </p>
         </div>
       </div>
@@ -297,7 +285,7 @@ scene generation from a text prompt describing partial scene configurations. (ri
       <div class="column is-four-fifths">
         <h2 class="title is-3">Video</h2>
         <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/VkBey2ZHA6E"  
+          <iframe src="https://youtu.be/aKfmzxTyU_I"  
                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
       </div>
