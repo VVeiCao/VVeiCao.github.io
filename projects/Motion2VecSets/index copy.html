@@ -33,7 +33,8 @@
         href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/favicon.svg">
-
+  <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> -->
+  <!-- <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
   <script src="./static/js/bulma-carousel.min.js"></script>
@@ -86,9 +87,9 @@
           <h1 class="title is-1 publication-title">Motion2VecSets: 4D Latent Vector Set Diffusion for Non-rigid Shape Reconstruction and Tracking</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a href="https://vveicao.github.io">Wei Cao</a><sup>1</sup>,</span>
+              <a href="https://vveicao.github.io">Wei Cao</a><sup>1*</sup>,</span>
             <span class="author-block">
-              <a href="https://github.com/netbeifeng">Chang Luo</a><sup>1</sup>,</span>
+              <a href="https://github.com/netbeifeng">Chang Luo</a><sup>1*</sup>,</span>
             <span class="author-block">
               <a href="https://1zb.github.io/">Biao Zhang</a><sup>2</sup>,</span>
             <span class="author-block">
@@ -111,7 +112,7 @@
             <div class="publication-links">
               <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2303.14207.pdf"
+                <a href="#"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
@@ -120,7 +121,7 @@
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2303.14207.pdf"
+                <a href="#"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="ai ai-arxiv"></i>
@@ -140,8 +141,8 @@
               </span>
               <!-- Code Link. -->
               <span class="link-block">
-                <a href=""
-                   class="external-link button is-normal is-rounded is-dark">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark disabled">
                   <span class="icon">
                       <i class="fab fa-github"></i>
                   </span>
@@ -156,7 +157,7 @@
   </div>
 </section>
 
-<section class="hero teaser">
+<section class="hero teaser" >
   <div class="container is-max-desktop">
     <div class="hero-body">
       <!--
@@ -166,10 +167,11 @@
         </video>
       -->
       <img src="teaser_final.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
-      <h2 class="subtitle has-text-centered">
-        We present <span>Motion2VecSets</span>, a 4D diffusion model for dynamic surface reconstruction from sparse, noisy, or partial point cloud sequences. Compared to the existing state-of-the-art method CaDeX, our method can reconstruct more plausible non-rigid object surfaces with complicated structures and achieve more robust motion tracking. 
-
+      <h2 class="subtitle has-text-centered" style="margin-top: 10px;">
+        We present <b style="background: -webkit-linear-gradient(0deg, rgba(0,70,255,1) 0%, rgba(128,0,255,1) 50%, rgba(122,0,122,1) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Motion2VecSets</b>, a 4D diffusion model for dynamic surface reconstruction from sparse, noisy, or partial <span style="color: rgba(108, 198, 111, 1)">point cloud sequences</span>. 
+        Compared to the existing state-of-the-art method <span style="color: rgba(128, 128, 128, 1)">CaDeX</span>, our method can reconstruct more plausible non-rigid object surfaces with complicated structures and achieve more robust motion tracking. 
       </h2>
+
     </div>
   </div>
 </section>
@@ -259,8 +261,8 @@
 
 
 
-<section class="section">
-  <div class="container is-max-desktop">
+<section class="section" >
+  <div class="container is-max-desktop" style="margin-bottom:-25px;">
     <!-- Abstract. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
@@ -299,17 +301,57 @@
       
         <div class="content has-text-justified">
           <p>
-            Given a 3D scene S, we obtain its fully-connected scene graph x0, by parametrizing each object as a graph node storing all object attributes i.e., location, size, orientation, class label,
-            and latent shape code. 
-          </p>
-          
-          <p>
-            Based on a set of all possible x0, we propose DiffuScene, a denoising diffusion probabilistic model
-            for 3D scene graph generation. In the forward process, we gradually add noise to x0 until we obtain a standard Gaussian
-            noise xT. In the reverse process i.e. generative process, a denoising network iteratively cleans the noisy graph using ancestral
-            sampling. Finally, we use the denoised object features to perform shape retrieval for realistic scene synthesis.
+            Given a sequence of sparse and noisy point clouds as inputs \(\{\mathbf{P}^t\}_{t=1}^{T}\), 
+            Motion2VecSets outputs a continuous mesh sequence \(\{\mathcal{M}^t\}_{t=1}^{T}\). 
+            The initial input frame \(\mathbf{P}^1\) (top left) is used as condition in 
+            the \(\textcolor[RGB]{0, 32, 96}{\mathbf{Shape\text{ }Vector\text{ }Set\text{ }Diffusion}}\), 
+            yielding denoised shape codes \(\mathcal{S}\) for reconstructing the geometry of the reference frame 
+            \(\mathcal{M}^1\) (top right). Concurrently, the subsequent input frames \(\{\mathbf{P}^t\}_{t=2}^{T}\) 
+            (bottom left) are utilized in the 
+            \(\textcolor[RGB]{56, 87, 35}{\mathbf{Synchronized\text{ }Deformation\text{ }Vector\text{ }Sets\text{ }Diffusion}}\) 
+            to produce denoised deformation codes \(\{\mathcal{D}^t\}_{t=2}^{T}\), where each latent 
+            set \(\mathcal{D}^t\) encodes the deformation from the reference frame \(\mathcal{M}^1\) 
+            to each subsequent frame \(\mathcal{M}^t\).
           </p>
         </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths" style="position: relative; display: inline;">
+        <!-- <h2 class="title is-3">Overview</h2> -->
+        <img src="./static/images/pipeline.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+        <video style="position:absolute; bottom:8.8%; left:10.4%; width:16.3%;" autoplay  muted loop  playsinline>
+          <source src="./static/videos/pipeline/output_video.mp4"
+                  type="video/mp4">
+        </video>   
+        <video style="position:absolute; bottom:8.8%; left:42.4%; width:16.3%;" autoplay  muted loop  playsinline>
+          <source src="./static/videos/pipeline/1.mp4"
+                  type="video/mp4">
+        </video>   
+        <video style="position:absolute; bottom:8.8%; left:61.9%; width:16.3%;" autoplay  muted loop  playsinline>
+          <source src="./static/videos/pipeline/2.mp4"
+                  type="video/mp4">
+        </video>   
+        <video style="position:absolute; bottom:8.8%; left:81.4%; width:16.3%;" autoplay  muted loop  playsinline>
+          <source src="./static/videos/pipeline/3.mp4"
+                  type="video/mp4">
+        </video>   
+        <!-- <div class="content has-text-justified">
+          <p>
+            Given a sequence of sparse and noisy point clouds as inputs \(\{\mathbf{P}^t\}_{t=1}^{T}\), 
+            Motion2VecSets outputs a continuous mesh sequence \(\{\mathcal{M}^t\}_{t=1}^{T}\). 
+            The initial input frame \(\mathbf{P}^1\) (top left) is used as condition in 
+            the \(\textcolor[RGB]{0, 32, 96}{\mathbf{Shape\text{ }Vector\text{ }Set\text{ }Diffusion}}\), 
+            yielding denoised shape codes \(\mathcal{S}\) for reconstructing the geometry of the reference frame 
+            \(\mathcal{M}^1\) (top right). Concurrently, the subsequent input frames \(\{\mathbf{P}^t\}_{t=2}^{T}\) 
+            (bottom left) are utilized in the 
+            \(\textcolor[RGB]{56, 87, 35}{\mathbf{Synchronized\text{ }Deformation\text{ }Vector\text{ }Sets\text{ }Diffusion}}\) 
+            to produce denoised deformation codes \(\{\mathcal{D}^t\}_{t=2}^{T}\), where each latent 
+            set \(\mathcal{D}^t\) encodes the deformation from the reference frame \(\mathcal{M}^1\) 
+            to each subsequent frame \(\mathcal{M}^t\).
+          </p>
+        </div> -->
       </div>
     </div>
     <!--/ Method Overview. -->
@@ -784,14 +826,9 @@
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@inproceedings{
-    tang2023diffuscene,
-    title={DiffuScene: Scene Graph Denoising Diffusion Probabilistic Model for
-      Generative Indoor Scene Synthesis},
-    author={Tang, Jiapeng and Nie Yinyu and Markhasin Lev and Dai Angela and Thies Justus and Nie{\ss}ner, Matthias},
-    booktitle={arxiv},
-    year={2023},
-    }</code></pre>
+    <pre><code>
+      Placeholder
+    </code></pre>
   </div>
 </section>
 
