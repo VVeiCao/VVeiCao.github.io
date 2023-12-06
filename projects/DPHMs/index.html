@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Diffusion Parametric Head Models for Depth-based Tracking.">
+  <meta name="keywords" content="Head Reconstruction and Tracking, Diffusion Models, Parametric Models">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DPHMs: Diffusion Parametric Head Models for Depth-based Tracking</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://tangjiapeng.github.io/">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://tangjiapeng.github.io/projects/SA-ConvONet/">
+            SA-ConvONet
+          </a>
+          <a class="navbar-item" href="https://tangjiapeng.github.io/projects/NSDP/">
+            NSDP
+          </a>
+          <a class="navbar-item" href="https://tangjiapeng.github.io/projects/DiffuScene/">
+            DiffuScene
+          </a>
+        </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">DPHMs: Diffusion Parametric Head Models for Depth-based Tracking</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://tangjiapeng.github.io">Jiapeng Tang</a><sup>1</sup>,</span>
+            <span class="author-block">
+                <a href="https://www.3dunderstanding.org/">Angela Dai</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://yinyunie.github.io/">Yinyu Nie</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://tangjiapeng.github.io">Lev Markhasin</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://justusthies.github.io/">Justus Thies</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="http://niessnerlab.org/members/matthias_niessner/profile.html">Matthias Nießner</a><sup>1</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Technical University of Munich</span>
+            <span class="author-block"><sup>2</sup>Sony Semiconductor Solutions Europe</span>
+            <p> 
+            </p>
+            <span class="author-block"><sup>3</sup>Technical University of Darmstadt</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2312.01068.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2312.01068.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href="https://www.youtube.com/embed/w_EJ5LDJ7T4"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/tangjiapeng/DPHMs"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+        <video id="teaser" autoplay muted loop playsinline height="100%">
+          <source src="./static/videos/teaser.mp4"
+                  type="video/mp4">
+        </video>
+        
+      <img src="teaser.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+      <h2 class="subtitle has-text-centered">
+        We present <span class="dnerf">DPHMs</span>, a diffusion parametric head model which is used for robust head reconstruction and expression tracking from monocular depth sequences. 
+        Leveraging the DPHM diffusion prior, we effectively constrain the identity and expression codes on the underlying latent manifold when fitting to noisy and partial observations of commodity depth sensors.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            We introduce Diffusion Parametric Head Models (DPHMs), a generative model that enables robust volumetric head reconstruction and tracking from monocular depth
+          sequences. While recent volumetric head models, such as NPHMs, can now excel in representing high-fidelity head geometries, tracking and reconstruction heads 
+          from real-world single-view depth sequences remains very challenging, as the fitting to partial and noisy observations is under-constrained. 
+          To tackle these challenges, we propose a latent diffusion-based prior to regularize volumetric head reconstruction and tracking. This prior-based regularizer effectively constrains the identity and expression codes to lie on
+          the underlying latent manifold which represents plausible head shapes. To evaluate the effectiveness of the diffusion-based prior, 
+          we collect a dataset of monocular Kinect sequences consisting of various complex facial expression motions and rapid transitions. We compare our method to state-of-the-art tracking methods,
+          and demonstrate improved head identity reconstruction as well as robust expression tracking.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/w_EJ5LDJ7T4" 
+          frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video. -->
+
+  </div>
+</section>
+
+
+
+
+  <section class="section">
+
+      <!-- Novel datasets. -->
+      <!-- style="margin-top: 25px" -->
+      <div class="container is-max-desktop">
+        <div class="column is-full-width">
+          <h2 class="title has-text-centered">DPHM Kinect Dataset</h2>
+            <div class="content has-text-justified">
+                <p>
+                  We collect a dataset of monocular Kinect sequences consisting of various complex facial expression motions and rapid transitions.
+                </p>
+            </div>
+            <div class="columns is-centered">
+                <video poster="" id="dphm_kinect_color" autoplay controls muted loop playsinline height="100%">
+                  <source src="./static/videos/dphm_kinect.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+    <!--/ Animation. -->
+
+</section>
+
+<section class="section">
+      <div class="container is-max-desktop">
+          <h2 class="title has-text-centered">Comparisons with baselines</h2>
+        <div class="content has-text-justified">
+          <p>
+            Our approach demonstrates the ability to reconstruct realistic head avatars with hairs and accurately capture intricate facial expressions such as extreme mouth movements and eyelid movements.
+          </p>
+        </div>
+
+        <div style="overflow:hidden;">
+              <div class="container">
+                  <div id="post_images" class="carousel">
+                      <div class="item-1">
+                          <video poster="" autoplay="" muted loop="" style="pointer-events: none; width:100%;">
+                              <source src="./static/videos/compare_kinect.mp4" type="video/mp4">
+                          </video>
+                      </div>
+                      <div class="item-2">
+                          <video poster="" autoplay="" muted loop="" style="pointer-events: none; width:100%;">
+                              <source src="./static/videos/compare_kinect2.mp4" type="video/mp4">
+                          </video>
+                      </div>
+                      <div class="item-3">
+                          <video poster="" autoplay="" muted loop="" style="pointer-events: none; width:100%;">
+                              <source src="./static/videos/compare_mvs.mp4" type="video/mp4">
+                          </video>
+                      </div>
+                  </div>
+          </div>
+          <!-- End Hero Carousel -->
+
+
+        <h2 class="title has-text-centered">Result Gallery</h2>
+          <div class="content has-text-justified">
+            <p>
+            </p>
+          </div>
+
+          <div style="overflow:hidden;">
+                <div class="container">
+                    <div id="post_images" class="carousel">
+                        <div class="item-1">
+                            <video poster="" autoplay="" muted loop="" style="pointer-events: none; width:100%;">
+                                <source src="./static/videos/gallery/gallery1.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="item-2">
+                            <video poster="" autoplay="" muted loop="" style="pointer-events: none; width:100%;">
+                                <source src="./static/videos/gallery/gallery2.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="item-3">
+                            <video poster="" autoplay="" muted loop="" style="pointer-events: none; width:100%;">
+                                <source src="./static/videos/gallery/gallery3.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="item-4">
+                          <video poster="" autoplay="" muted loop="" style="pointer-events: none; width:100%;">
+                              <source src="./static/videos/gallery/gallery4.mp4" type="video/mp4">
+                          </video>
+                        </div>
+                        <div class="item-5">
+                          <video poster="" autoplay="" muted loop="" style="pointer-events: none; width:100%;">
+                              <source src="./static/videos/gallery/gallery5.mp4" type="video/mp4">
+                          </video>
+                        </div>
+                    </div>
+            </div>
+            <!-- End Hero Carousel -->
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+          <script>
+              bulmaCarousel.attach('#post_images', {
+                    slidesToScroll: 1,
+                    slidesToShow: 1,
+                    loop: true,
+              });
+        </script>
+      </div>
+
+
+        <!-- Method Overview. -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Overview</h2>
+            <img src="overview.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+            <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+            <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+            
+            <div class="content has-text-justified">
+              <p>
+                Given a sequence of depth maps \( I \) of \( N \) frames, our objective is to reconstruct a full-head avatar \( O \) including its expression transitions. To achieve this, we optimize the parametric latent \( \mathcal{Z} = { \mathbf{z}^{id}, \mathbf{z}^{ex}_1 , ..., \mathbf{z}^{ex}_N } \) of NPHM 
+                that can be decoded into continuous signed distance fields \( O \) by identity and expression decoders. To align with the observations, we calculate data terms \( L_{sdf} \) and Lnorm between \( I \) and \( O \). 
+                However, high-level noise still makes navigating the latent optimization extremely challenging. 
+                At the core of our method is an effective latent regularization using diffusion priors; we add Gaussian noises to \( \mathcal{Z} \) and then pass them into identity and expression diffusion models to predict perturbed noise \( \mathbf{\epsilon} \) for updating \( \mathcal{Z} \). 
+                The diffusion regularizer guides \( \mathbf{z}^{id} \) and \( \mathbf{z}^{ex}_i \) towards the individual manifold of their distributions via \( \mathbf{\epsilon}^{id} \) and \( \mathbf{\epsilon}^{ex} \), ensuring plausible head geometry reconstruction and robust tracking. To enhance
+                temporal coherence, \( L_{temp} \) penalizes inconsistency between \(\mathbf{z}^{ex}_i\)  of nearby frames. 
+              </p>
+            </div>
+          </div>
+        </div>
+        <!--/ Method Overview. -->
+
+  </section>
+
+
+
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{
+    tang2023dphms,
+    title={DPHMs: Diffusion Parametric Head Models for Depth-based Tracking},
+    author={Tang, Jiapeng and Dai Angela and Nie Yinyu and Markhasin Lev and Thies Justus and Nie{\ss}ner, Matthias},
+    booktitle={arxiv},
+    year={2023},
+    }</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="https://arxiv.org/abs/2312.01068.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/tangjiapeng/DPHMs" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Website source code is borrowed from <a
+              href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="3D Shape Modeling, Neural Implicit Field, and Surface Reconstruction.">
+    <meta name="author" content="Jiapeng Tang, 
+                                 Jiabao Lei, 
+                                 Dan Xu, 
+                                 Feiying Ma,
+                                 Kui Jia,
+                                 Lei Zhang">
+
+    <title>SA-ConvONet: Sign-Agnostic Optimization of Convolutional Occupancy Networks</title>
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="offcanvas.css" rel="stylesheet">
+
+    <link rel="icon" href="img/1-ours.gif" type="image/gif" >
+  </head>
+
+  <body>
+    <div class="container">
+
+    <div class="jumbotron">
+      <h2>SA-ConvONet: Sign-Agnostic Optimization of Convolutional Occupancy Networks</h2>
+      <p class="abstract">3D Shape Modeling, Neural Implicit Field, and Surface Reconstruction </p>
+      <p iclass="authors">
+          <a href="https://tangjiapeng.github.io/">Jiapeng Tang</a>,
+          <a href="">Jiabao Lei</a>,
+          <a href="https://www.danxurgb.net/index.html">Dan Xu</a>,
+          <a href="">Feiying Ma</a>,
+          <a href="http://kuijia.site/">Kui Jia</a>,
+          <a href="https://www4.comp.polyu.edu.hk/~cslzhang/">Lei Zhang</a>
+      </p>
+
+      <p>
+        <a class="btn btn-primary" href="https://github.com/tangjiapeng/SA-ConvONet">Code</a>
+        <a class="btn btn-primary" href="https://www.youtube.com/watch?v=kus2JEgBqQg">Video</a>
+        <a class="btn btn-primary" href="http://tangjiapeng.github.io/files/ICCV21_Slides.pdf">Slides</a>
+        <a class="btn btn-primary" href="https://openaccess.thecvf.com/content/ICCV2021/papers/Tang_SA-ConvONet_Sign-Agnostic_Optimization_of_Convolutional_Occupancy_Networks_ICCV_2021_paper.pdf">Paper</a>
+        <a class="btn btn-primary" href="https://openaccess.thecvf.com/content/ICCV2021/supplemental/Tang_SA-ConvONet_Sign-Agnostic_Optimization_ICCV_2021_supplemental.pdf">Supplemental Material</a> </p>
+	</div>
+	
+	
+	
+    <div class="section">
+         
+        <hr>
+   <!--   <iframe width="560" height="315" src="https://www.youtube.com/embed/5Plwj6lTnoM?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+          <iframe width="1060" height="557" src="https://www.youtube.com/embed/kus2JEgBqQg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> 
+
+	 <!--       <iframe width="884" height="497" src="https://www.youtube.com/watch?v=kus2JEgBqQg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>   -->
+    </div> 
+
+
+
+    <div class="section">
+         
+        <hr>
+        <p>
+            Surface reconstruction from point clouds is a fundamental problem in the computer vision and graphics community. Recent state-of-the-arts solve this problem by individually 
+            optimizing each local implicit field during inference. Without considering the geometric relationships between local fields, they typically require accurate normals
+            to avoid the sign conflict problem in overlapped regions of local fields, which severely limits their robustness to raw scans where surface normals could be unavailable. 
+            Although SAL breaks this limitation via sign-agnostic learning, further works still need to explore how to extend this technique for local shape modeling. To this end, we propose
+            to learn implicit surface reconstruction by sign-agnostic optimization of convolutional occupancy networks, to simultaneously achieve advanced scalability to large-scale scenes,
+            generality to novel shapes, and robustness to raw scans in a unified framework. Concretely, we achieve this goal by a simple yet effective design, which further optimizes the pretrained 
+            occupancy prediction networks with an unsigned cross-entropy loss during inference. The learning of occupancy fields is conditioned on convolutional features from
+            an hourglass network architecture. Extensive experimental comparisons with previous state-of-the-arts on both objectlevel and scene-level datasets demonstrate the superior accuracy 
+            of our approach for surface reconstruction from unorientated point clouds. 
+        </p>
+    </div>
+    
+     
+    <div class="section">
+        <h3>How to simultaneously achieve advanced scalability to large-scale scenes,
+            generality to novel shapes, and robustness to raw scans in a unified framework?</h3>
+        <h3>Sign-Agnostic Optimization of Convolutional Occupancy Networks</h3>
+        <hr>
+        <img src="image/pipeline.png" style="width:100%; display:block; margin-right:auto; margin-left:auto; margin-top:auto;">
+        <p>
+            We propose a simple yet effective solution that further optimizes the pre-trained 
+            occupancy prediction networks via sign-agnostic learning. The learning of occupancy fields is conditioned on convolutional features
+            from an hourglass network (e.g. U-Net).
+          </p>
+        <p>
+            Our solution is motivated by two key characteristics. The first characteristic is that, after being pre-trained on the accessible datasets
+            with ground-truth signed fields, the occupancy decoder can provide a signed field as initialization for the test-time optimization. Thus we can further 
+            apply unsigned objectives to optimize occupancy prediction networks, maximizing the consistency between the desired iso-surface with the observed 
+            un-oriented point cloud. The second characteristic is that, the U-Net aggregates both local and global information in an hourglass convolutional manner. The use
+            of local shape features not only preserves the fine-grained geometries, but also enables the surface recovery of largescale indoor scenes. The integrated global shape features
+            can enforce geometric consistency between learned local geometries and guarantee the assembly of local fields as a globally consistent one, although we do not 
+            utilize guidance from additional normal information.
+        </p>
+    </div>
+ <!--
+    <div class="section">
+        <h3>DeepVoxels: A 3D-structured Neural Scene Representation</h3>
+        <hr>
+        <p>
+            With DeepVoxels, we introduce a 3D-structured neural scene representation.
+            DeepVoxels encodes the view-dependent appearance of a 3D scene without having to explicitly model its geometry.
+            DeepVoxels is based on a Cartesian 3D grid of persistent features that learn to make use of the underlying 3D
+            scene structure. It combines insights from 3D computer vision with recent advances in learning
+            image-to-image mappings. DeepVoxels is supervised, without requiring a 3D reconstruction of the scene,
+            using a 2D re-rendering loss and enforces perspective and multi-view geometry in a principled manner.
+        </p>
+    </div>
+  -->
+    <div class="section">
+        <h3>Object-level Reconstruction</h3>
+        <hr>
+        <img src="image/shape-chair.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+		<img src="image/novelcat.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+    </div>
+      
+    <div class="section">
+        <h3>Scene-level Reconstruction</h3>
+        <hr>
+		<img src="image/synroom.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+		 </div>
+
+    <div class="section">
+        <h3>Real-world Scenes</h3>
+        <hr>
+        <img src="image/scannet.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+        <img src="image/matterport3d.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+        </div>
+      
+       
+    <div class="section">
+        <h3>Paper</h3>
+        <hr>
+        <div>
+            <div class="list-group">
+                <a href="https://openaccess.thecvf.com/content/ICCV2021/papers/Tang_SA-ConvONet_Sign-Agnostic_Optimization_of_Convolutional_Occupancy_Networks_ICCV_2021_paper.pdf" class="list-group-item">
+                    <img src="paper_thumbnails.png" style="width:100%; margin-right:-20px; margin-top:-10px;">
+                </a>
+            </div>
+        </div>
+    </div>
+      
+
+
+    <h3>Bibtex</h3>
+    <hr>
+    <div class="bibtexsection">
+    @inproceedings{tang2021sign,
+        title={SA-ConvONet: Sign-Agnostic Optimization of Convolutional Occupancy Networks},
+        author={Tang, Jiapeng and Lei, Jiabao and Xu, Dan and Ma, Feiying and Jia, Kui and Zhang, Lei},
+        booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+        year={2021}
+    }
+ 
+    </div>
+
+
+    
+    <hr>
+      <footer>
+          
+           <p>Thanks to Volodymyr Kuleshov for his website template. &copy; 2017</p>
+      </footer>
+
+    </div><!--/.container-->
+  </body>
+</html>
