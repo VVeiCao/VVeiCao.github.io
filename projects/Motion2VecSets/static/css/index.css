@@ -13,6 +13,14 @@ body {
     margin-bottom: 5px;
 }
 
+.disabled {
+  background-color: #fff;
+  border-color: #dbdbdb;
+  box-shadow: none;
+  opacity: .5;
+  cursor: not-allowed;
+}
+
 .dnerf {
   font-variant: small-caps;
 }
