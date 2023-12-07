@@ -51,29 +51,26 @@
       <span aria-hidden="true"></span>
     </a>
   </div>
-  <!-- <div class="navbar-menu">
+  <div class="navbar-menu">
     <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
       <a class="navbar-item" href="https://vveicao.github.io/">
       <span class="icon">
           <i class="fas fa-home"></i>
       </span>
-      </a> -->
+      </a> 
 
-      <!-- <div class="navbar-item has-dropdown is-hoverable">
+       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">
           More Research
         </a>
         <div class="navbar-dropdown">
-          <a class="navbar-item" href="https://tangjiapeng.github.io/projects/SA-ConvONet/">
-            SA-ConvONet
-          </a>
-          <a class="navbar-item" href="https://tangjiapeng.github.io/projects/NSDP/">
-            NSDP
+          <a class="navbar-item" href="#">
+            Motion2VecSets
           </a>
         </div>
         </div>
-      </div> -->
-    <!-- </div> -->
+      </div>
+     </div>
 
   </div>
 </nav>
@@ -101,6 +98,8 @@
           </div>
 
           <div class="is-size-5 publication-authors">
+            <span style="font-size: medium;">* Equal Contribution</span>
+            <br>
             <span class="author-block"><sup>1</sup>Technical University of Munich</span>
             </p>
             <span class="author-block"><sup>2</sup>King Abdullah University of Science and Technology</span>
@@ -169,27 +168,27 @@
       -->
       <img src="teaser_final.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
       <h2 class="subtitle has-text-centered" style="margin-top: 10px;">
-        We present <b style="background: -webkit-linear-gradient(0deg, rgba(0,70,255,1) 0%, rgba(128,0,255,1) 50%, rgba(122,0,122,1) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Motion2VecSets</b>, a 4D diffusion model for dynamic surface reconstruction from sparse, noisy, or partial <span style="color: rgba(108, 198, 111, 1)">point cloud sequences</span>. 
-        Compared to the existing state-of-the-art method <span style="color: rgba(128, 128, 128, 1)">CaDeX</span>, our method can reconstruct more plausible non-rigid object surfaces with complicated structures and achieve more robust motion tracking. 
+        We present <b style="background: -webkit-linear-gradient(0deg, rgba(0,70,255,1) 0%, rgba(128,0,255,1) 50%, rgba(122,0,122,1) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Motion2VecSets</b>, a 4D diffusion model for dynamic surface reconstruction from sparse, noisy, or partial <b style="color: rgba(108, 198, 111, 1)">point cloud sequences</b>. 
+        Compared to the existing state-of-the-art method <b style="color: rgba(128, 128, 128, 1)">CaDeX</b>, our method can reconstruct more plausible non-rigid object surfaces with complicated structures and achieve more robust motion tracking. 
       </h2>
       <div class="columns is-centered">
         <div class="column">
-          <p style="text-align: center; font-size: larger;"> <span style="color: rgba(108, 198, 111, 1)">Input</span> </p>
-            <video id="completion-bed-partial" autoplay controls muted loop playsinline height="100%">
+          <p style="text-align: center; font-size: larger;"> <b style="color: rgba(108, 198, 111, 1)">Input</b> </p>
+            <video id="completion-bed-partial" autoplay muted loop playsinline height="100%">
               <source src="./static/videos/teaser/dragon/input.mp4"
                       type="video/mp4">
             </video>         
         </div>
         <div class="column">
-          <p style="text-align: center; font-size: larger;"> <span style="color: rgba(128, 128, 128, 1)">CaDeX</span> </p>
-          <video id="completion-bed-ours-1" autoplay controls muted loop playsinline height="100%">
+          <p style="text-align: center; font-size: larger;"> <b style="color: rgba(128, 128, 128, 1)">CaDeX</b> </p>
+          <video id="completion-bed-ours-1" autoplay muted loop playsinline height="100%">
             <source src="./static/videos/teaser/dragon/cadex.mp4"
                     type="video/mp4">
           </video>
         </div>
         <div class="column">
           <p style="text-align: center; font-size: larger;"> <b style="background: -webkit-linear-gradient(0deg, rgba(0,70,255,1) 0%, rgba(128,0,255,1) 50%, rgba(122,0,122,1) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Motion2VecSets</b> </p>
-          <video id="completion-bed-ours-1" autoplay controls muted loop playsinline height="100%">
+          <video id="completion-bed-ours-1" autoplay muted loop playsinline height="100%">
             <source src="./static/videos/teaser/dragon/sync.mp4"
                     type="video/mp4">
           </video>
@@ -198,19 +197,19 @@
       </div>
       <div class="columns is-centered">
         <div class="column">
-            <video id="completion-bed-partial" autoplay controls muted loop playsinline height="100%">
+            <video id="completion-bed-partial" autoplay  muted loop playsinline height="100%">
               <source src="./static/videos/teaser/rabbit/input.mp4"
                       type="video/mp4">
             </video>         
         </div>
         <div class="column">
-            <video id="completion-bed-atiss-1" autoplay controls muted loop playsinline height="100%">
+            <video id="completion-bed-atiss-1" autoplay  muted loop playsinline height="100%">
               <source src="./static/videos/teaser/rabbit/cadex.mp4"
                       type="video/mp4">
             </video>
         </div>
         <div class="column">
-          <video id="completion-bed-atiss-2" autoplay controls muted loop playsinline height="100%">
+          <video id="completion-bed-atiss-2" autoplay  muted loop playsinline height="100%">
             <source src="./static/videos/teaser/rabbit/sync.mp4"
                     type="video/mp4">
           </video>   
@@ -341,7 +340,7 @@
     <!--/ Paper video. -->
 
     <!-- Method Overview. -->
-    <div class="columns is-centered has-text-centered">
+    <!-- <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Overview</h2>
         <img src="overview.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
@@ -362,50 +361,82 @@
           </p>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div class="columns is-centered has-text-centered">
+    <!-- <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths" style="position: relative; display: inline;">
-        <!-- <h2 class="title is-3">Overview</h2> -->
         <img src="./static/images/pipeline.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
-        <video style="position:absolute; bottom:8.8%; left:10.4%; width:16.3%;" autoplay  muted loop  playsinline>
+        <video style="position:absolute;bottom:1.5%; left:10.4%; width:16.3%;" autoplay  muted loop  playsinline>
           <source src="./static/videos/pipeline/output_video.mp4"
                   type="video/mp4">
         </video>   
-        <video style="position:absolute; bottom:8.8%; left:42.4%; width:16.3%;" autoplay  muted loop  playsinline>
+        <video style="position:absolute;bottom:1.5%; left:42.4%; width:16.3%;" autoplay  muted loop  playsinline>
           <source src="./static/videos/pipeline/1.mp4"
                   type="video/mp4">
         </video>   
-        <video style="position:absolute; bottom:8.8%; left:61.9%; width:16.3%;" autoplay  muted loop  playsinline>
+        <video style="position:absolute;bottom:1.5%; left:61.9%; width:16.3%;" autoplay  muted loop  playsinline>
           <source src="./static/videos/pipeline/2.mp4"
                   type="video/mp4">
         </video>   
-        <video style="position:absolute; bottom:8.8%; left:81.4%; width:16.3%;" autoplay  muted loop  playsinline>
+        <video style="position:absolute;bottom:1.5%; left:81.4%; width:16.3%;" autoplay  muted loop  playsinline>
           <source src="./static/videos/pipeline/3.mp4"
                   type="video/mp4">
         </video>   
-        <!-- <div class="content has-text-justified">
-          <p>
-            Given a sequence of sparse and noisy point clouds as inputs \(\{\mathbf{P}^t\}_{t=1}^{T}\), 
-            Motion2VecSets outputs a continuous mesh sequence \(\{\mathcal{M}^t\}_{t=1}^{T}\). 
-            The initial input frame \(\mathbf{P}^1\) (top left) is used as condition in 
-            the \(\textcolor[RGB]{0, 32, 96}{\mathbf{Shape\text{ }Vector\text{ }Set\text{ }Diffusion}}\), 
-            yielding denoised shape codes \(\mathcal{S}\) for reconstructing the geometry of the reference frame 
-            \(\mathcal{M}^1\) (top right). Concurrently, the subsequent input frames \(\{\mathbf{P}^t\}_{t=2}^{T}\) 
-            (bottom left) are utilized in the 
-            \(\textcolor[RGB]{56, 87, 35}{\mathbf{Synchronized\text{ }Deformation\text{ }Vector\text{ }Sets\text{ }Diffusion}}\) 
-            to produce denoised deformation codes \(\{\mathcal{D}^t\}_{t=2}^{T}\), where each latent 
-            set \(\mathcal{D}^t\) encodes the deformation from the reference frame \(\mathcal{M}^1\) 
-            to each subsequent frame \(\mathcal{M}^t\).
-          </p>
-        </div> -->
       </div>
-    </div>
+    </div> -->
     <!--/ Method Overview. -->
 
   </div>
 </section>
 
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Overview</h2>
+        <div class="content has-text-justified">
+          <!-- <p>
+            4D Reconstruction from Partial Scans.
+          </p> -->
+        </div>
+        
+        
+          <img src="overview.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+         
+          <div class="content has-text-justified">
+            <p>
+              Given a sequence of sparse and noisy point clouds as inputs \(\{\mathbf{P}^t\}_{t=1}^{T}\), 
+              Motion2VecSets outputs a continuous mesh sequence \(\{\mathcal{M}^t\}_{t=1}^{T}\). 
+              The initial input frame \(\mathbf{P}^1\) (top left) is used as condition in 
+              the \(\textcolor[RGB]{0, 32, 96}{\mathbf{Shape\text{ }Vector\text{ }Set\text{ }Diffusion}}\), 
+              yielding denoised shape codes \(\mathcal{S}\) for reconstructing the geometry of the reference frame 
+              \(\mathcal{M}^1\) (top right). Concurrently, the subsequent input frames \(\{\mathbf{P}^t\}_{t=2}^{T}\) 
+              (bottom left) are utilized in the 
+              \(\textcolor[RGB]{56, 87, 35}{\mathbf{Synchronized\text{ }Deformation\text{ }Vector\text{ }Sets\text{ }Diffusion}}\) 
+              to produce denoised deformation codes \(\{\mathcal{D}^t\}_{t=2}^{T}\), where each latent 
+              set \(\mathcal{D}^t\) encodes the deformation from the reference frame \(\mathcal{M}^1\) 
+              to each subsequent frame \(\mathcal{M}^t\).
+            </p>
+            <div class="columns is-centered has-text-centered">
+              <img src="./static/images/pipeline.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+              <video style="position:absolute; bottom:1.8%; left:8.04%; width:17.5%;" autoplay  muted loop  playsinline>
+                <source src="./static/videos/pipeline/output_video.mp4"
+                        type="video/mp4">
+              </video>   
+              <video style="position:absolute;bottom:1.8%; left:41.7%; width:17.5%;" autoplay  muted loop  playsinline>
+                <source src="./static/videos/pipeline/1.mp4"
+                        type="video/mp4">
+              </video>   
+              <video style="position:absolute;bottom:1.8%; left:62.3%; width:17.5%;" autoplay  muted loop  playsinline>
+                <source src="./static/videos/pipeline/2.mp4"
+                        type="video/mp4">
+              </video>   
+              <video style="position:absolute;bottom:1.8%; left:82.9%; width:17.5%;" autoplay  muted loop  playsinline>
+                <source src="./static/videos/pipeline/3.mp4"
+                        type="video/mp4">
+              </video>   
+            </div>
+        
+  </div>
+</section>
 
 
 <section class="section">
@@ -821,67 +852,8 @@
           </div>
     
         </div>
-        <!--/ Scene Completion. -->
-
-
-    <!-- Text-conditioned Scene Synthesis. -->
-
-
-    <!-- Scene Completion. -->
-    <!-- <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Scene Completion</h2>
-        <div class="content has-text-justified">
-          <p>
-            Scene completion from partial scenes with only 3 objects given as inputs.
-          </p>
-        </div>
-        <video id="completion" autoplay controls muted loop playsinline height="100%">
-          <source src="./static/videos/completion.mp4"
-                  type="video/mp4">
-        </video>
-      </div>
-    </div> -->
-  <!--/ Scene Completion. -->
-
-  <!-- Scene Re-arrangement. -->
-    <!-- <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h2 class="title is-3">Scene Re-arrangement</h2>
-          <div class="content has-text-justified">
-            <p>
-              Scene re-arrangements of collections of random objects. 
-            </p>
-          </div>
-          <video id="re-arrangement" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/rearrangement.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-    </div> -->
-  <!--/ Scene Re-arrangement. -->
-
-
-  <!--Text-conditioned Scene Synthesis. -->
-    <!-- <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Text-conditioned Scene Synthesis</h2>
-        <div class="content has-text-justified">
-          <p>
-            Text-conditioned scene synthesis. The input text
-            only describes a partial scene configuration.
-          </p>
-        </div>
-        <video id="text-condition" autoplay controls muted loop playsinline height="100%">
-          <source src="./static/videos/text_condition.mp4"
-                  type="video/mp4">
-        </video>
-      </div>
-    </div> -->
-  <!--/ Text-conditioned Scene Synthesis. -->
-  
   </div>
-
+</section>
 
 
 
