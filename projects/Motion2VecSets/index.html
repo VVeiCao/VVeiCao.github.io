@@ -172,6 +172,77 @@
         We present <b style="background: -webkit-linear-gradient(0deg, rgba(0,70,255,1) 0%, rgba(128,0,255,1) 50%, rgba(122,0,122,1) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Motion2VecSets</b>, a 4D diffusion model for dynamic surface reconstruction from sparse, noisy, or partial <span style="color: rgba(108, 198, 111, 1)">point cloud sequences</span>. 
         Compared to the existing state-of-the-art method <span style="color: rgba(128, 128, 128, 1)">CaDeX</span>, our method can reconstruct more plausible non-rigid object surfaces with complicated structures and achieve more robust motion tracking. 
       </h2>
+      <div class="columns is-centered">
+        <div class="column">
+          <p style="text-align: center; font-size: larger;"> Input </p>
+            <video id="completion-bed-partial" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/partial_ani_0/input.mp4"
+                      type="video/mp4">
+            </video>         
+        </div>
+        <div class="column">
+          <p style="text-align: center; font-size: larger;"> OFlow </p>
+            <video id="completion-bed-atiss-1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/partial_ani_0/oflow.mp4"
+                      type="video/mp4">
+            </video>
+        </div>
+        <div class="column">
+          <p style="text-align: center; font-size: larger;"> LPDC </p>
+          <video id="completion-bed-atiss-2" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/partial_ani_0/lpdc.mp4"
+                    type="video/mp4">
+          </video>   
+        </div>
+        <div class="column">
+          <p style="text-align: center; font-size: larger;"> CaDex </p>
+          <video id="completion-bed-ours-1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/partial_ani_0/cadex.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="column">
+          <p style="text-align: center; font-size: larger;"> Ours </p>
+          <video id="completion-bed-ours-1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/partial_ani_0/sync.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+  
+      </div>
+      <div class="columns is-centered">
+        <div class="column">
+            <video id="completion-bed-partial" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/partial_ani_1/input.mp4"
+                      type="video/mp4">
+            </video>         
+        </div>
+        <div class="column">
+            <video id="completion-bed-atiss-1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/partial_ani_1/oflow.mp4"
+                      type="video/mp4">
+            </video>
+        </div>
+        <div class="column">
+          <video id="completion-bed-atiss-2" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/partial_ani_1/lpdc.mp4"
+                    type="video/mp4">
+          </video>   
+        </div>
+        <div class="column">
+          <video id="completion-bed-ours-1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/partial_ani_1/cadex.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="column">
+          <video id="completion-bed-ours-1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/partial_ani_1/sync.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+  
+      </div>
 
     </div>
   </div>
@@ -654,6 +725,7 @@
           </div>
 
         </div>
+
         <!--/ Scene Completion. -->
     <h2 class="title is-3">More Results</h2>
         <div class="content has-text-justified">
