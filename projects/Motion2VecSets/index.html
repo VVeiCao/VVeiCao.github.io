@@ -90,10 +90,9 @@
             <span class="author-block">
               <a href="https://1zb.github.io/">Biao Zhang</a><sup>2</sup>,</span>
             <span class="author-block">
-              <a href="http://niessnerlab.org/members/matthias_niessner/profile.html">Matthias Nießner</a><sup>1</sup>
-            </span>
+              <a href="http://niessnerlab.org/members/matthias_niessner/profile.html">Matthias Nießner</a><sup>1</sup>,</span>
             <span class="author-block">
-              <a href="https://tangjiapeng.github.io">Jiapeng Tang</a><sup>1</sup>,
+              <a href="https://tangjiapeng.github.io">Jiapeng Tang</a><sup>1</sup>
             </span>
           </div>
 
@@ -159,7 +158,6 @@
 
 <section class="hero teaser" >
   <div class="container is-max-desktop">
-      <img src="teaser_final.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
       <div class="hero-body">
       <!--
         <video id="teaser" autoplay muted loop playsinline height="100%">
@@ -167,10 +165,11 @@
                   type="video/mp4">
         </video>
       -->
-      <h2 class="subtitle has-text-centered" style="margin-top: 10px;">
+      <!-- <h2 class="subtitle has-text-centered" style="margin-top: 10px;">
         We present <b style="background: -webkit-linear-gradient(0deg, rgba(0,70,255,1) 0%, rgba(128,0,255,1) 50%, rgba(122,0,122,1) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Motion2VecSets</b>, a 4D diffusion model for dynamic surface reconstruction from sparse, noisy, or partial <b style="color: rgba(108, 198, 111, 1)">point cloud sequences</b>. 
         Compared to the existing state-of-the-art method <b style="color: rgba(128, 128, 128, 1)">CaDeX</b>, our method can reconstruct more plausible non-rigid object surfaces with complicated structures and achieve more robust motion tracking. 
-      </h2>
+      </h2> -->
+      <div class="is-centered" style="width: 80%; margin: auto;">
       <div class="columns is-centered">
         <div class="column">
           <p style="text-align: center; font-size: larger;"> <b style="color: rgba(108, 198, 111, 1)">Input</b> </p>
@@ -193,7 +192,6 @@
                     type="video/mp4">
           </video>
         </div>
-  
       </div>
       <div class="columns is-centered">
         <div class="column">
@@ -213,11 +211,18 @@
             <source src="./static/videos/teaser/rabbit/sync.mp4"
                     type="video/mp4">
           </video>   
+
         </div>
 
   
       </div>
-
+      <hr class="dashed" style="margin-top: -10px;">
+      <img src="teaser_final.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+      <h2 class="subtitle has-text-centered" style="margin-top: 15px;">
+        We present <b style="background: -webkit-linear-gradient(0deg, rgba(0,70,255,1) 0%, rgba(128,0,255,1) 50%, rgba(122,0,122,1) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Motion2VecSets</b>, a 4D diffusion model for dynamic surface reconstruction from sparse, noisy, or partial <b style="color: rgba(108, 198, 111, 1)">point cloud sequences</b>. 
+        Compared to the existing state-of-the-art method <b style="color: rgba(128, 128, 128, 1)">CaDeX</b>, our method can reconstruct more plausible non-rigid object surfaces with complicated structures and achieve more robust motion tracking. 
+      </h2>
+    </div>
     </div>
   </div>
 </section>
@@ -311,7 +316,7 @@
   <div class="container is-max-desktop" style="margin-bottom:-25px;">
     <!-- Abstract. -->
     <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
+      <div>
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
@@ -321,7 +326,7 @@
           We parameterize 4D dynamics with latent vector sets instead of using a global latent. This novel 4D representation allows us to learn local surface shape and deformation patterns, leading to more accurate non-linear motion capture and significantly improving generalizability to unseen motions and identities.
           For more temporal-coherent object tracking, we synchronously denoise deformation latent sets and exchange information across multiple frames.
           To avoid the computational overhead, we design an interleaved space and time attention block to alternately aggregate deformation latents along spatial and temporal domains.  
-          Extensive comparisons against the state-of-the-art methods demonstrate the superiority of our Motion2VecSets in 4D reconstruction from various imperfect observations, notably achieving a 19% improvement in Intersection over Union (IoU) compared to CaDex for reconstructing unseen individuals from sparse point clouds on the DeformingThings4D-Animals dataset 
+          Extensive comparisons against the state-of-the-art methods demonstrate the superiority of our Motion2VecSets in 4D reconstruction from various imperfect observations, notably achieving a 19% improvement in Intersection over Union (IoU) compared to CaDex for reconstructing unseen individuals from sparse point clouds on the DeformingThings4D-Animals dataset. 
           </p>
         </div>
       </div>
@@ -390,7 +395,7 @@
 </section>
 
 <section class="section">
-  <div class="container is-max-desktop">
+  <div class="container is-max-desktop has-text-centered">
     <h2 class="title is-3">Overview</h2>
         <div class="content has-text-justified">
           <!-- <p>
@@ -861,7 +866,12 @@
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
     <pre><code>
-      Placeholder
+      @inproceedings{
+        cao2023motion,
+        title={Motion2VecSets: 4D Latent Vector Set Diffusion for Non-rigid Shape Reconstruction and Tracking},
+        author={Wei Cao and Biao Zhang and Nie{\ss}ner, Matthias and Jiapeng Tang},
+        year={2023},
+      }
     </code></pre>
   </div>
 </section>
