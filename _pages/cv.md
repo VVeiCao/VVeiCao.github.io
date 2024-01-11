@@ -8,4 +8,7 @@ cv_pdf:
 description:
 ---
 
-[Click to View My Up-to-date Curriculum Vitae[PDF]](https://vveicao.github.io/files/CV_23.01.pdf)
+
+```
+[Click to View My Up-to-date Curriculum Vitae [PDF]](https://vveicao.github.io/cv/files/CV_23.01.pdf)
+```
