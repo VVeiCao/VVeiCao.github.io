@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="Motion2VecSets: 4D Latent Vector Set Diffusion for Non-rigid Shape Reconstruction and Tracking">
+  <meta name="keywords" content="4D Reconstruction, Diffusion Models">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Motion2VecSets: 4D Latent Vector Set Diffusion for Non-rigid Shape Reconstruction and Tracking</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="https://vveicao.github.io/">
+          <span class="icon">
+            <i class="fas fa-home"></i>
+          </span>
+        </a>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            More Research
+          </a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">
+              Motion2VecSets
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </nav>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Motion2VecSets: 4D Latent Vector Set Diffusion for Non-rigid Shape
+              Reconstruction and Tracking</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://vveicao.github.io">Wei Cao</a><sup>1*</sup>,</span>
+              <span class="author-block">
+                <a href="https://github.com/netbeifeng">Chang Luo</a><sup>1*</sup>,</span>
+              <span class="author-block">
+                <a href="https://1zb.github.io/">Biao Zhang</a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="http://niessnerlab.org/members/matthias_niessner/profile.html">Matthias
+                  Nießner</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://tangjiapeng.github.io">Jiapeng Tang</a><sup>1#</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span style="font-size: medium;">* Equal Contribution</span> </span> <span style="font-size: medium;">#
+                Corresponding Author</span>
+              <br>
+              <span class="author-block"><sup>1</sup>Technical University of Munich</span>
+              </p>
+              <span class="author-block"><sup>2</sup>King Abdullah University of Science and Technology</span>
+              <!-- <p> 
+            </p>
+            <span class="author-block"><sup>2</sup>King Abdullah University of Science and Technology</span> -->
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2401.06614.pdf"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2401.06614" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <!-- Video Link. -->
+                <span class="link-block">
+                  <a href="https://youtu.be/VXI3y2o0SqY?si=pd6bVBDotKGNCYdN"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                    </span>
+                    <span>Video</span>
+                  </a>
+                </span>
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a href="https://github.com/VVeiCao/Motion2VecSets"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <!--
+        <video id="teaser" autoplay muted loop playsinline height="100%">
+          <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/teaser.mp4"
+                  type="video/mp4">
+        </video>
+      -->
+        <!-- <h2 class="subtitle has-text-centered" style="margin-top: 10px;">
+        We present <b style="background: -webkit-linear-gradient(0deg, rgba(0,70,255,1) 0%, rgba(128,0,255,1) 50%, rgba(122,0,122,1) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Motion2VecSets</b>, a 4D diffusion model for dynamic surface reconstruction from sparse, noisy, or partial <b style="color: rgba(108, 198, 111, 1)">point cloud sequences</b>. 
+        Compared to the existing state-of-the-art method <b style="color: rgba(128, 128, 128, 1)">CaDeX</b>, our method can reconstruct more plausible non-rigid object surfaces with complicated structures and achieve more robust motion tracking. 
+      </h2> -->
+        <div class="is-centered" style="width: 80%; margin: auto;">
+          <div class="columns is-centered">
+            <div class="column">
+              <p style="text-align: center; font-size: larger;"> <b style="color: rgba(108, 198, 111, 1)">Input</b> </p>
+              <video id="completion-bed-partial" autoplay muted loop playsinline height="100%">
+                <source src="./static/videos/teaser/moose_new/input.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="column">
+              <p style="text-align: center; font-size: larger;"> <b style="color: rgba(128, 128, 128, 1)">CaDeX</b> </p>
+              <video id="completion-bed-ours-1" autoplay muted loop playsinline height="100%">
+                <source src="./static/videos/teaser/moose_new/cadex.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="column">
+              <p style="text-align: center; font-size: larger;"> <b
+                  style="background: -webkit-linear-gradient(0deg, rgba(0,70,255,1) 0%, rgba(128,0,255,1) 50%, rgba(122,0,122,1) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Motion2VecSets</b>
+              </p>
+              <video id="completion-bed-ours-1" autoplay muted loop playsinline height="100%">
+                <source src="./static/videos/teaser/moose_new/sync.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="columns is-centered">
+            <div class="column">
+              <video id="completion-bed-partial" autoplay muted loop playsinline height="100%">
+                <source src="./static/videos/teaser/rabbit_new/input.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="column">
+              <video id="completion-bed-atiss-1" autoplay muted loop playsinline height="100%">
+                <source src="./static/videos/teaser/rabbit_new/cadex.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="column">
+              <video id="completion-bed-atiss-2" autoplay muted loop playsinline height="100%">
+                <source src="./static/videos/teaser/rabbit_new/sync.mp4" type="video/mp4">
+              </video>
+
+            </div>
+
+
+          </div>
+          <hr class="dashed" style="margin-top: -10px;">
+          <img src="x22.jpg" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+          <h2 class="subtitle has-text-centered" style="margin-top: 15px;">
+            We present <b
+              style="background: -webkit-linear-gradient(0deg, rgba(0,70,255,1) 0%, rgba(128,0,255,1) 50%, rgba(122,0,122,1) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Motion2VecSets</b>,
+            a 4D diffusion model for dynamic surface reconstruction from sparse, noisy, or partial <b
+              style="color: rgba(108, 198, 111, 1)">point cloud sequences</b>.
+            Compared to the existing state-of-the-art method <b style="color: rgba(128, 128, 128, 1)">CaDeX</b>, our
+            method can reconstruct more plausible non-rigid object surfaces with complicated structures and achieve more
+            robust motion tracking.
+          </h2>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- <section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title has-text-centered">Unconditional Scene Synthesis</h2>
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-Bedroom-2719">
+          <video poster="" id="Bedroom-2719" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/uncond/Bedroom-2719_8_130.mkv"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-LivingRoom-50084">
+          <video poster="" id="LivingRoom-50084" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/uncond/LivingRoom-50084_76_718.mkv"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-LivingRoom-68491">
+          <video poster="" id="LivingRoom-68491" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/uncond/LivingRoom-68491_81_650.mkv"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-SecondBedroom-35821">
+          <video poster="" id="SecondBedroom-35821" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/uncond/SecondBedroom-35821_15_393.mkv"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-LivingRoom-71071-485">
+          <video poster="" id="LivingRoom-71071-485" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/uncond/LivingRoom-71071_8_485.mkv"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-LivingRoom-71071-997">
+          <video poster="" id="LivingRoom-71071-997" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/uncond/LivingRoom-71071_8_997.mkv"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-SecondBedroom-52584">
+          <video poster="" id="SecondBedroom-52584" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/uncond/SecondBedroom-52584_24_964.mkv"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-LivingRoom-88425">
+          <video poster="" id="LivingRoom-88425" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/uncond/LivingRoom-88425_55_025.mkv"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-LivingDiningRoom-34678">
+          <video poster="" id="LivingDiningRoom-34678" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/uncond/LivingDiningRoom-34678_2_215.mkv"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-LivingDiningRoom-86944">
+          <video poster="" id="LivingDiningRoom-86944" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/uncond/LivingDiningRoom-86944_84_103.mkv"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-LivingDiningRoom-109935">
+          <video poster="" id="LivingDiningRoom-109935" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/uncond/LivingDiningRoom-109935_48_096.mkv"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-LivingDiningRoom-163914">
+          <video poster="" id="LivingDiningRoom-163914" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/uncond/LivingDiningRoom-163914_165_492.mkv"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+
+  <section class="section">
+    <div class="container is-max-desktop" style="margin-bottom:-25px;">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div>
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              We introduce Motion2VecSets, a 4D diffusion model for dynamic surface reconstruction from point cloud
+              sequences.
+              While existing state-of-the-art methods have demonstrated success in reconstructing non-rigid objects
+              using neural field representations, conventional feed-forward networks encounter challenges with ambiguous
+              observations from noisy, partial, or sparse point clouds.
+              To address these challenges, we introduce a diffusion model that explicitly learns the shape and motion
+              distribution of non-rigid objects through an iterative denoising process of compressed latent
+              representations. The diffusion-based prior enables more plausible and probabilistic reconstructions when
+              handling ambiguous inputs.
+              We parameterize 4D dynamics with latent vector sets instead of using a global latent. This novel 4D
+              representation allows us to learn local surface shape and deformation patterns, leading to more accurate
+              non-linear motion capture and significantly improving generalizability to unseen motions and identities.
+              For more temporal-coherent object tracking, we synchronously denoise deformation latent sets and exchange
+              information across multiple frames.
+              To avoid the computational overhead, we design an interleaved space and time attention block to
+              alternately aggregate deformation latents along spatial and temporal domains.
+              Extensive comparisons against the state-of-the-art methods demonstrate the superiority of our
+              Motion2VecSets in 4D reconstruction from various imperfect observations, notably achieving a 19%
+              improvement in Intersection over Union (IoU) compared to CaDex for reconstructing unseen individuals from
+              sparse point clouds on the DeformingThings4D-Animals dataset.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+
+      <!-- Paper video. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Video</h2>
+          <div class="publication-video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/VXI3y2o0SqY?si=-EycdfJHUyrZgWlT"
+              title="YouTube video player" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+          </div>
+        </div>
+        <!--/ Paper video. -->
+
+        <!-- Method Overview. -->
+        <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Overview</h2>
+        <img src="overview.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+      
+        <div class="content has-text-justified">
+          <p>
+            Given a sequence of sparse and noisy point clouds as inputs \(\{\mathbf{P}^t\}_{t=1}^{T}\), 
+            Motion2VecSets outputs a continuous mesh sequence \(\{\mathcal{M}^t\}_{t=1}^{T}\). 
+            The initial input frame \(\mathbf{P}^1\) (top left) is used as condition in 
+            the \(\textcolor[RGB]{0, 32, 96}{\mathbf{Shape\text{ }Vector\text{ }Set\text{ }Diffusion}}\), 
+            yielding denoised shape codes \(\mathcal{S}\) for reconstructing the geometry of the reference frame 
+            \(\mathcal{M}^1\) (top right). Concurrently, the subsequent input frames \(\{\mathbf{P}^t\}_{t=2}^{T}\) 
+            (bottom left) are utilized in the 
+            \(\textcolor[RGB]{56, 87, 35}{\mathbf{Synchronized\text{ }Deformation\text{ }Vector\text{ }Sets\text{ }Diffusion}}\) 
+            to produce denoised deformation codes \(\{\mathcal{D}^t\}_{t=2}^{T}\), where each latent 
+            set \(\mathcal{D}^t\) encodes the deformation from the reference frame \(\mathcal{M}^1\) 
+            to each subsequent frame \(\mathcal{M}^t\).
+          </p>
+        </div>
+      </div>
+    </div> -->
+
+        <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths" style="position: relative; display: inline;">
+        <img src="./static/images/pipeline.png" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+        <video style="position:absolute;bottom:1.5%; left:10.4%; width:16.3%;" autoplay  muted loop  playsinline>
+          <source src="./static/videos/pipeline/output_video.mp4"
+                  type="video/mp4">
+        </video>   
+        <video style="position:absolute;bottom:1.5%; left:42.4%; width:16.3%;" autoplay  muted loop  playsinline>
+          <source src="./static/videos/pipeline/1.mp4"
+                  type="video/mp4">
+        </video>   
+        <video style="position:absolute;bottom:1.5%; left:61.9%; width:16.3%;" autoplay  muted loop  playsinline>
+          <source src="./static/videos/pipeline/2.mp4"
+                  type="video/mp4">
+        </video>   
+        <video style="position:absolute;bottom:1.5%; left:81.4%; width:16.3%;" autoplay  muted loop  playsinline>
+          <source src="./static/videos/pipeline/3.mp4"
+                  type="video/mp4">
+        </video>   
+      </div>
+    </div> -->
+        <!--/ Method Overview. -->
+
+      </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop has-text-centered">
+      <h2 class="title is-3">Overview</h2>
+      <div class="content has-text-justified">
+        <!-- <p>
+            4D Reconstruction from Partial Scans.
+          </p> -->
+      </div>
+
+
+      <img src="overview.jpg" style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+
+      <div class="content has-text-justified">
+        <p>
+          Given a sequence of sparse and noisy point clouds as inputs \(\{\mathbf{P}^t\}_{t=1}^{T}\),
+          Motion2VecSets outputs a continuous mesh sequence \(\{\mathcal{M}^t\}_{t=1}^{T}\).
+          The initial input frame \(\mathbf{P}^1\) (top left) is used as condition in
+          the \(\textcolor[RGB]{0, 32, 96}{\mathbf{Shape\text{ }Vector\text{ }Set\text{ }Diffusion}}\),
+          yielding denoised shape codes \(\mathcal{S}\) for reconstructing the geometry of the reference frame
+          \(\mathcal{M}^1\) (top right). Concurrently, the subsequent input frames \(\{\mathbf{P}^t\}_{t=2}^{T}\)
+          (bottom left) are utilized in the
+          \(\textcolor[RGB]{56, 87, 35}{\mathbf{Synchronized\text{ }Deformation\text{ }Vector\text{ }Sets\text{
+          }Diffusion}}\)
+          to produce denoised deformation codes \(\{\mathcal{D}^t\}_{t=2}^{T}\), where each latent
+          set \(\mathcal{D}^t\) encodes the deformation from the reference frame \(\mathcal{M}^1\)
+          to each subsequent frame \(\mathcal{M}^t\).
+        </p>
+        <div class="columns is-centered has-text-centered">
+          <img src="./static/images/pipeline.png"
+            style="width:100%; margin-right:auto; margin-left:auto; margin-top:auto;">
+          <video style="position:absolute; bottom:1.8%; left:8.04%; width:17.5%;" autoplay muted loop playsinline>
+            <source src="./static/videos/pipeline/output_video.mp4" type="video/mp4">
+          </video>
+          <video style="position:absolute;bottom:1.8%; left:41.7%; width:17.5%;" autoplay muted loop playsinline>
+            <source src="./static/videos/pipeline/1.mp4" type="video/mp4">
+          </video>
+          <video style="position:absolute;bottom:1.8%; left:62.3%; width:17.5%;" autoplay muted loop playsinline>
+            <source src="./static/videos/pipeline/2.mp4" type="video/mp4">
+          </video>
+          <video style="position:absolute;bottom:1.8%; left:82.9%; width:17.5%;" autoplay muted loop playsinline>
+            <source src="./static/videos/pipeline/3.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+  </section>
+
+
+  <section class="section">
+    <div class="container is-max-desktop has-text-centered">
+
+      <!-- Scene Completion. -->
+      <h2 class="title is-3">4D Reconstruction from Sparse Point Clouds</h2>
+      <div class="content has-text-justified">
+        <!-- <p>
+            4D Reconstruction from Sparse Point Clouds.
+          </p> -->
+      </div>
+
+      <!-- Split Video -->
+      <div class="columns is-centered">
+        <div class="column">
+          <p style="text-align: center; font-size: larger; word-spacing: 128px; "> Input OFlow LPDC CaDex Ours </p>
+          <video class="sparse_0" id="completion-bed-partial" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/combi/sparse2.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column">
+          <p style="text-align: center; font-size: larger; "> </p>
+          <video class="sparse_0" id="completion-bed-partial" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/combi/sparse3.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column">
+          <p style="text-align: center; font-size: larger; "> </p>
+          <video class="sparse_0" id="completion-bed-partial" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/combi/sparse0.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column">
+          <p style="text-align: center; font-size: larger; "> </p>
+          <video class="sparse_0" id="completion-bed-partial" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/combi/sparse1.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+
+
+      <h2 class="title is-3">4D Reconstruction from Partial Scans</h2>
+      <div class="content has-text-justified">
+        <!-- <p>
+            4D Reconstruction from Partial Scans.
+          </p> -->
+      </div>
+
+      <!-- Split Video -->
+      <div class="columns is-centered">
+        <div class="column">
+          <p style="text-align: center; font-size: larger; word-spacing: 128px; "> Input OFlow LPDC CaDex Ours </p>
+          <video class="sparse_0" id="completion-bed-partial" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/combi/partial2.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column">
+          <p style="text-align: center; font-size: larger; "> </p>
+          <video class="sparse_0" id="completion-bed-partial" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/combi/partial3.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column">
+          <p style="text-align: center; font-size: larger; "> </p>
+          <video class="sparse_0" id="completion-bed-partial" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/combi/partial0.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column">
+          <p style="text-align: center; font-size: larger; "> </p>
+          <video class="sparse_0" id="completion-bed-partial" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/combi/partial1.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+
+      <!--/ Scene Completion. -->
+      <h2 class="title is-3">More Results</h2>
+      <div class="content has-text-justified">
+        <!-- <p>
+            More Results
+          </p> -->
+      </div>
+      <div class="columns is-centered">
+        <div class="column">
+          <p style="text-align: center; font-size: larger;"> Input </p>
+          <video id="completion-bed-partial" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/ani_0/input.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column">
+          <p style="text-align: center; font-size: larger;"> Ours </p>
+          <video id="completion-bed-atiss-1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/ani_0/sync.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column">
+          <p style="text-align: center; font-size: larger;"> Input </p>
+          <video id="completion-bed-atiss-2" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/ani_1/input.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column">
+          <p style="text-align: center; font-size: larger;"> Ours </p>
+          <video id="completion-bed-ours-1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/ani_1/sync.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+      <div class="columns is-centered">
+        <div class="column">
+          <video id="completion-bed-atiss-2" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/ani_2/input.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column">
+          <video id="completion-bed-ours-1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/ani_2/sync.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column">
+          <video id="completion-bed-atiss-2" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/human_4/input.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column">
+          <video id="completion-bed-ours-1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/human_4/sync.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+      <div class="columns is-centered">
+        <div class="column">
+          <video id="completion-bed-atiss-2" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/human_0/input.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column">
+          <video id="completion-bed-ours-1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/human_0/sync.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column">
+          <video id="completion-bed-atiss-2" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/human_1/input.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column">
+          <video id="completion-bed-ours-1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/human_1/sync.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column">
+          <video id="completion-bed-atiss-2" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/human_2/input.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column">
+          <video id="completion-bed-ours-1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/human_2/sync.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column">
+          <video id="completion-bed-atiss-2" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/human_3/input.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="column">
+          <video id="completion-bed-ours-1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gallery/human_3/sync.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@misc{cao2024motion2vecsets,
+        title={Motion2VecSets: 4D Latent Vector Set Diffusion for Non-rigid Shape Reconstruction and Tracking}, 
+        author={Wei Cao and Chang Luo and Biao Zhang and Matthias Nießner and Jiapeng Tang},
+        year={2024},
+        eprint={2401.06614},
+        archivePrefix={arXiv},
+        primaryClass={cs.CV}
+  }</code></pre>
+    </div>
+  </section>
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="#">
+          <i class="fas fa-file-pdf"></i>
+        </a>
+        <a class="icon-link" href="#" class="external-link" disabled>
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              Website source code is borrowed from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 获取所有视频元素
+    const videos = document.querySelectorAll('.sparse_0');
+
+    // 获取进度条
+    const videoProgress = document.getElementById('video-progress');
+
+    // 更新进度条位置
+    function updateProgressBar() {
+      const progressValue = (videos[0].currentTime / videos[0].duration) * 100;
+      videoProgress.value = progressValue;
+    }
+
+    // 当任何一个视频时间更新时，更新进度条
+    videos.forEach(video => {
+      video.addEventListener('timeupdate', updateProgressBar);
+    });
+
+    // 当按下进度条时，暂停所有视频
+    videoProgress.addEventListener('mousedown', function () {
+      videos.forEach(video => video.pause());
+    });
+
+    // 当松开进度条时，继续播放所有视频
+    videoProgress.addEventListener('mouseup', function () {
+      videos.forEach(video => video.play());
+    });
+
+    // 当进度条值改变时（例如拖动进度条），更新所有视频的当前时间
+    videoProgress.addEventListener('input', function () {
+      const seekTime = (videoProgress.value / 100) * videos[0].duration;
+      videos.forEach(video => (video.currentTime = seekTime));
+    });
+
+  </script>
+
+
+
+
+</body>
+
+</html>
