@@ -143,8 +143,6 @@ span.highlight {
 
 p {
   line-height: 1.5; 
-}
-p {
   text-align: justify;
   text-justify: inter-word;
 }
