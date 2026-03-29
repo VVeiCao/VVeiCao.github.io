@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html>
+<!-- ==================== 头部区域 - Head ====================
+     包含：页面元信息、CSS样式表、JavaScript脚本引入
+     ========================================================= -->
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="FreeOrbit4D enables training-free arbitrary camera redirection for monocular videos through geometry-complete 4D reconstruction.">
+  <meta name="keywords" content="FreeOrbit4D, 4D Reconstruction, Camera Redirection, Novel View Synthesis, Monocular Video, Dynamic Scene">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FreeOrbit4D: Training-free Arbitrary Camera Redirection for Monocular Videos via Geometry-Complete 4D Reconstruction</title>
+
+  <!-- Google Analytics - 网站访问统计 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZTZL4SD545"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZTZL4SD545');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./assets/icon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<!-- ==================== 第1部分：导航栏 (Navbar) ====================
+     顶部导航，包含主页链接和相关研究下拉菜单
+     - navbar-burger: 移动端汉堡菜单按钮
+     - navbar-menu: 导航菜单内容
+     - has-dropdown: 下拉菜单（More Research）
+     [已注释 - 暂时隐藏，以后可能会用]
+     ================================================================= 
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://keunhong.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+-->
+
+
+<!-- ==================== 第2部分：Hero 区域 ====================
+     论文标题、作者列表、机构信息、链接按钮
+     - publication-title: 论文标题
+     - publication-authors: 作者列表（带上标标注机构）
+     - publication-links: 链接按钮 (Paper/arXiv/Video/Code/Data)
+     [已注释 - 匿名审稿期间隐藏，录用后恢复]
+     ============================================================
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Nerfies: Deformable Neural Radiance Fields</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://keunhong.com">Keunhong Park</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://utkarshsinha.com">Utkarsh Sinha</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://jonbarron.info">Jonathan T. Barron</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="http://sofienbouaziz.com">Sofien Bouaziz</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.danbgoldman.com">Dan B Goldman</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://homes.cs.washington.edu/~seitz/">Steven M. Seitz</a><sup>1,2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="http://www.ricardomartinbrualla.com">Ricardo Martin-Brualla</a><sup>2</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Washington,</span>
+            <span class="author-block"><sup>2</sup>Google Research</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+-->
+
+<!-- ==================== 第2部分(匿名版)：Hero 区域 ====================
+     匿名审稿期间使用的简化版本，录用后删除此部分并恢复上面的完整版
+     ===================================================================== -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <!-- 论文标题 -->
+          <div class="publication-title">
+            <img src="./assets/title.png" alt="FreeOrbit4D" style="max-width: 300px; height: auto; margin-bottom: 0.5em;">
+            <h2 class="title is-2" style="font-weight: normal; margin-bottom: 1em;">FreeOrbit4D: Training-free Arbitrary Camera Redirection for Monocular Videos via Geometry-Complete 4D Reconstruction</h2>
+          </div>
+          <!-- 作者��表 -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://vveicao.github.io/">Wei Cao</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://haoz19.github.io/">Hao Zhang</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://tianfr.github.io/">Fengrui Tian</a><sup>2</sup>,</span>
+            <span class="author-block"><a href="https://yulunwu0108.github.io/">Yulun Wu</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://www.yingying.li/">Yingying Li</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://shenlong.web.illinois.edu/">Shenlong Wang</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://ningyu1991.github.io/">Ning Yu</a><sup>3</sup>,</span>
+            <span class="author-block"><a href="https://yaoyaoliu.web.illinois.edu/">Yaoyao Liu</a><sup>1</sup></span>
+          </div>
+          <!-- 机构信息 -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Illinois Urbana-Champaign,</span>
+            <span class="author-block"><sup>2</sup>University of Pennsylvania,</span>
+            <span class="author-block"><sup>3</sup>Eyeline Labs</span>
+          </div>
+
+          <!-- 链接按钮 -->
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2601.18993"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/VVeiCao/FreeOrbit4D"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 第3部分：Teaser 视频 ====================
+     展示核心成果的预览视频
+     - 自动播放、静音、循环播放
+     - 下方有简短的描述文字
+     ============================================================== -->
+<!-- <section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop playsinline height="100%">
+        <source src="./static/videos/teaser.mp4"
+                type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
+        free-viewpoint
+        portraits.
+      </h2>
+    </div>
+  </div>
+</section> -->
+
+
+<!-- ==================== 第4部分：视频轮播 (Carousel) ====================
+     使用 Bulma Carousel 组件展示多个结果视频
+     - results-carousel: 轮播容器
+     - 每个 item 包含一个自动播放的视频
+     - 可左右滑动浏览不同的结果
+     ==================================================================== -->
+<!--
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/steve.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/chair-tp.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-shiba">
+          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/shiba.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-fullbody">
+          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/fullbody.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-blueshirt">
+          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/blueshirt.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-mask">
+          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/mask.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-coffee">
+          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/coffee.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-toby">
+          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/toby2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+-->
+
+
+<!-- ==================== 第5部分：Abstract 论文摘要 ====================
+     论文的摘要内容，居中显示
+     - is-four-fifths: 占据页面4/5宽度
+     - has-text-justified: 两端对齐
+     ==================================================================== -->
+<!--
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Camera redirection aims to replay a dynamic scene from a single monocular video under a user-specified camera trajectory. However, large-angle redirection is inherently ill-posed: a monocular video captures only a narrow spatio-temporal view of a dynamic 3D scene, providing highly partial observations of the underlying 4D world. The key challenge is therefore to recover a complete and coherent plenoptic representation from this limited input, with consistent geometry and coherent motion.
+          </p>
+          <p>
+            While recent diffusion-based methods achieve impressive visual generation quality, they often break down under large-angle viewpoint changes far from the original trajectory, where missing visual grounding leads to severe geometric ambiguity and temporal inconsistency.
+          </p>
+          <p>
+            To address this, we present <b>FreeOrbit4D</b>, an effective training-free framework that tackles this geometric ambiguity by recovering a geometry-complete 4D proxy as structural grounding for video generation. We obtain this proxy by decoupling foreground and background reconstructions: we unproject the monocular video into a static background and geometry-incomplete foreground point clouds in a unified global space, then leverage an object-centric multi-view diffusion model to synthesize multi-view images and reconstruct geometry-complete foreground point clouds in canonical object space.
+          </p>
+          <p>
+            By aligning the canonical foreground point cloud to the global scene space via dense pixel-synchronized 3D–3D correspondences and projecting the geometry-complete 4D proxy onto target camera viewpoints, we provide geometric scaffolds (e.g., depth/visibility cues) that guide a conditional video diffusion model.
+          </p>
+          <p>
+            Extensive experiments show that FreeOrbit4D produces more faithful and temporally coherent redirected videos under challenging large-angle trajectories, and our geometry-complete 4D proxy further opens a potential avenue for practical applications such as edit propagation and 4D data generation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+-->
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <!-- ==================== 第6部分：嵌入 YouTube 视频 ====================
+         论文演示视频，使用 iframe 嵌入 YouTube
+         - publication-video: 响应式视频容器（16:9 比例）
+         ==================================================================== -->
+    <!-- TL;DR -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <p class="is-size-5" style="margin-bottom: 1.5em;">
+          <strong>TL;DR:</strong> FreeOrbit4D is an effective training-free method for large-angle camera redirection via geometry-complete 4D proxy.
+        </p>
+      </div>
+    </div>
+
+    <!-- Paper video 论文视频 -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <!-- <h2 class="title is-3">Video</h2> -->
+        <div class="publication-video" style="max-width: 1800px; margin: 0 auto;">
+          <video controls style="width: 100%;">
+            <source src="./assets/FreeOrbit-4_compressed.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video 论文视频结束 -->
+
+    <!-- ==================== 4D 点云可视化 ====================
+         使用 Viser 播放器展示 4D 动态点云序列
+         三列布局：左边视频 | 中间4D点云 | 右边视频
+         ======================================================= -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">4D Reconstruction Visualization</h2>
+        <div class="content has-text-justified">
+          <p>
+            Interactive 4D point cloud reconstruction results. You can rotate, zoom, and play the dynamic sequence. For the best experience, please view on a desktop browser.
+          </p>
+        </div>
+        <!-- 三列容器样式 -->
+        <style>
+          .visualization-row {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 1em;
+            margin: 1em 0;
+          }
+          .visualization-row .side-video {
+            flex: 0 0 auto;
+            text-align: center;
+          }
+          .visualization-row .side-video video {
+            width: 400px;
+            height: 400px;
+            object-fit: contain;
+            background-color: white;
+            border-radius: 0.5em;
+            box-shadow: 0 0 1em 0em rgba(0, 0, 0, 0.15);
+            display: block;
+          }
+          .visualization-row .side-video p {
+            margin-top: 0.5em;
+          }
+          .visualization-row .center-viewer {
+            flex: 0 0 auto;
+            text-align: center;
+          }
+          .visualization-row .center-viewer iframe {
+            border-radius: 0.5em;
+            width: 400px;
+            height: 400px;
+            border: none;
+            box-shadow: 0 0 1em 0em rgba(0, 0, 0, 0.15);
+            display: block;
+          }
+          @media (max-width: 1300px) {
+            .visualization-row {
+              flex-wrap: wrap;
+            }
+            .visualization-row .side-video video,
+            .visualization-row .center-viewer iframe {
+              width: 300px;
+              height: 300px;
+            }
+          }
+          /* 手机端：一行显示3个 */
+          @media (max-width: 768px) {
+            .visualization-row {
+              flex-wrap: nowrap;
+              gap: 0.3em;
+            }
+            .visualization-row .side-video video,
+            .visualization-row .center-viewer iframe {
+              width: calc(33vw - 1em);
+              height: calc(33vw - 1em);
+            }
+            .visualization-row .side-video p,
+            .visualization-row .center-viewer p {
+              font-size: 0.6em;
+            }
+          }
+        </style>
+        <!-- 第一行：Camel -->
+        <div class="visualization-row">
+          <!-- 左边：输入视频 -->
+          <div class="side-video">
+            <video autoplay muted loop playsinline>
+              <source src="./assets/camel/input_video.mp4" type="video/mp4">
+            </video>
+            <p class="is-size-7">Input Video</p>
+          </div>
+          <!-- 中间：4D 点云查看器 -->
+          <div class="center-viewer">
+            <iframe src="https://vveicao.github.io/projects/freeorbit4d/build/?playbackPath=https://vveicao.github.io/projects/freeorbit4d/assets/camel/camel_4d_v14.viser&initDistanceScale=1&initHeightOffset=0.0"></iframe>
+            <p class="is-size-7">4D Reconstruction</p>
+          </div>
+          <!-- 右边：输出视频 -->
+          <div class="side-video">
+            <video autoplay muted loop playsinline>
+              <source src="./assets/camel/output_video.mp4" type="video/mp4">
+            </video>
+            <p class="is-size-7">Output Video</p>
+          </div>
+        </div>
+
+        <!-- 第二行：Breakdance -->
+        <div class="visualization-row">
+          <!-- 左边：输入视频 -->
+          <div class="side-video">
+            <video autoplay muted loop playsinline>
+              <source src="./assets/breakdance/input_video.mp4" type="video/mp4">
+            </video>
+            <p class="is-size-7">Input Video</p>
+          </div>
+          <!-- 中间：4D 点云查看器 -->
+          <div class="center-viewer">
+            <iframe src="https://vveicao.github.io/projects/freeorbit4d/build/?playbackPath=https://vveicao.github.io/projects/freeorbit4d/assets/breakdance/breakdance_4d.viser&initDistanceScale=1&initHeightOffset=0.0"></iframe>
+            <p class="is-size-7">4D Reconstruction</p>
+          </div>
+          <!-- 右边：输出视频 -->
+          <div class="side-video">
+            <video autoplay muted loop playsinline>
+              <source src="./assets/breakdance/output_video.mp4" type="video/mp4">
+            </video>
+            <p class="is-size-7">Output Video</p>
+          </div>
+        </div>
+
+        <!-- 第三行：Unitree -->
+        <div class="visualization-row">
+          <!-- 左边：输入视频 -->
+          <div class="side-video">
+            <video autoplay muted loop playsinline>
+              <source src="./assets/unitree/input_video.m4v" type="video/mp4">
+            </video>
+            <p class="is-size-7">Input Video</p>
+          </div>
+          <!-- 中间：4D 点云查看器 -->
+          <div class="center-viewer">
+            <iframe src="https://vveicao.github.io/projects/freeorbit4d/build/?playbackPath=https://vveicao.github.io/projects/freeorbit4d/assets/unitree/unitree_4d.viser&initDistanceScale=1&initHeightOffset=0.0"></iframe>
+            <p class="is-size-7">4D Reconstruction</p>
+          </div>
+          <!-- 右边：输出视频 -->
+          <div class="side-video">
+            <video autoplay muted loop playsinline>
+              <source src="./assets/unitree/output_video.mp4" type="video/mp4">
+            </video>
+            <p class="is-size-7">Output Video</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ==================== Qualitative Visualization ====================
+     定性可视化：一行3个视频（Input + 两个轨迹）
+     ================================================================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Qualitative Visualization</h2>
+        
+        <style>
+          .qual-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+          }
+          .qual-header {
+            display: flex;
+            justify-content: center;
+            gap: 0.3em;
+            margin-bottom: 0.5em;
+          }
+          .qual-header .qual-label {
+            flex: 1;
+            max-width: 300px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.95em;
+          }
+          .qual-header .qual-label.input-label {
+            margin-right: 2em;
+          }
+          .qual-row {
+            display: flex;
+            justify-content: center;
+            gap: 0.3em;
+            margin-bottom: 1em;
+          }
+          .qual-row .qual-video {
+            flex: 1;
+            max-width: 300px;
+          }
+          .qual-row .qual-video.input-video {
+            margin-right: 2em;
+          }
+          .qual-row .qual-video video {
+            width: 100%;
+            height: auto;
+            border-radius: 0.3em;
+            box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.1);
+          }
+        </style>
+
+        <div class="qual-container">
+          <!-- 标题（只写一次） -->
+          <div class="qual-header">
+            <div class="qual-label input-label">Input Video</div>
+            <div class="qual-label">Trajectory #1</div>
+            <div class="qual-label">Trajectory #2</div>
+          </div>
+
+          <!-- bear -->
+          <div class="qual-row">
+            <div class="qual-video input-video"><video autoplay muted loop playsinline><source src="./assets/two_views/bear/original_images.mp4" type="video/mp4"></video></div>
+            <div class="qual-video"><video autoplay muted loop playsinline><source src="./assets/two_views/bear/output_video_1.mp4" type="video/mp4"></video></div>
+            <div class="qual-video"><video autoplay muted loop playsinline><source src="./assets/two_views/bear/output_video_2.mp4" type="video/mp4"></video></div>
+          </div>
+
+          <!-- duck -->
+          <div class="qual-row">
+            <div class="qual-video input-video"><video autoplay muted loop playsinline><source src="./assets/two_views/duck/original_images.mp4" type="video/mp4"></video></div>
+            <div class="qual-video"><video autoplay muted loop playsinline><source src="./assets/two_views/duck/output_video_1.mp4" type="video/mp4"></video></div>
+            <div class="qual-video"><video autoplay muted loop playsinline><source src="./assets/two_views/duck/output_video_2.mp4" type="video/mp4"></video></div>
+          </div>
+
+          <!-- hike -->
+          <div class="qual-row">
+            <div class="qual-video input-video"><video autoplay muted loop playsinline><source src="./assets/two_views/hike/original_images.mp4" type="video/mp4"></video></div>
+            <div class="qual-video"><video autoplay muted loop playsinline><source src="./assets/two_views/hike/output_video.mp4" type="video/mp4"></video></div>
+            <div class="qual-video"><video autoplay muted loop playsinline><source src="./assets/two_views/hike/output_video_2.mp4" type="video/mp4"></video></div>
+          </div>
+
+          <!-- lecun2 (commented out)
+          <div class="qual-row">
+            <div class="qual-video input-video"><video autoplay muted loop playsinline><source src="./assets/two_views/lecun2/original_images.mp4" type="video/mp4"></video></div>
+            <div class="qual-video"><video autoplay muted loop playsinline><source src="./assets/two_views/lecun2/output_video_1.mp4" type="video/mp4"></video></div>
+            <div class="qual-video"><video autoplay muted loop playsinline><source src="./assets/two_views/lecun2/output_video_2.mp4" type="video/mp4"></video></div>
+          </div>
+          -->
+
+          <!-- robot1 -->
+          <div class="qual-row">
+            <div class="qual-video input-video"><video autoplay muted loop playsinline><source src="./assets/two_views/robot1/original_images.mp4" type="video/mp4"></video></div>
+            <div class="qual-video"><video autoplay muted loop playsinline><source src="./assets/two_views/robot1/output_video.mp4" type="video/mp4"></video></div>
+            <div class="qual-video"><video autoplay muted loop playsinline><source src="./assets/two_views/robot1/output_video_2.mp4" type="video/mp4"></video></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== Quantitative Results ====================
+     定量对比结果：多行布局 + 响应式适配
+     ============================================================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Quantitative Results</h2>
+        
+        <!-- 对比视频样式 + 响应式 -->
+        <style>
+          .comparison-container {
+            width: 100%;
+            overflow-x: auto;
+          }
+          .comparison-header {
+            display: flex;
+            justify-content: center;
+            flex-wrap: nowrap; /* 桌面端不换行 */
+            gap: 0.2em;
+            margin-bottom: 0.5em;
+          }
+          .comparison-header .method-name {
+            flex: 1 1 0;
+            max-width: 180px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.85em;
+          }
+          .comparison-header .method-name.input-label {
+            margin-right: 0.5em;
+          }
+          .comparison-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: nowrap; /* 桌面端不换行 */
+            gap: 0.15em;
+            margin-bottom: 0.8em;
+          }
+          .comparison-row .comp-video {
+            flex: 1 1 0;
+            max-width: 180px;
+            text-align: center;
+          }
+          .comparison-row .comp-video.input-video {
+            margin-right: 0.5em;
+          }
+          .comparison-row .comp-video video {
+            width: 100%;
+            height: auto;
+            border-radius: 0.3em;
+            box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.1);
+          }
+          /* 视频上方的方法名标签 - 桌面端隐藏 */
+          .comp-video .video-label {
+            display: none;
+            font-size: 0.75em;
+            font-weight: bold;
+            margin-bottom: 0.2em;
+            color: #363636;
+          }
+          /* Input 用 Seaborn 绿色 */
+          .comp-video .video-label.label-input {
+            color: #2ca02c;
+          }
+          /* FreeOrbit4D 用 Seaborn 蓝色 */
+          .comp-video .video-label.label-ours {
+            color: #1f77b4;
+          }
+          /* 手机端标签按钮 - 桌面端隐藏 */
+          .mobile-tabs {
+            display: none;
+          }
+          
+          /* 手机端响应式：屏幕宽度 < 768px */
+          @media screen and (max-width: 768px) {
+            .comparison-header {
+              display: none; /* 手机端隐藏统一的方法名称行 */
+            }
+            /* 手机端标签按钮 */
+            .mobile-tabs {
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: center;
+              gap: 0.4em;
+              margin-bottom: 1em;
+            }
+            .mobile-tab {
+              padding: 0.4em 0.8em;
+              border: 2px solid #ddd;
+              border-radius: 0.5em;
+              cursor: pointer;
+              font-size: 0.8em;
+              background: white;
+              transition: all 0.2s;
+            }
+            .mobile-tab.active {
+              background: #3273dc;
+              color: white;
+              border-color: #3273dc;
+            }
+            /* 手机端隐藏非激活的 case */
+            .comparison-row {
+              display: none;
+              flex-wrap: wrap;
+              justify-content: center;
+              gap: 0.5em;
+            }
+            .comparison-row.mobile-active {
+              display: flex;
+            }
+            .comparison-row .comp-video {
+              flex: 0 0 calc(33.33% - 0.5em); /* 3个一行 */
+              max-width: calc(33.33% - 0.5em);
+            }
+            .comparison-row .comp-video.input-video {
+              margin-right: 0;
+            }
+            .comparison-row .comp-video video {
+              width: 100%;
+            }
+            /* 手机端显示每个视频的标签 */
+            .comp-video .video-label {
+              display: block;
+            }
+          }
+          
+          /* 更小屏幕：< 480px，2个一行 */
+          @media screen and (max-width: 480px) {
+            .comparison-row .comp-video {
+              flex: 0 0 calc(50% - 0.5em);
+              max-width: calc(50% - 0.5em);
+            }
+          }
+        </style>
+
+        <div class="comparison-container">
+          <!-- 手机端标签按钮 -->
+          <div class="mobile-tabs">
+            <span class="mobile-tab active" data-case="0">BMX</span>
+            <span class="mobile-tab" data-case="1">Breakdance</span>
+            <span class="mobile-tab" data-case="2">Camel</span>
+            <span class="mobile-tab" data-case="3">Car Round</span>
+            <span class="mobile-tab" data-case="4">Car Turn</span>
+            <span class="mobile-tab" data-case="5">Horse</span>
+            <span class="mobile-tab" data-case="6">Swing</span>
+          </div>
+
+          <!-- 方法名称（桌面端显示） -->
+          <div class="comparison-header">
+            <div class="method-name input-label" style="color: #2ca02c;">Input Video</div>
+            <div class="method-name">ReCamMaster</div>
+            <div class="method-name">TrajectoryCrafter</div>
+            <div class="method-name">EX4D</div>
+            <div class="method-name">GEN3C</div>
+            <div class="method-name">CogNVS</div>
+            <div class="method-name" style="color: #1f77b4;">FreeOrbit4D</div>
+          </div>
+
+          <!-- Case 1: bmx-bumps_yaw_-120 -->
+          <div class="comparison-row mobile-active" data-case="0">
+            <div class="comp-video input-video"><span class="video-label label-input">Input</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/bmx-bumps_yaw_-120/4dcrafter_original_images.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">ReCamMaster</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/bmx-bumps_yaw_-120/recam_output_yaw_-120p0.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">TrajectoryCrafter</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/bmx-bumps_yaw_-120/trajcrafter_gen.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">EX4D</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/bmx-bumps_yaw_-120/ex4d_output_yaw_-120.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">GEN3C</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/bmx-bumps_yaw_-120/gen3c_bmx-bumps_yaw_arc_-120.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">CogNVS</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/bmx-bumps_yaw_-120/cognvs_output.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label label-ours">FreeOrbit4D</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/bmx-bumps_yaw_-120/4dcrafter_output_video.mp4" type="video/mp4"></video></div>
+          </div>
+
+          <!-- Case 2: breakdance -->
+          <div class="comparison-row" data-case="1">
+            <div class="comp-video input-video"><span class="video-label label-input">Input</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/breakdance/4dcrafter_original_images.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">ReCamMaster</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/breakdance/recam_output_yaw_100p0.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">TrajectoryCrafter</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/breakdance/trajcrafter_gen.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">EX4D</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/breakdance/ex4d_output_yaw_100.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">GEN3C</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/breakdance/gen3c_breakdance_yaw_arc_100_0.5.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">CogNVS</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/breakdance/cognvs_output.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label label-ours">FreeOrbit4D</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/breakdance/4dcrafter_output_video.mp4" type="video/mp4"></video></div>
+          </div>
+
+          <!-- Case 3: camel_yaw_-120 -->
+          <div class="comparison-row" data-case="2">
+            <div class="comp-video input-video"><span class="video-label label-input">Input</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/camel_yaw_-120/4dcrafter_original_images.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">ReCamMaster</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/camel_yaw_-120/recam_output_cam_120.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">TrajectoryCrafter</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/camel_yaw_-120/trajcrafter_gen.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">EX4D</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/camel_yaw_-120/ex4d_output_yaw_-120.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">GEN3C</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/camel_yaw_-120/gen3c_camel_yaw_arc_-120.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">CogNVS</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/camel_yaw_-120/cognvs_output.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label label-ours">FreeOrbit4D</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/camel_yaw_-120/4dcrafter_output_video.mp4" type="video/mp4"></video></div>
+          </div>
+
+          <!-- Case 4: car-roundabout_yaw_-120 -->
+          <div class="comparison-row" data-case="3">
+            <div class="comp-video input-video"><span class="video-label label-input">Input</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/car-roundabout_yaw_-120/4dcrafter_original_images.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">ReCamMaster</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/car-roundabout_yaw_-120/recam_output_yaw_-120p0.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">TrajectoryCrafter</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/car-roundabout_yaw_-120/trajcrafter_gen.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">EX4D</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/car-roundabout_yaw_-120/ex4d_output_yaw_-120.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">GEN3C</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/car-roundabout_yaw_-120/gen3c_car-roundabout_yaw_arc_-120.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">CogNVS</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/car-roundabout_yaw_-120/cognvs_output.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label label-ours">FreeOrbit4D</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/car-roundabout_yaw_-120/4dcrafter_output_video.mp4" type="video/mp4"></video></div>
+          </div>
+
+          <!-- Case 5: car-turn_yaw_-120 -->
+          <div class="comparison-row" data-case="4">
+            <div class="comp-video input-video"><span class="video-label label-input">Input</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/car-turn_yaw_-120/4dcrafter_original_images.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">ReCamMaster</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/car-turn_yaw_-120/recam_output_yaw_-120p0.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">TrajectoryCrafter</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/car-turn_yaw_-120/trajcrafter_gen.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">EX4D</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/car-turn_yaw_-120/ex4d_output_yaw_-120.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">GEN3C</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/car-turn_yaw_-120/gen3c_car-turn_yaw_arc_-120.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">CogNVS</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/car-turn_yaw_-120/cognvs_output.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label label-ours">FreeOrbit4D</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/car-turn_yaw_-120/4dcrafter_output_video.mp4" type="video/mp4"></video></div>
+          </div>
+
+          <!-- Case 6: horse_jum_high_yaw_-120 -->
+          <div class="comparison-row" data-case="5">
+            <div class="comp-video input-video"><span class="video-label label-input">Input</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/horse_jum_high_yaw_-120/4dcrafter_original_images.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">ReCamMaster</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/horse_jum_high_yaw_-120/recam_output_yaw_-120p0.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">TrajectoryCrafter</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/horse_jum_high_yaw_-120/trajcrafter_gen.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">EX4D</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/horse_jum_high_yaw_-120/ex4d_output_yaw_-120.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">GEN3C</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/horse_jum_high_yaw_-120/gen3c_horsejump-high_yaw_arc_-120.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">CogNVS</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/horse_jum_high_yaw_-120/cognvs_output.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label label-ours">FreeOrbit4D</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/horse_jum_high_yaw_-120/4dcrafter_output_video.mp4" type="video/mp4"></video></div>
+          </div>
+
+          <!-- Case 7: swing_yaw_-120 -->
+          <div class="comparison-row" data-case="6">
+            <div class="comp-video input-video"><span class="video-label label-input">Input</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/swing_yaw_-120/4dcrafter_original_images.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">ReCamMaster</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/swing_yaw_-120/recam_output_yaw_-120p0.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">TrajectoryCrafter</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/swing_yaw_-120/trajcrafter_gen.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">EX4D</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/swing_yaw_-120/ex4d_output_yaw_-120.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">GEN3C</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/swing_yaw_-120/gen3c_swing_yaw_arc_-120.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label">CogNVS</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/swing_yaw_-120/cognvs_output.mp4" type="video/mp4"></video></div>
+            <div class="comp-video"><span class="video-label label-ours">FreeOrbit4D</span><video autoplay muted loop playsinline><source src="./assets/Comparison_flat/swing_yaw_-120/4dcrafter_output_video.mp4" type="video/mp4"></video></div>
+          </div>
+
+        </div>
+
+        <!-- 手机端标签切换脚本 -->
+        <script>
+          document.querySelectorAll('.mobile-tab').forEach(function(tab) {
+            tab.addEventListener('click', function() {
+              var caseId = this.dataset.case;
+              // 更新标签激活状态
+              document.querySelectorAll('.mobile-tab').forEach(function(t) { t.classList.remove('active'); });
+              this.classList.add('active');
+              // 更新视频行显示
+              document.querySelectorAll('.comparison-row').forEach(function(row) {
+                row.classList.remove('mobile-active');
+                row.querySelectorAll('video').forEach(function(v) { v.pause(); });
+              });
+              var activeRow = document.querySelector('.comparison-row[data-case="' + caseId + '"]');
+              activeRow.classList.add('mobile-active');
+              activeRow.querySelectorAll('video').forEach(function(v) { v.currentTime = 0; v.play(); });
+            });
+          });
+        </script>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== 第7部分：Related Links 相关工作链接 ====================
+         列出相关的研究工作和参考链接
+         =========================================================================== -->
+<!--
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Related Links</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            There's a lot of excellent work that was introduced around the same time as ours.
+          </p>
+          <p>
+            <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an idea similar to our windowed position encoding for coarse-to-fine optimization.
+          </p>
+          <p>
+            <a href="https://www.albertpumarola.com/research/D-NeRF/index.html">D-NeRF</a> and <a href="https://gvv.mpi-inf.mpg.de/projects/nonrigid_nerf/">NR-NeRF</a>
+            both use deformation fields to model non-rigid scenes.
+          </p>
+          <p>
+            Some works model videos with a NeRF by directly modulating the density, such as <a href="https://video-nerf.github.io/">Video-NeRF</a>, <a href="https://www.cs.cornell.edu/~zl548/NSFF/">NSFF</a>, and <a href="https://neural-3d-video.github.io/">DyNeRF</a>
+          </p>
+          <p>
+            There are probably many more by the time you are reading this. Check out <a href="https://dellaert.github.io/NeRF/">Frank Dellart's survey on recent NeRF papers</a>, and <a href="https://github.com/yenchenlin/awesome-NeRF">Yen-Chen Lin's curated list of NeRF papers</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+-->
+
+
+<!-- ==================== 第10部分：BibTeX 引用格式 ====================
+     提供论文的 BibTeX 引用格式，方便他人引用
+     =================================================================== -->
+<!--
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{park2021nerfies,
+  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
+  title     = {Nerfies: Deformable Neural Radiance Fields},
+  journal   = {ICCV},
+  year      = {2021},
+}</code></pre>
+  </div>
+</section>
+-->
+
+
+<!-- ==================== Application 应用展示 ====================
+     标签栏切换不同应用场景的视频
+     ============================================================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Application</h2>
+        
+        <style>
+          .app-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+          }
+          .app-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1.5em;
+            margin-bottom: 1.5em;
+            flex-wrap: wrap;
+          }
+          .app-tab {
+            cursor: pointer;
+            text-align: center;
+            padding: 0.5em;
+            border-radius: 0.5em;
+            border: 3px solid transparent;
+            transition: border-color 0.2s;
+          }
+          .app-tab:hover {
+            border-color: #dbdbdb;
+          }
+          .app-tab.active {
+            border-color: #3273dc;
+          }
+          .app-tab img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 0.3em;
+            box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.1);
+          }
+          .app-tab p {
+            margin-top: 0.5em;
+            font-size: 0.8em;
+            font-weight: bold;
+            line-height: 1.2;
+          }
+          .app-video-container {
+            width: 100%;
+          }
+          .app-video-row {
+            display: none;
+            justify-content: center;
+            gap: 1em;
+          }
+          .app-video-row.active {
+            display: flex;
+          }
+          .app-video-item {
+            flex: 1;
+            max-width: 400px;
+            text-align: center;
+          }
+          .app-video-item video {
+            width: 100%;
+            border-radius: 0.5em;
+            box-shadow: 0 0 1em rgba(0, 0, 0, 0.15);
+          }
+          .app-video-item p {
+            margin-top: 0.5em;
+            font-size: 0.9em;
+            font-weight: bold;
+          }
+        </style>
+
+        <div class="app-container">
+          <!-- 标签栏 -->
+          <div class="app-tabs">
+            <div class="app-tab active" onclick="switchAppVideo('color')">
+              <img src="./assets/application/color.png" alt="Color Editing">
+              <p>Appearance<br>Editing (Color)</p>
+            </div>
+            <div class="app-tab" onclick="switchAppVideo('shape')">
+              <img src="./assets/application/shape.png" alt="Geometry Scaling">
+              <p>Geometry<br>Editing (Scaling)</p>
+            </div>
+            <div class="app-tab" onclick="switchAppVideo('style')">
+              <img src="./assets/application/style.png" alt="Style Editing">
+              <p>Appearance<br>Editing (Style)</p>
+            </div>
+            <div class="app-tab" onclick="switchAppVideo('camel')">
+              <img src="./assets/application/camel.png" alt="Composition">
+              <p>Geometry<br>Editing (Composition)</p>
+            </div>
+          </div>
+
+          <!-- 视频区域 -->
+          <div class="app-video-container">
+            <!-- Color -->
+            <div class="app-video-row active" id="app-row-color">
+              <div class="app-video-item">
+                <video autoplay muted loop playsinline><source src="./assets/application/input.m4v" type="video/mp4"></video>
+                <p>Original</p>
+              </div>
+              <div class="app-video-item">
+                <video autoplay muted loop playsinline><source src="./assets/application/color.m4v" type="video/mp4"></video>
+                <p>Edited</p>
+              </div>
+            </div>
+            <!-- Shape -->
+            <div class="app-video-row" id="app-row-shape">
+              <div class="app-video-item">
+                <video autoplay muted loop playsinline><source src="./assets/application/input.m4v" type="video/mp4"></video>
+                <p>Original</p>
+              </div>
+              <div class="app-video-item">
+                <video autoplay muted loop playsinline><source src="./assets/application/shape.m4v" type="video/mp4"></video>
+                <p>Edited</p>
+              </div>
+            </div>
+            <!-- Style -->
+            <div class="app-video-row" id="app-row-style">
+              <div class="app-video-item">
+                <video autoplay muted loop playsinline><source src="./assets/application/input.m4v" type="video/mp4"></video>
+                <p>Original</p>
+              </div>
+              <div class="app-video-item">
+                <video autoplay muted loop playsinline><source src="./assets/application/style.m4v" type="video/mp4"></video>
+                <p>Edited</p>
+              </div>
+            </div>
+            <!-- Camel -->
+            <div class="app-video-row" id="app-row-camel">
+              <div class="app-video-item">
+                <video autoplay muted loop playsinline><source src="./assets/application/input.m4v" type="video/mp4"></video>
+                <p>Original</p>
+              </div>
+              <div class="app-video-item">
+                <video autoplay muted loop playsinline><source src="./assets/application/camel.m4v" type="video/mp4"></video>
+                <p>Edited</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          function switchAppVideo(name) {
+            // 移除所有 active 状态
+            document.querySelectorAll('.app-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.app-video-row').forEach(row => {
+              row.classList.remove('active');
+              row.querySelectorAll('video').forEach(v => v.pause());
+            });
+            // 激活选中的标签和视频
+            event.currentTarget.classList.add('active');
+            const activeRow = document.getElementById('app-row-' + name);
+            activeRow.classList.add('active');
+            activeRow.querySelectorAll('video').forEach(v => v.play());
+          }
+        </script>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== 第11部分：Footer 页脚 ====================
+     页脚和版权声明
+     - 包含 PDF 和 GitHub 图标链接
+     - 网站许可证信息（CC BY-SA 4.0）
+     - 模板来源说明
+     =============================================================== -->
+<footer class="footer">
+  <div class="container">
+    <!-- 模板说明 -->
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered">
+          <p>
+            This webpage template is adapted from <a href="https://nerfies.github.io">Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // 减慢 Qualitative Visualization 和 Quantitative Results 视频的播放速度
+  document.addEventListener('DOMContentLoaded', function() {
+    // 只在桌面端设置 playbackRate，移动端保持默认速度以确保兼容性
+    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+    
+    if (!isMobile) {
+      // 选择 Qualitative, Quantitative, Application 中的所有视频
+      var qualVideos = document.querySelectorAll('.qual-video video, .comp-video video, .app-video-item video');
+      qualVideos.forEach(function(video) {
+        video.playbackRate = 0.7; // 桌面端 0.7 倍速
+      });
+    }
+  });
+</script>
+</body>
+</html>
+<!-- ==================== 网站结构总结 ====================
+     1. 导航栏 (Navbar) - 顶部导航
+     2. Hero 区域 - 标题、作者、链接按钮
+     3. Teaser 视频 - 核心成果预览
+     4. 视频轮播 - 多个结果展示
+     5. Abstract - 论文摘要
+     6. YouTube 视频 - 论文演示
+     7. Visual Effects / Matting - 两列视觉效果
+     8. Animation - 交互式滑块插值
+     9. Related Links - 相关工作
+     10. BibTeX - 引用格式
+     11. Footer - 页脚版权
+     ======================================================= -->
