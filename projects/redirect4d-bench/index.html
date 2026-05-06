@@ -710,21 +710,6 @@
         </thead>
         <tbody>
           <tr>
-            <td class="col-method">TrajectoryCrafter</td>
-            <td class="col-video"><video autoplay muted loop playsinline><source src="web_assets/cases/wolf/tc.mp4" type="video/mp4"></video></td>
-            <td class="col-metric">0.284</td>
-            <td class="col-metric">0.948</td>
-            <td class="col-metric">0.802</td>
-            <td class="col-metric">0.733</td>
-            <td class="col-metric">0.903</td>
-            <td class="col-metric">0.933</td>
-            <td class="col-metric">0.964</td>
-            <td class="col-metric">0.440</td>
-            <td class="col-metric best">0.741</td>
-            <td class="col-metric">0.265</td>
-            <td class="col-he fail"><span class="he-mark">😞</span><span>fails<span class="he-note">distorts the wolf body</span></span></td>
-          </tr>
-          <tr>
             <td class="col-method">ReCamMaster</td>
             <td class="col-video"><video autoplay muted loop playsinline><source src="web_assets/cases/wolf/rcm.mp4" type="video/mp4"></video></td>
             <td class="col-metric best">0.314</td>
@@ -737,7 +722,22 @@
             <td class="col-metric best">0.569</td>
             <td class="col-metric">0.715</td>
             <td class="col-metric best">0.313</td>
-            <td class="col-he fail"><span class="he-mark">😞</span><span>fails<span class="he-note">camera barely moves; ignores the requested arc</span></span></td>
+            <td class="col-he fail"><span class="he-mark">❌</span><span class="he-note">Does not follow trajectory</span></td>
+          </tr>
+          <tr>
+            <td class="col-method">TrajectoryCrafter</td>
+            <td class="col-video"><video autoplay muted loop playsinline><source src="web_assets/cases/wolf/tc.mp4" type="video/mp4"></video></td>
+            <td class="col-metric">0.284</td>
+            <td class="col-metric">0.948</td>
+            <td class="col-metric">0.802</td>
+            <td class="col-metric">0.733</td>
+            <td class="col-metric">0.903</td>
+            <td class="col-metric">0.933</td>
+            <td class="col-metric">0.964</td>
+            <td class="col-metric">0.440</td>
+            <td class="col-metric best">0.741</td>
+            <td class="col-metric">0.265</td>
+            <td class="col-he fail"><span class="he-mark">❌</span><span class="he-note">Distorted geometry</span></td>
           </tr>
           <tr>
             <td class="col-method">GEN3C</td>
@@ -752,7 +752,7 @@
             <td class="col-metric">0.546</td>
             <td class="col-metric">0.660</td>
             <td class="col-metric">0.293</td>
-            <td class="col-he fail"><span class="he-mark">😞</span><span>fails<span class="he-note">subject placed at the wrong target-view location</span></span></td>
+            <td class="col-he fail"><span class="he-mark">❌</span><span class="he-note">Distorted geometry</span></td>
           </tr>
           <tr>
             <td class="col-method">FreeOrbit4D</td>
@@ -767,7 +767,7 @@
             <td class="col-metric">0.531</td>
             <td class="col-metric">0.565</td>
             <td class="col-metric">0.293</td>
-            <td class="col-he pass"><span class="he-mark">😊</span><span>only correct<span class="he-note">follows the requested path; subject intact in target view</span></span></td>
+            <td class="col-he pass"><span class="he-mark">✅</span><span class="he-note">Looks good!</span></td>
           </tr>
         </tbody>
       </table>
@@ -974,7 +974,7 @@
         <td class="col-m ">0.498</td>
         <td class="col-m best">0.748</td>
         <td class="col-m ">0.223</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m ">3.99</td>
         <td class="col-m ">0.15</td>
         <td class="col-m best">1.000</td>
@@ -994,7 +994,7 @@
         <td class="col-m ">0.507</td>
         <td class="col-m ">0.709</td>
         <td class="col-m ">0.219</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m ">27.31</td>
         <td class="col-m ">0.73</td>
         <td class="col-m best">1.000</td>
@@ -1014,7 +1014,7 @@
         <td class="col-m ">0.498</td>
         <td class="col-m ">0.685</td>
         <td class="col-m ">0.215</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m ">7.10</td>
         <td class="col-m ">0.16</td>
         <td class="col-m best">1.000</td>
@@ -1034,7 +1034,7 @@
         <td class="col-m best">0.554</td>
         <td class="col-m ">0.703</td>
         <td class="col-m best">0.223</td>
-        <td class="col-he pass">😊</td>
+        <td class="col-he pass">✅</td>
         <td class="col-m best">0.79</td>
         <td class="col-m best">0.03</td>
         <td class="col-m best">1.000</td>
@@ -1099,7 +1099,7 @@
         <td class="col-m ">0.429</td>
         <td class="col-m best">0.652</td>
         <td class="col-m best">0.310</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m ">4.12</td>
         <td class="col-m ">0.27</td>
         <td class="col-m best">1.000</td>
@@ -1119,7 +1119,7 @@
         <td class="col-m best">0.549</td>
         <td class="col-m ">0.648</td>
         <td class="col-m ">0.294</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m ">31.93</td>
         <td class="col-m ">0.84</td>
         <td class="col-m best">1.000</td>
@@ -1139,7 +1139,7 @@
         <td class="col-m ">0.471</td>
         <td class="col-m ">0.571</td>
         <td class="col-m ">0.305</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m ">23.95</td>
         <td class="col-m ">0.67</td>
         <td class="col-m best">1.000</td>
@@ -1159,7 +1159,7 @@
         <td class="col-m ">0.516</td>
         <td class="col-m ">0.628</td>
         <td class="col-m ">0.279</td>
-        <td class="col-he pass">😊</td>
+        <td class="col-he pass">✅</td>
         <td class="col-m best">3.53</td>
         <td class="col-m best">0.16</td>
         <td class="col-m best">1.000</td>
@@ -1224,7 +1224,7 @@
         <td class="col-m ">0.533</td>
         <td class="col-m ">0.530</td>
         <td class="col-m ">0.277</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m ">14.63</td>
         <td class="col-m ">1.16</td>
         <td class="col-m best">1.000</td>
@@ -1244,7 +1244,7 @@
         <td class="col-m ">0.547</td>
         <td class="col-m ">0.566</td>
         <td class="col-m ">0.302</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m ">24.85</td>
         <td class="col-m ">0.67</td>
         <td class="col-m best">1.000</td>
@@ -1264,7 +1264,7 @@
         <td class="col-m ">0.502</td>
         <td class="col-m ">0.549</td>
         <td class="col-m best">0.306</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m ">18.84</td>
         <td class="col-m ">0.78</td>
         <td class="col-m best">1.000</td>
@@ -1284,7 +1284,7 @@
         <td class="col-m best">0.569</td>
         <td class="col-m best">0.585</td>
         <td class="col-m ">0.305</td>
-        <td class="col-he pass">😊</td>
+        <td class="col-he pass">✅</td>
         <td class="col-m best">12.10</td>
         <td class="col-m best">0.64</td>
         <td class="col-m best">1.000</td>
@@ -1349,7 +1349,7 @@
         <td class="col-m ">0.418</td>
         <td class="col-m best">0.697</td>
         <td class="col-m ">0.253</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m best">3.05</td>
         <td class="col-m ">0.16</td>
         <td class="col-m best">1.000</td>
@@ -1369,7 +1369,7 @@
         <td class="col-m best">0.472</td>
         <td class="col-m ">0.690</td>
         <td class="col-m best">0.294</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m ">32.94</td>
         <td class="col-m ">0.90</td>
         <td class="col-m best">1.000</td>
@@ -1389,7 +1389,7 @@
         <td class="col-m ">0.430</td>
         <td class="col-m ">0.552</td>
         <td class="col-m ">0.280</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m ">10.17</td>
         <td class="col-m ">0.11</td>
         <td class="col-m best">1.000</td>
@@ -1409,7 +1409,7 @@
         <td class="col-m ">0.466</td>
         <td class="col-m ">0.693</td>
         <td class="col-m ">0.285</td>
-        <td class="col-he pass">😊</td>
+        <td class="col-he pass">✅</td>
         <td class="col-m ">4.20</td>
         <td class="col-m best">0.09</td>
         <td class="col-m best">1.000</td>
@@ -1474,7 +1474,7 @@
         <td class="col-m ">0.394</td>
         <td class="col-m best">0.691</td>
         <td class="col-m ">0.266</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m ">4.84</td>
         <td class="col-m ">0.56</td>
         <td class="col-m best">1.000</td>
@@ -1494,7 +1494,7 @@
         <td class="col-m ">0.479</td>
         <td class="col-m ">0.685</td>
         <td class="col-m ">0.329</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m ">19.47</td>
         <td class="col-m ">1.03</td>
         <td class="col-m best">1.000</td>
@@ -1514,7 +1514,7 @@
         <td class="col-m best">0.516</td>
         <td class="col-m ">0.575</td>
         <td class="col-m ">0.332</td>
-        <td class="col-he fail">😞</td>
+        <td class="col-he fail">❌</td>
         <td class="col-m ">3.47</td>
         <td class="col-m ">0.35</td>
         <td class="col-m best">1.000</td>
@@ -1534,7 +1534,7 @@
         <td class="col-m ">0.467</td>
         <td class="col-m ">0.680</td>
         <td class="col-m best">0.352</td>
-        <td class="col-he pass">😊</td>
+        <td class="col-he pass">✅</td>
         <td class="col-m best">3.28</td>
         <td class="col-m best">0.34</td>
         <td class="col-m best">1.000</td>
