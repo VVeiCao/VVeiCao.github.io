@@ -813,24 +813,6 @@
     <p class="section-desc">Each Redirect4D-Bench track ships with a source RGB clip, the reconstructed 4D point cloud, and per-trajectory pseudo-GT mask + depth. The interactive viewer overlays the foreground/background point cloud, the <span style="color:#2891ff; font-weight:600;">target trajectory</span> (blue), and the <span style="color:#eb5a69; font-weight:600;">original source-video trajectory</span> (red).</p>
 
     <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/camel/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Camel</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/camel.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/camel/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/camel/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
-    </div>
-    <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/bear/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Bear</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/bear.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/bear/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/bear/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
-    </div>
-    <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/dancer53/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Dancer</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/dancer53.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/dancer53/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/dancer53/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
-    </div>
-    <div class="data-case-row">
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/deer/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Deer</p></div>
       <div class="data-case-cell"><iframe src="web_assets/viewers/deer.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/deer/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
@@ -916,7 +898,6 @@
     <div class="cmp-tabs" id="cmpTabs">
       <span class="cmp-tab active" data-case="camel">Camel</span>
       <span class="cmp-tab" data-case="bear">Bear</span>
-      <span class="cmp-tab" data-case="dancer53">Dancer</span>
       <span class="cmp-tab" data-case="deer">Deer</span>
       <span class="cmp-tab" data-case="robot_qzs016">Robot</span>
     </div>
@@ -1168,131 +1149,6 @@
         <td class="col-m best">1.000</td>
         <td class="col-m best">0.981</td>
         <td class="col-m best">0.981</td>
-      </tr>
-    </tbody></table></div>
-</div>
-<div class="cmp-pane" data-case="dancer53" style="display:none">
-  <p class="cmp-case-label">Dancer &middot; yaw 90 / pitch -10 / roll -10</p>
-  <div class="cmp-videos">
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/dancer53/tc.mp4" type="video/mp4"></video><div class="cmp-vname">TrajectoryCrafter</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/dancer53/rcm.mp4" type="video/mp4"></video><div class="cmp-vname">ReCamMaster</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/dancer53/gen3c.mp4" type="video/mp4"></video><div class="cmp-vname">GEN3C</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/dancer53/r4d.mp4" type="video/mp4"></video><div class="cmp-vname">FreeOrbit4D</div></div>
-  </div>
-  <div class="cmp-table-wrap"><table class="cmp-table">
-    <thead>
-      <tr>
-        <th rowspan="3" class="col-method">Method</th>
-        <th class="band band-trad" colspan="10">Traditional video metrics</th>
-        <th rowspan="3" class="col-he">Human</th>
-        <th class="band band-r4d" colspan="6">Redirect4D-Bench metrics</th>
-      </tr>
-      <tr>
-        <th class="grp" colspan="3">CLIP&nbsp;↑</th>
-        <th class="grp" colspan="7">VBench&nbsp;↑</th>
-        <th class="grp" colspan="2">Camera acc.&nbsp;↓</th>
-        <th class="grp" colspan="2">Object fid.&nbsp;↑</th>
-        <th class="grp" colspan="2">Subject loc.&nbsp;↑</th>
-      </tr>
-      <tr>
-        <th class="col-m">T</th>
-        <th class="col-m">F</th>
-        <th class="col-m">V</th>
-        <th class="col-m">SC</th>
-        <th class="col-m">BG</th>
-        <th class="col-m">TF</th>
-        <th class="col-m">MS</th>
-        <th class="col-m">AQ</th>
-        <th class="col-m">IQ</th>
-        <th class="col-m">OC</th>
-        <th class="col-m">RotErr</th>
-        <th class="col-m">TransErr</th>
-        <th class="col-m">D</th>
-        <th class="col-m">R</th>
-        <th class="col-m">cIoU</th>
-        <th class="col-m">R·cIoU</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="">
-        <td class="col-method">TrajectoryCrafter</td>
-        <td class="col-m ">0.330</td>
-        <td class="col-m ">0.954</td>
-        <td class="col-m ">0.846</td>
-        <td class="col-m ">0.855</td>
-        <td class="col-m ">0.872</td>
-        <td class="col-m ">0.935</td>
-        <td class="col-m ">0.975</td>
-        <td class="col-m ">0.533</td>
-        <td class="col-m ">0.530</td>
-        <td class="col-m ">0.277</td>
-        <td class="col-he fail">❌</td>
-        <td class="col-m ">14.63</td>
-        <td class="col-m ">1.16</td>
-        <td class="col-m best">1.000</td>
-        <td class="col-m ">0.756</td>
-        <td class="col-m ">0.407</td>
-        <td class="col-m ">0.308</td>
-      </tr>
-      <tr class="">
-        <td class="col-method">ReCamMaster</td>
-        <td class="col-m ">0.318</td>
-        <td class="col-m best">0.976</td>
-        <td class="col-m ">0.863</td>
-        <td class="col-m best">0.898</td>
-        <td class="col-m ">0.889</td>
-        <td class="col-m best">0.969</td>
-        <td class="col-m best">0.988</td>
-        <td class="col-m ">0.547</td>
-        <td class="col-m ">0.566</td>
-        <td class="col-m ">0.302</td>
-        <td class="col-he fail">❌</td>
-        <td class="col-m ">24.85</td>
-        <td class="col-m ">0.67</td>
-        <td class="col-m best">1.000</td>
-        <td class="col-m best">1.000</td>
-        <td class="col-m ">0.043</td>
-        <td class="col-m ">0.043</td>
-      </tr>
-      <tr class="">
-        <td class="col-method">GEN3C</td>
-        <td class="col-m best">0.349</td>
-        <td class="col-m ">0.963</td>
-        <td class="col-m best">0.881</td>
-        <td class="col-m ">0.827</td>
-        <td class="col-m ">0.886</td>
-        <td class="col-m ">0.940</td>
-        <td class="col-m ">0.981</td>
-        <td class="col-m ">0.502</td>
-        <td class="col-m ">0.549</td>
-        <td class="col-m best">0.306</td>
-        <td class="col-he fail">❌</td>
-        <td class="col-m ">18.84</td>
-        <td class="col-m ">0.78</td>
-        <td class="col-m best">1.000</td>
-        <td class="col-m ">0.800</td>
-        <td class="col-m ">0.373</td>
-        <td class="col-m ">0.298</td>
-      </tr>
-      <tr class="r4d-row">
-        <td class="col-method">FreeOrbit4D</td>
-        <td class="col-m ">0.343</td>
-        <td class="col-m ">0.967</td>
-        <td class="col-m ">0.875</td>
-        <td class="col-m ">0.873</td>
-        <td class="col-m best">0.917</td>
-        <td class="col-m ">0.940</td>
-        <td class="col-m ">0.974</td>
-        <td class="col-m best">0.569</td>
-        <td class="col-m best">0.585</td>
-        <td class="col-m ">0.305</td>
-        <td class="col-he pass">✅</td>
-        <td class="col-m best">12.10</td>
-        <td class="col-m best">0.64</td>
-        <td class="col-m best">1.000</td>
-        <td class="col-m best">1.000</td>
-        <td class="col-m best">0.886</td>
-        <td class="col-m best">0.886</td>
       </tr>
     </tbody></table></div>
 </div>
