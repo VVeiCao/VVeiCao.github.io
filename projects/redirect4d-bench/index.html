@@ -620,8 +620,8 @@
 <section>
   <div class="container-wide">
     <h2 class="section-title">Motivation</h2>
-    <p class="section-desc"><strong>Camera redirection</strong> takes a monocular source video and replays the same dynamic event along a user-requested camera trajectory. A successful output must do two things: <em>follow the requested camera motion</em>, AND <em>preserve the foreground subject in the target view</em>.</p>
-    <p class="section-desc"><strong>High video-metric scores do not imply successful camera redirection.</strong> The table scores the same wolf case on every CLIP and VBench metric: per-column winners (in red) scatter across all four baselines, yet those wins do not align with the human verdict, which picks the only output that actually follows the target trajectory and keeps the wolf intact in the target view.</p>
+    <p class="section-desc"><strong>Camera redirection</strong> takes a monocular source video and replays the same dynamic event along a user-requested camera trajectory.</p>
+    <p class="section-desc"><strong>High video-metric scores do not imply successful camera redirection.</strong> On the wolf comparison below, per-column CLIP/VBench winners (red) are spread across the baselines, yet none of those winning videos completes the task: ReCamMaster barely orbits the wolf, TrajectoryCrafter distorts it, and Gen3C places it at the wrong target-view location. Only FreeOrbit4D follows the requested trajectory while keeping the wolf intact, matching the human verdict.</p>
 
     <div class="motiv-block">
       <!-- Top: source video + interactive 4D viewer side by side -->
@@ -746,7 +746,7 @@
 <section>
   <div class="container">
     <h2 class="section-title">Construction Pipeline</h2>
-    <p class="section-desc">Source RGB and source mask drive a reconstruction stack that recovers geometry-complete foreground 4D point clouds and a VIPE/LyRA background. Target trajectories then render rendered_images, rendered_depths, rendered_mask. A frozen prompt feeds the Wan generator, and MaskRefine produces the pseudo-GT target mask used for evaluation.</p>
+    <p class="section-desc">Source clips are curated from in-the-wild YouTube videos: category-level queries fetch candidates, which are split into shot-level clips and turned into object-centric crops with Grounded-SAM masks. Each clip's RGB + mask drives a reconstruction stack that recovers geometry-complete foreground 4D point clouds and a ViPE background. Target trajectories then render depth and rough masks; a frozen prompt feeds the Wan generator, and MaskRefine produces the pseudo-GT target mask used for evaluation.</p>
     <figure class="asset-figure">
       <img class="asset-img" src="web_assets/images/construction_pipeline.png" alt="Construction pipeline">
     </figure>
