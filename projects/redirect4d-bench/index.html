@@ -351,10 +351,12 @@
     width: 100%;
     border-radius: 6px;
     border: 1px solid var(--border);
-    overflow: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .motiv-table {
     width: 100%;
+    min-width: 1100px;
     border-collapse: collapse;
     background: var(--bg);
     table-layout: fixed;
@@ -412,7 +414,7 @@
     color: var(--text);
   }
   .motiv-table td.col-metric.best {
-    color: var(--accent-red);
+    color: var(--accent-green);
     font-weight: 700;
   }
   .motiv-table td.col-he {
@@ -431,9 +433,9 @@
     font-family: 'Google Sans', 'Noto Sans', sans-serif;
   }
   .motiv-table td.col-he.fail .he-mark { color: var(--text-mute); }
-  .motiv-table td.col-he.pass .he-mark { color: var(--accent-red); }
+  .motiv-table td.col-he.pass .he-mark { color: var(--accent-green); }
   .motiv-table td.col-he.pass {
-    color: var(--accent-red);
+    color: var(--accent-green);
     font-weight: 600;
   }
   .motiv-table td.col-he .he-note {
@@ -443,7 +445,7 @@
     display: block;
     margin-top: 4px;
   }
-  .motiv-table td.col-he.pass .he-note { color: var(--accent-red); opacity: 0.85; }
+  .motiv-table td.col-he.pass .he-note { color: var(--accent-green); opacity: 0.85; }
 
   /* Comparison section */
   .cmp-tabs {
@@ -488,9 +490,9 @@
   }
   .cmp-vname { margin-top: 8px; font-size: 0.95rem; color: var(--text); font-weight: 500; }
 
-  .cmp-table-wrap { width: 100%; border-radius: 6px; border: 1px solid var(--border); overflow: hidden; }
+  .cmp-table-wrap { width: 100%; border-radius: 6px; border: 1px solid var(--border); overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .cmp-table {
-    width: 100%; border-collapse: collapse; background: var(--bg);
+    width: 100%; min-width: 1100px; border-collapse: collapse; background: var(--bg);
     table-layout: fixed;
   }
   .cmp-table th, .cmp-table td {
@@ -521,8 +523,8 @@
     color: var(--text-dim);
   }
   .cmp-table thead th.band-r4d {
-    background: rgba(220, 38, 38, 0.08);
-    color: var(--accent-red);
+    background: rgba(5, 150, 105, 0.08);
+    color: var(--accent-green);
   }
   .cmp-table thead th.grp {
     color: var(--accent-blue);
@@ -535,7 +537,7 @@
     font-size: 0.85rem;
   }
   .cmp-table tbody tr.r4d-row td.col-method { color: var(--accent-blue); font-weight: 700; }
-  .cmp-table td.best { color: var(--accent-red); font-weight: 700; }
+  .cmp-table td.best { color: var(--accent-green); font-weight: 700; }
   .cmp-table th.col-he, .cmp-table td.col-he {
     width: 5.5%; text-align: center; padding: 4px 2px;
     background: var(--bg-card);
@@ -546,7 +548,7 @@
     font-size: 0.78rem; font-weight: 700; color: var(--text);
   }
   .cmp-table tbody td.col-he { font-size: 1.35rem; line-height: 1; }
-  .cmp-table td.col-he.pass { color: var(--accent-red); }
+  .cmp-table td.col-he.pass { color: var(--accent-green); }
   .cmp-table td.col-he.fail { color: var(--text-mute); }
 
   /* Data Case section */
@@ -772,7 +774,7 @@
         </tbody>
       </table>
       </div>
-      <p class="metric-note"><strong>CLIP-T/F/V</strong>: text, adjacent-frame, and source-video consistency. <strong>VBench</strong>: SC subject, BG background, TF temporal-flickering, MS motion-smoothness, AQ aesthetic, IQ imaging, OC overall consistency. Per-column best in <span style="color:var(--accent-red); font-weight:600;">red</span>. The CLIP/VBench winners scatter across all four methods, while the human verdict points to the only one that completes the redirection.</p>
+      <p class="metric-note"><strong>CLIP-T/F/V</strong>: text, adjacent-frame, and source-video consistency. <strong>VBench</strong>: SC subject, BG background, TF temporal-flickering, MS motion-smoothness, AQ aesthetic, IQ imaging, OC overall consistency. Per-column best in <span style="color:var(--accent-green); font-weight:600;">green</span>. The CLIP/VBench winners scatter across all four methods, while the human verdict points to the only one that completes the redirection.</p>
     </div>
   </div>
 </section>
@@ -909,7 +911,7 @@
 <section>
   <div class="container-wide">
     <h2 class="section-title">Comparison</h2>
-    <p class="section-desc">Four representative cases, each scored with the full <em>CLIP&nbsp;+&nbsp;VBench</em> stack alongside Redirect4D-Bench's <em>Camera&nbsp;accuracy</em>, <em>Object&nbsp;fidelity</em>, and <em>Subject&nbsp;localization</em> metrics. Per-column best in <span style="color:var(--accent-red); font-weight:600;">red</span>. Click a case to switch.</p>
+    <p class="section-desc">Four representative cases, each scored with the full <em>CLIP&nbsp;+&nbsp;VBench</em> stack alongside Redirect4D-Bench's <em>Camera&nbsp;accuracy</em>, <em>Object&nbsp;fidelity</em>, and <em>Subject&nbsp;localization</em> metrics. Per-column best in <span style="color:var(--accent-green); font-weight:600;">green</span>. Click a case to switch.</p>
 
     <div class="cmp-tabs" id="cmpTabs">
       <span class="cmp-tab active" data-case="camel">Camel</span>
