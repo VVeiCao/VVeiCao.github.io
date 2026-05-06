@@ -571,6 +571,39 @@
     text-align: center;
   }
 
+  /* BibTeX section */
+  .bibtex-block {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    position: relative;
+  }
+  .bibtex-block pre {
+    margin: 0;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text);
+    white-space: pre;
+  }
+  .bibtex-copy {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-dim);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .bibtex-copy:hover { color: var(--text); border-color: var(--accent-blue); }
+
   /* Footer */
   footer {
     padding: 28px 24px;
@@ -610,9 +643,11 @@
     </div>
 
     <div class="links">
+      <a class="btn" href="redirect4d-bench.pdf" target="_blank" rel="noopener"><span class="icon"><i class="fas fa-file-pdf"></i></span><span>PDF</span></a>
       <a class="btn" href="#" target="_blank" rel="noopener"><span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv (coming soon)</span></a>
       <a class="btn" href="https://github.com/VVeiCao/redirect4d-bench" target="_blank" rel="noopener"><span class="icon"><i class="fab fa-github"></i></span><span>Code</span></a>
       <a class="btn" href="https://huggingface.co/datasets/vveicao/redirect4d-bench" target="_blank" rel="noopener"><span class="icon">🤗</span><span>Dataset</span></a>
+      <a class="btn" href="#bibtex"><span class="icon"><i class="fas fa-quote-left"></i></span><span>BibTeX</span></a>
     </div>
     <p class="tldr">
       <strong>TL;DR:</strong> Redirect4D-Bench is a dataset and benchmark for camera redirection of monocular dynamic videos, with per-clip pseudo-4D references that directly measure camera following and subject placement.
@@ -1529,6 +1564,40 @@
       });
     }
     tabs.forEach(t => t.addEventListener('click', () => activate(t.dataset.case)));
+  })();
+</script>
+
+<!-- BibTeX -->
+<section id="bibtex">
+  <div class="container-wide">
+    <h2 class="section-title">BibTeX</h2>
+    <p class="section-desc">If you find Redirect4D-Bench useful, please cite the paper. The arXiv identifier will be added once the preprint is online.</p>
+    <div class="bibtex-block">
+      <button class="bibtex-copy" id="bibtexCopy">Copy</button>
+<pre id="bibtexText">@misc{cao2026redirect4d,
+  title         = {Redirect4D-Bench: A Dataset and Benchmark for Camera Redirection of Monocular Dynamic Videos with Pseudo-4D References},
+  author        = {Wei Cao and Hao Zhang and Jiapeng Tang and Yulun Wu and Yingying Li and Ning Yu and Shenlong Wang and Yaoyao Liu},
+  year          = {2026},
+  eprint        = {XXXX.XXXXX},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV},
+}</pre>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    const btn = document.getElementById('bibtexCopy');
+    const pre = document.getElementById('bibtexText');
+    if (!btn || !pre) return;
+    btn.addEventListener('click', () => {
+      navigator.clipboard.writeText(pre.innerText).then(() => {
+        const original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = original; }, 1600);
+      }).catch(() => { btn.textContent = 'Copy failed'; });
+    });
   })();
 </script>
 
