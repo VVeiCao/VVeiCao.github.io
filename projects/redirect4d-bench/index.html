@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Redirect4D-Bench: a benchmark for camera redirection on monocular dynamic videos.">
+<meta name="description" content="Redirect4D-Bench: a scalable benchmark for camera redirection of monocular dynamic videos, with pseudo-4D ground truth and two new metrics (camera accuracy, subject fidelity).">
 <title>Redirect4D-Bench: A Scalable Benchmark for Camera Redirection of Monocular Dynamic Videos with Pseudo-4D Ground Truth</title>
 
 <link rel="icon" type="image/png" href="web_assets/icons/small_icon.png">
@@ -787,7 +787,7 @@
 <section>
   <div class="container">
     <h2 class="section-title">Construction Pipeline</h2>
-    <p class="section-desc">Source clips are curated from in-the-wild YouTube videos: category-level queries fetch candidates, which are split into shot-level clips and turned into object-centric crops with Grounded-SAM masks. Each clip's RGB + mask drives a reconstruction stack that recovers geometry-complete foreground 4D point clouds and a ViPE background. Target trajectories then render depth and rough masks; a frozen prompt feeds the Wan generator, and MaskRefine produces the pseudo-GT target mask used for evaluation.</p>
+    <p class="section-desc">Construction is fully <strong>training-free</strong>, so the benchmark scales as more source clips are added. Source clips are curated from in-the-wild YouTube videos: category-level queries fetch candidates, which are split into shot-level clips and turned into object-centric crops with Grounded-SAM masks. Each clip's RGB + mask drives a reconstruction stack that recovers geometry-complete foreground 4D point clouds and a ViPE background. Target trajectories then render depth and rough masks; a frozen prompt feeds the Wan generator, and MaskRefine produces the pseudo-GT target mask used for evaluation.</p>
     <figure class="asset-figure">
       <img class="asset-img" src="web_assets/images/construction_pipeline.png" alt="Construction pipeline">
     </figure>
