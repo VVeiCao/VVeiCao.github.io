@@ -65,6 +65,9 @@
 
 a {
   color: #1772d0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
   text-decoration: none;
 }
 
@@ -79,14 +82,17 @@ td,
 th,
 tr,
 p,
-a {
+li {
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
   font-size: 14px;
+  line-height: 1.45;
 }
 
 strong {
-  font-family: 'Lato', Verdana, Helvetica, sans-serif;
-  font-size: 14px;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
+  line-height: inherit;
 }
 
 h2 {
@@ -94,19 +100,76 @@ h2 {
   font-weight: normal;
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
   font-size: 22px;
+  line-height: 1.25;
 }
 
 .papertitle {
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
   font-size: 14px;
   font-weight: 700;
+  line-height: 1.35;
+}
+
+.venue-main,
+a.venue-main:focus,
+a.venue-main:hover {
+  display: inline-block;
+  margin-top: 7px;
+  color: #111;
+  font-family: 'Lato', Verdana, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.venue-note {
+  color: #555;
+  font-family: 'Lato', Verdana, Helvetica, sans-serif;
+  font-size: 15px;
+  margin-left: 2px;
+  font-style: italic;
+  line-height: 1.35;
+}
+
+.paper-note {
+  display: inline-block;
+  margin-top: 2px;
+  color: #555;
+  font-family: 'Lato', Verdana, Helvetica, sans-serif;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.paper-note a,
+.paper-note strong {
+  font-family: 'Lato', Verdana, Helvetica, sans-serif;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.paper-note strong {
+  color: #e65100;
+}
+
+.misc-content p:first-child {
+  margin-top: 0;
 }
 
 .name {
   padding-top: 20px;
-  margin: 0;
+  margin: 0 0 12px 0;
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
   font-size: 32px;
+  line-height: 1.15;
+}
+
+.chinese-name {
+  font-family: 'PingFang SC', 'Heiti SC', 'Microsoft YaHei', sans-serif;
+  font-size: 29px;
+  font-weight: 600;
+  margin-left: 5px;
 }
 
 .one {
