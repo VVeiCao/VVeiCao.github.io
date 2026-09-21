@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>4Director — Interactive Scene Gallery</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0f1115;
+        --panel: #171b22;
+        --line: #2a3140;
+        --text: #e8ecf4;
+        --muted: #9aa6b8;
+        --accent: #7eb6ff;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.45;
+      }
+      main {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 32px 20px 48px;
+      }
+      header h1 { margin: 0 0 8px; font-size: 1.7rem; }
+      header p { margin: 0 0 28px; color: var(--muted); max-width: 72ch; }
+      .gallery {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      @media (min-width: 900px) {
+        .gallery { grid-template-columns: 1fr 1fr; }
+      }
+      article {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      article header {
+        padding: 14px 16px 10px;
+      }
+      article h2 {
+        margin: 0;
+        font-size: 1.05rem;
+      }
+      article .subtitle {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+      .viewer {
+        aspect-ratio: 16 / 10;
+        background: #000;
+        border-top: 1px solid var(--line);
+      }
+      iframe {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+      .open {
+        display: block;
+        padding: 10px 16px 14px;
+        color: var(--accent);
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+      .open:hover { text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>4Director</h1>
+        <p>
+          Controlling Video World Models with Rigid 3D Geometry. Click a viewer
+          to orbit the reconstructed scene, or open it full-page.
+        </p>
+      </header>
+      <section class="gallery">
+        <article>
+          <header>
+            <h2>Hiker</h2>
+            <p class="subtitle">Object Motion — hiker only</p>
+          </header>
+          <div class="viewer">
+            <iframe
+              src="./viser-client/?playbackPath=../assets/object-motion.viser"
+              title="Interactive point cloud for object-motion"
+              loading="lazy"
+              allow="fullscreen"
+            ></iframe>
+          </div>
+          <a class="open" href="./viser-client/?playbackPath=../assets/object-motion.viser">Open object-motion viewer</a>
+        </article>
+        <article>
+          <header>
+            <h2>Hiker + Camel</h2>
+            <p class="subtitle">Object Motion + Object Insertion — static camera</p>
+          </header>
+          <div class="viewer">
+            <iframe
+              src="./viser-client/?playbackPath=../assets/object-insertion.viser"
+              title="Interactive point cloud for object-insertion"
+              loading="lazy"
+              allow="fullscreen"
+            ></iframe>
+          </div>
+          <a class="open" href="./viser-client/?playbackPath=../assets/object-insertion.viser">Open object-insertion viewer</a>
+        </article>
+        <article>
+          <header>
+            <h2>Hiker + Camel + Camera A</h2>
+            <p class="subtitle">Joint Object and Camera Control — yaw-90</p>
+          </header>
+          <div class="viewer">
+            <iframe
+              src="./viser-client/?playbackPath=../assets/joint-camera-a.viser"
+              title="Interactive point cloud for joint-camera-a"
+              loading="lazy"
+              allow="fullscreen"
+            ></iframe>
+          </div>
+          <a class="open" href="./viser-client/?playbackPath=../assets/joint-camera-a.viser">Open joint-camera-a viewer</a>
+        </article>
+        <article>
+          <header>
+            <h2>Hiker + Camel + Camera B</h2>
+            <p class="subtitle">Joint Object and Camera Control — yaw-80</p>
+          </header>
+          <div class="viewer">
+            <iframe
+              src="./viser-client/?playbackPath=../assets/joint-camera-b.viser"
+              title="Interactive point cloud for joint-camera-b"
+              loading="lazy"
+              allow="fullscreen"
+            ></iframe>
+          </div>
+          <a class="open" href="./viser-client/?playbackPath=../assets/joint-camera-b.viser">Open joint-camera-b viewer</a>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
