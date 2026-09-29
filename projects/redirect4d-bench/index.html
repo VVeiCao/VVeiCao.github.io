@@ -6,8 +6,8 @@
 <meta name="description" content="Redirect4D-Bench: a scalable benchmark for camera redirection of monocular dynamic videos, with pseudo-4D ground truth and two new metrics (camera accuracy, subject fidelity).">
 <title>Redirect4D-Bench: A Scalable Benchmark for Camera Redirection of Monocular Dynamic Videos with Pseudo-4D Ground Truth</title>
 
-<link rel="icon" type="image/png" href="web_assets/icons/small_icon.png">
-<link rel="apple-touch-icon" href="web_assets/icons/small_icon.png">
+<link rel="icon" type="image/png" href="/page_Redirect4D-Bench/web_assets/icons/small_icon.png">
+<link rel="apple-touch-icon" href="/page_Redirect4D-Bench/web_assets/icons/small_icon.png">
 
 <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,600,700|Noto+Sans:400,500,600,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
@@ -622,7 +622,7 @@
 <!-- Hero -->
 <header class="hero">
   <div class="container-wide">
-    <img class="hero-logo" src="web_assets/icons/large_icon.png" alt="Redirect4D-Bench">
+    <img class="hero-logo" src="/page_Redirect4D-Bench/web_assets/icons/large_icon.png" alt="Redirect4D-Bench">
     <h1>A Scalable Benchmark for Camera Redirection of Monocular Dynamic Videos with Pseudo-4D Ground Truth</h1>
 
     <div class="authors">
@@ -669,7 +669,7 @@
       <div class="motiv-top">
         <div class="motiv-cell">
           <video class="motiv-source-large" autoplay muted loop playsinline>
-            <source src="web_assets/cases/wolf/source.mp4" type="video/mp4">
+            <source src="/page_Redirect4D-Bench/web_assets/cases/wolf/source.mp4" type="video/mp4">
           </video>
           <p class="motiv-cell-label">Source video (wolf, yaw &minus;80, scale 0.9)</p>
         </div>
@@ -713,7 +713,7 @@
         <tbody>
           <tr>
             <td class="col-method">ReCamMaster</td>
-            <td class="col-video"><video autoplay muted loop playsinline><source src="web_assets/cases/wolf/rcm.mp4" type="video/mp4"></video></td>
+            <td class="col-video"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/wolf/rcm.mp4" type="video/mp4"></video></td>
             <td class="col-metric best">0.314</td>
             <td class="col-metric best">0.967</td>
             <td class="col-metric best">0.920</td>
@@ -728,7 +728,7 @@
           </tr>
           <tr>
             <td class="col-method">TrajectoryCrafter</td>
-            <td class="col-video"><video autoplay muted loop playsinline><source src="web_assets/cases/wolf/tc.mp4" type="video/mp4"></video></td>
+            <td class="col-video"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/wolf/tc.mp4" type="video/mp4"></video></td>
             <td class="col-metric">0.284</td>
             <td class="col-metric">0.948</td>
             <td class="col-metric">0.802</td>
@@ -743,7 +743,7 @@
           </tr>
           <tr>
             <td class="col-method">GEN3C</td>
-            <td class="col-video"><video autoplay muted loop playsinline><source src="web_assets/cases/wolf/gen3c.mp4" type="video/mp4"></video></td>
+            <td class="col-video"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/wolf/gen3c.mp4" type="video/mp4"></video></td>
             <td class="col-metric">0.288</td>
             <td class="col-metric">0.951</td>
             <td class="col-metric">0.864</td>
@@ -758,7 +758,7 @@
           </tr>
           <tr>
             <td class="col-method">FreeOrbit4D</td>
-            <td class="col-video"><video autoplay muted loop playsinline><source src="web_assets/cases/wolf/r4d.mp4" type="video/mp4"></video></td>
+            <td class="col-video"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/wolf/r4d.mp4" type="video/mp4"></video></td>
             <td class="col-metric">0.304</td>
             <td class="col-metric">0.954</td>
             <td class="col-metric">0.856</td>
@@ -789,7 +789,7 @@
     <h2 class="section-title">Construction Pipeline</h2>
     <p class="section-desc">Construction is fully <strong>training-free</strong>, so the benchmark scales as more source clips are added. Source clips are curated from in-the-wild YouTube videos: category-level queries fetch candidates, which are split into shot-level clips and turned into object-centric crops with Grounded-SAM masks. Each clip's RGB + mask drives a reconstruction stack that recovers geometry-complete foreground 4D point clouds and a ViPE background. Target trajectories then render depth and rough masks; a frozen prompt feeds the Wan generator, and MaskRefine produces the pseudo-GT target mask used for evaluation.</p>
     <figure class="asset-figure">
-      <img class="asset-img" src="web_assets/images/construction_pipeline.png" alt="Construction pipeline">
+      <img class="asset-img" src="/page_Redirect4D-Bench/web_assets/images/construction_pipeline.png" alt="Construction pipeline">
     </figure>
   </div>
 </section>
@@ -800,7 +800,7 @@
     <h2 class="section-title">Metric Protocol</h2>
     <p class="section-desc">Object fidelity uses SAM3 propagation to extract masks from each submitted RGB video and compares them to the dataset target pseudo-GT mask. Camera-pose accuracy reconstructs the camera path from each generated video with a pinned reconstruction stack and compares it to the requested target trajectory. CLIP, FID/FVD, and VBench are reported alongside.</p>
     <figure class="asset-figure">
-      <img class="asset-img" src="web_assets/images/metric_protocol.png" alt="Metric protocol">
+      <img class="asset-img" src="/page_Redirect4D-Bench/web_assets/images/metric_protocol.png" alt="Metric protocol">
     </figure>
   </div>
 </section>
@@ -813,83 +813,83 @@
     <p class="section-desc">Each Redirect4D-Bench track ships with a source RGB clip, the reconstructed 4D point cloud, and per-trajectory pseudo-GT mask + depth. The interactive viewer overlays the foreground/background point cloud, the <span style="color:#2891ff; font-weight:600;">target trajectory</span> (blue), and the <span style="color:#eb5a69; font-weight:600;">original source-video trajectory</span> (red).</p>
 
     <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/camel/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Camel</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/camel.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/camel/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/camel/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/camel/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Camel</p></div>
+      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/camel.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/camel/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/camel/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/deer/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Deer</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/deer.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/deer/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/deer/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Deer</p></div>
+      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/deer.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot014/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #1</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/robot014.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot014/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot014/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot014/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #1</p></div>
+      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/robot014.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot014/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot014/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_zf/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #2</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/robot_zf.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_zf/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_zf/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_zf/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #2</p></div>
+      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/robot_zf.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_zf/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_zf/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/tiger/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Tiger</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/tiger.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/tiger/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/tiger/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/tiger/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Tiger</p></div>
+      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/tiger.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/tiger/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/tiger/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/cow/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Cow</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/cow.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/cow/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/cow/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cow/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Cow</p></div>
+      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/cow.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cow/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cow/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
       <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot029/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #3</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/robot029.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot029/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot029/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot029/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #3</p></div>
+      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/robot029.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot029/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot029/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_9qZ/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #4</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/robot_9qZ.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_9qZ/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_9qZ/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_9qZ/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #4</p></div>
+      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/robot_9qZ.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_9qZ/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_9qZ/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_drnc/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #5</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/robot_drnc.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_drnc/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_drnc/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_drnc/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #5</p></div>
+      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/robot_drnc.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_drnc/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_drnc/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/cat/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Cat</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/cat.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/cat/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/cat/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cat/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Cat</p></div>
+      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/cat.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cat/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cat/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
 
     <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_snuf/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #6</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/robot_snuf.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_snuf/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_snuf/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_snuf/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #6</p></div>
+      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/robot_snuf.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_snuf/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_snuf/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_evlq/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #7</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/robot_evlq.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_evlq/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_evlq/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_evlq/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #7</p></div>
+      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/robot_evlq.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_evlq/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_evlq/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/deer2/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Deer #2</p></div>
-      <div class="data-case-cell"><iframe src="web_assets/viewers/deer2.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/deer2/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/cases/deer2/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer2/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Deer #2</p></div>
+      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/deer2.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer2/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer2/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
 
   </div>
@@ -913,10 +913,10 @@
 <div class="cmp-pane" data-case="camel" style="display:block">
   <p class="cmp-case-label">Camel &middot; yaw 120 / pitch -20</p>
   <div class="cmp-videos">
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/camel/tc.mp4" type="video/mp4"></video><div class="cmp-vname">TrajectoryCrafter</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/camel/rcm.mp4" type="video/mp4"></video><div class="cmp-vname">ReCamMaster</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/camel/gen3c.mp4" type="video/mp4"></video><div class="cmp-vname">GEN3C</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/camel/r4d.mp4" type="video/mp4"></video><div class="cmp-vname">FreeOrbit4D</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/camel/tc.mp4" type="video/mp4"></video><div class="cmp-vname">TrajectoryCrafter</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/camel/rcm.mp4" type="video/mp4"></video><div class="cmp-vname">ReCamMaster</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/camel/gen3c.mp4" type="video/mp4"></video><div class="cmp-vname">GEN3C</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/camel/r4d.mp4" type="video/mp4"></video><div class="cmp-vname">FreeOrbit4D</div></div>
   </div>
   <div class="cmp-table-wrap"><table class="cmp-table">
     <thead>
@@ -1038,10 +1038,10 @@
 <div class="cmp-pane" data-case="bear" style="display:none">
   <p class="cmp-case-label">Bear &middot; yaw 120</p>
   <div class="cmp-videos">
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/bear/tc.mp4" type="video/mp4"></video><div class="cmp-vname">TrajectoryCrafter</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/bear/rcm.mp4" type="video/mp4"></video><div class="cmp-vname">ReCamMaster</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/bear/gen3c.mp4" type="video/mp4"></video><div class="cmp-vname">GEN3C</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/bear/r4d.mp4" type="video/mp4"></video><div class="cmp-vname">FreeOrbit4D</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/bear/tc.mp4" type="video/mp4"></video><div class="cmp-vname">TrajectoryCrafter</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/bear/rcm.mp4" type="video/mp4"></video><div class="cmp-vname">ReCamMaster</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/bear/gen3c.mp4" type="video/mp4"></video><div class="cmp-vname">GEN3C</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/bear/r4d.mp4" type="video/mp4"></video><div class="cmp-vname">FreeOrbit4D</div></div>
   </div>
   <div class="cmp-table-wrap"><table class="cmp-table">
     <thead>
@@ -1163,10 +1163,10 @@
 <div class="cmp-pane" data-case="deer" style="display:none">
   <p class="cmp-case-label">Deer &middot; yaw -120 / pitch -10</p>
   <div class="cmp-videos">
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/deer/tc.mp4" type="video/mp4"></video><div class="cmp-vname">TrajectoryCrafter</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/deer/rcm.mp4" type="video/mp4"></video><div class="cmp-vname">ReCamMaster</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/deer/gen3c.mp4" type="video/mp4"></video><div class="cmp-vname">GEN3C</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/deer/r4d.mp4" type="video/mp4"></video><div class="cmp-vname">FreeOrbit4D</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer/tc.mp4" type="video/mp4"></video><div class="cmp-vname">TrajectoryCrafter</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer/rcm.mp4" type="video/mp4"></video><div class="cmp-vname">ReCamMaster</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer/gen3c.mp4" type="video/mp4"></video><div class="cmp-vname">GEN3C</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer/r4d.mp4" type="video/mp4"></video><div class="cmp-vname">FreeOrbit4D</div></div>
   </div>
   <div class="cmp-table-wrap"><table class="cmp-table">
     <thead>
@@ -1288,10 +1288,10 @@
 <div class="cmp-pane" data-case="robot_qzs016" style="display:none">
   <p class="cmp-case-label">Robot &middot; yaw -110 / pitch -20</p>
   <div class="cmp-videos">
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_qzs016/tc.mp4" type="video/mp4"></video><div class="cmp-vname">TrajectoryCrafter</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_qzs016/rcm.mp4" type="video/mp4"></video><div class="cmp-vname">ReCamMaster</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_qzs016/gen3c.mp4" type="video/mp4"></video><div class="cmp-vname">GEN3C</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/robot_qzs016/r4d.mp4" type="video/mp4"></video><div class="cmp-vname">FreeOrbit4D</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_qzs016/tc.mp4" type="video/mp4"></video><div class="cmp-vname">TrajectoryCrafter</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_qzs016/rcm.mp4" type="video/mp4"></video><div class="cmp-vname">ReCamMaster</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_qzs016/gen3c.mp4" type="video/mp4"></video><div class="cmp-vname">GEN3C</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_qzs016/r4d.mp4" type="video/mp4"></video><div class="cmp-vname">FreeOrbit4D</div></div>
   </div>
   <div class="cmp-table-wrap"><table class="cmp-table">
     <thead>
@@ -1413,10 +1413,10 @@
 <div class="cmp-pane" data-case="cow_91" style="display:none">
   <p class="cmp-case-label">Cow &middot; yaw -120</p>
   <div class="cmp-videos">
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/cow_91/rcm.mp4" type="video/mp4"></video><div class="cmp-vname">ReCamMaster</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/cow_91/tc.mp4" type="video/mp4"></video><div class="cmp-vname">TrajectoryCrafter</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/cow_91/gen3c.mp4" type="video/mp4"></video><div class="cmp-vname">GEN3C</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/cow_91/r4d.mp4" type="video/mp4"></video><div class="cmp-vname">FreeOrbit4D</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cow_91/rcm.mp4" type="video/mp4"></video><div class="cmp-vname">ReCamMaster</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cow_91/tc.mp4" type="video/mp4"></video><div class="cmp-vname">TrajectoryCrafter</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cow_91/gen3c.mp4" type="video/mp4"></video><div class="cmp-vname">GEN3C</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cow_91/r4d.mp4" type="video/mp4"></video><div class="cmp-vname">FreeOrbit4D</div></div>
   </div>
   <div class="cmp-table-wrap"><table class="cmp-table">
     <thead>
@@ -1538,10 +1538,10 @@
 <div class="cmp-pane" data-case="pig_64" style="display:none">
   <p class="cmp-case-label">Pig &middot; yaw -120 / pitch -20</p>
   <div class="cmp-videos">
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/pig_64/rcm.mp4" type="video/mp4"></video><div class="cmp-vname">ReCamMaster</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/pig_64/tc.mp4" type="video/mp4"></video><div class="cmp-vname">TrajectoryCrafter</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/pig_64/gen3c.mp4" type="video/mp4"></video><div class="cmp-vname">GEN3C</div></div>
-    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="web_assets/cases/pig_64/r4d.mp4" type="video/mp4"></video><div class="cmp-vname">FreeOrbit4D</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/pig_64/rcm.mp4" type="video/mp4"></video><div class="cmp-vname">ReCamMaster</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/pig_64/tc.mp4" type="video/mp4"></video><div class="cmp-vname">TrajectoryCrafter</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/pig_64/gen3c.mp4" type="video/mp4"></video><div class="cmp-vname">GEN3C</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/pig_64/r4d.mp4" type="video/mp4"></video><div class="cmp-vname">FreeOrbit4D</div></div>
   </div>
   <div class="cmp-table-wrap"><table class="cmp-table">
     <thead>
