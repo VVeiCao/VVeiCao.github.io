@@ -6,6 +6,13 @@
   margin: 0 0.28em;
 }
 
+.project-logo {
+  display: block;
+  width: 200px;
+  height: auto;
+  margin: -28px auto 4px;
+}
+
 .publication-authors a {
   color: #2f5fa7;
   text-decoration: none;
@@ -104,6 +111,11 @@ a.link-button:hover {
 }
 
 @media (max-width: 680px) {
+  .project-logo {
+    width: 150px;
+    margin-top: -20px;
+  }
+
   .publication-affiliations {
     font-size: 14px;
   }
