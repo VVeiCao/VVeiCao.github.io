@@ -6,6 +6,47 @@
   margin: 0 0.28em;
 }
 
+.publication-authors a {
+  color: #2f5fa7;
+  text-decoration: none;
+}
+
+.publication-authors a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.publication-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 18px 44px;
+  margin: 14px 0 4px;
+}
+
+.publication-logos a {
+  display: inline-flex;
+  opacity: 0.9;
+}
+
+.publication-logos a:hover {
+  opacity: 1;
+}
+
+.publication-logos img {
+  display: block;
+  width: auto;
+}
+
+.publication-logos .is-stability-ai img {
+  height: 24px;
+}
+
+.publication-logos .is-uiuc img {
+  height: 34px;
+}
+
 .publication-authors sup,
 .publication-affiliations sup {
   margin-left: 1px;
@@ -65,5 +106,13 @@ a.link-button:hover {
 @media (max-width: 680px) {
   .publication-affiliations {
     font-size: 14px;
+  }
+
+  .publication-logos .is-stability-ai img {
+    height: 20px;
+  }
+
+  .publication-logos .is-uiuc img {
+    height: 28px;
   }
 }
