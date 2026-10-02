@@ -128,3 +128,27 @@ a.link-button:hover {
     height: 28px;
   }
 }
+
+/* BibTeX section above the footer. */
+
+.bibtex-section {
+  order: 9;
+  padding-top: var(--section-space, 56px);
+  padding-bottom: var(--section-space, 56px);
+  border-top: 1px solid var(--paper-line);
+}
+
+.bibtex {
+  margin: 0;
+  padding: 18px 20px;
+  border: 1px solid var(--paper-line);
+  border-radius: 8px;
+  background: var(--paper-soft);
+  color: #333;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
