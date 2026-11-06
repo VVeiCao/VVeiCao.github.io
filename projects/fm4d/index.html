@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Redirect4D-Bench: a scalable benchmark for camera redirection of monocular dynamic videos, with pseudo-4D ground truth and two new metrics (camera accuracy, subject fidelity).">
-<title>Redirect4D-Bench: A Scalable Benchmark for Camera Redirection of Monocular Dynamic Videos with Pseudo-4D Ground Truth</title>
+<meta name="description" content="RetakeBench: a scalable benchmark for camera redirection of monocular dynamic videos, with pseudo-4D ground truth and two new metrics (camera accuracy, object fidelity).">
+<title>RetakeBench: Can Video Models Re-Film a Real Moment?</title>
 
 <link rel="icon" type="image/png" href="/page_Redirect4D-Bench/web_assets/icons/small_icon.png">
 <link rel="apple-touch-icon" href="/page_Redirect4D-Bench/web_assets/icons/small_icon.png">
@@ -625,18 +625,23 @@
   .tz-card-label { margin: 0; text-align: center; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 600; font-size: 1rem; }
   .tz-card video { width: 100%; aspect-ratio: 832 / 480; object-fit: cover; border-radius: 8px; display: block; background: var(--bg-elev); }
   .tz-src { background: #e8eff8; } .tz-src .tz-card-label { color: #2f6db5; }
-  .tz-scene { position: relative; justify-content: center; padding: 0; overflow: hidden; background: #fff; border: 1px solid var(--border); }
+  .tz-scene { justify-content: center; padding: 0; border: 1px solid var(--border); }
   .tz-scene .tz-still { width: 100%; height: 100%; max-height: 520px; object-fit: contain; display: block; }
-  .tz-scene canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity 0.3s; cursor: grab; touch-action: none; }
-  .tz-scene canvas:active { cursor: grabbing; }
-  .tz-scene.ready canvas { opacity: 1; }
-  .tz-scene.ready .tz-still { visibility: hidden; }
-  .tz-lab { position: absolute; transform: translate(-50%, -50%); display: none; pointer-events: none; white-space: nowrap; font-family: 'Times New Roman', Times, 'Liberation Serif', serif; font-weight: 700; font-size: 1.15rem; text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 6px #fff; transition: opacity 0.2s; }
-  .tz-lab-src { color: #2f6db5; } .tz-lab-new { color: #e0524f; }
-  .tz-reset { position: absolute; top: 10px; right: 10px; display: none; padding: 3px 12px; border: 1px solid var(--border); border-radius: 999px; background: rgba(255, 255, 255, 0.92); color: var(--text-dim); font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 0.78rem; cursor: pointer; }
-  .tz-reset:hover { color: var(--text); border-color: var(--accent-blue); }
-  .tz-hint { position: absolute; left: 0; right: 0; bottom: 6px; display: none; margin: 0; text-align: center; font-size: 0.74rem; color: var(--text-dim); pointer-events: none; text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 5px #fff; }
-  .tz-scene.ready .tz-lab, .tz-scene.ready .tz-reset, .tz-scene.ready .tz-hint { display: block; }
+  .pv { position: relative; overflow: hidden; background: #fff; }
+  .pv canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity 0.3s; cursor: grab; touch-action: none; }
+  .pv canvas:active { cursor: grabbing; }
+  .pv.ready canvas { opacity: 1; }
+  .pv.ready .tz-still, .pv.ready .pv-wait { visibility: hidden; }
+  .pv-wait { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; margin: 0; font-size: 0.8rem; color: var(--text-mute); }
+  .pv-lab { position: absolute; transform: translate(-50%, -50%); display: none; pointer-events: none; white-space: nowrap; font-family: 'Times New Roman', Times, 'Liberation Serif', serif; font-weight: 700; font-size: 1.15rem; text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 6px #fff; transition: opacity 0.2s; }
+  .pv-lab-src { color: #2f6db5; } .pv-lab-new { color: #e0524f; }
+  .pv-reset { position: absolute; top: 10px; right: 10px; display: none; padding: 3px 12px; border: 1px solid var(--border); border-radius: 999px; background: rgba(255, 255, 255, 0.92); color: var(--text-dim); font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 0.78rem; line-height: 1.5; cursor: pointer; }
+  .pv-reset:hover { color: var(--text); border-color: var(--accent-blue); }
+  .pv-hint { position: absolute; left: 0; right: 0; bottom: 6px; display: none; margin: 0; text-align: center; font-size: 0.74rem; color: var(--text-dim); pointer-events: none; text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 5px #fff; }
+  .pv.ready .pv-lab, .pv.ready .pv-reset, .pv.ready .pv-hint { display: block; }
+  .data-case-cell .pv { width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--border); border-radius: 6px; }
+  .data-case-cell .pv-lab { font-size: 0.82rem; }
+  .data-case-cell .pv-reset { top: 6px; right: 6px; padding: 1px 8px; font-size: 0.68rem; }
   .tz-question { margin: 28px 0 10px; text-align: center; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 600; font-size: 1.2rem; color: #e0524f; }
   .tz-retakes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .tz-a { background: #efe8f6; } .tz-a .tz-card-label { color: #6b4c9a; }
@@ -665,8 +670,7 @@
 <!-- Hero -->
 <header class="hero">
   <div class="container-wide">
-    <img class="hero-logo" src="/page_Redirect4D-Bench/web_assets/icons/large_icon.png" alt="Redirect4D-Bench">
-    <h1>A Scalable Benchmark for Camera Redirection of Monocular Dynamic Videos with Pseudo-4D Ground Truth</h1>
+    <h1>Can Video Models Re-Film a Real Moment?</h1>
 
     <div class="links">
       <a class="btn" href="../redirect4d-bench/cao2026redirect4dbench.pdf" target="_blank" rel="noopener"><span class="icon"><i class="fas fa-file-pdf"></i></span><span>PDF</span></a>
@@ -676,7 +680,7 @@
       <a class="btn" href="#bibtex"><span class="icon"><i class="fas fa-quote-left"></i></span><span>BibTeX</span></a>
     </div>
     <p class="tldr">
-      <strong>TL;DR:</strong> Redirect4D-Bench is a scalable benchmark for camera redirection of monocular dynamic videos, with per-clip pseudo-4D ground truth that directly measures camera following and subject placement.
+      <strong>TL;DR:</strong> RetakeBench is a scalable benchmark for camera redirection of monocular dynamic videos, with per-clip pseudo-4D ground truth that directly measures camera following and subject placement.
     </p>
   </div>
 </header>
@@ -691,12 +695,12 @@
       </div>
       <div class="tz-col">
         <p class="tz-title">4D scene and camera paths</p>
-        <div class="tz-card tz-scene" id="tzViewer">
+        <div class="tz-card tz-scene pv" data-cloud="teaser" data-clock="video.tz-clock">
           <img class="tz-still" src="web_assets/teaser/scene.jpg" alt="4D scene with the source camera path (blue) and the new camera path (red)">
           <canvas aria-label="Dynamic 4D point cloud with the source camera path (blue) and the new camera path (red); drag to orbit"></canvas>
-          <span class="tz-lab tz-lab-src">source camera</span><span class="tz-lab tz-lab-new">new camera</span>
-          <button class="tz-reset" type="button">Reset view</button>
-          <p class="tz-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p>
+          <span class="pv-lab pv-lab-src">source camera</span><span class="pv-lab pv-lab-new">new camera</span>
+          <button class="pv-reset" type="button">Reset view</button>
+          <p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p>
         </div>
       </div>
     </div>
@@ -713,126 +717,184 @@
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
 (function () {
-  /* Teaser: the dynamic 4D point cloud of the Go2 case with the source (blue) and new (red) camera paths. The robot and
-     both frustums follow the real video on the left; drag to orbit, right-drag to pan, Ctrl/Cmd + scroll to zoom. */
-  const box = document.getElementById("tzViewer");
-  if (!box || !window.THREE) return;
-  const canvas = box.querySelector("canvas"), clock = document.querySelector("video.tz-clock");
-  const labSrc = box.querySelector(".tz-lab-src"), labNew = box.querySelector(".tz-lab-new");
-  let renderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); } catch (e) { return; }
-  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
-  renderer.setClearColor(0xffffff);
+  /* Dynamic 4D point-cloud viewers (teaser + data case): every element with class "pv" and data-cloud="<name>" gets one.
+     The cloud is web_assets/clouds/<name>.js, loaded as a <script> (fetch() is refused on file:// pages). A viewer
+     builds its WebGL context only while on screen and frees it when scrolled away (browsers allow ~16 contexts). The
+     foreground and both frustums follow the source video of the same case. Drag to orbit, right-drag to pan,
+     Ctrl/Cmd + scroll to zoom (plain scrolling keeps scrolling the page). */
+  if (!window.THREE) return;
   const SRC = 0x2f6db5, NEW = 0xe0524f;
-  fetch("web_assets/teaser/scene_cloud.json").then((r) => r.json()).then((J) => {
+  const clouds = (window.SCENE_CLOUDS = window.SCENE_CLOUDS || {}), decoded = {};
+  function load(name) {
+    if (clouds[name]) return Promise.resolve(clouds[name]);
+    return new Promise((ok, fail) => {
+      const s = document.createElement("script");
+      s.src = "web_assets/clouds/" + name + ".js";
+      s.onload = () => (clouds[name] ? ok(clouds[name]) : fail(new Error("cloud " + name + " missing")));
+      s.onerror = () => fail(new Error("cloud " + name + " did not load"));
+      document.head.appendChild(s);
+    });
+  }
+  function decode(name, J) {                                          // int16 positions + uint8 colours, once per cloud
+    if (decoded[name]) return decoded[name];
     const C = J.meta, bin = atob(J.data), u8 = new Uint8Array(bin.length);
     for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
-    const buf = u8.buffer, lo = C.lo, hi = C.hi, R = C.radius, N = C.frames;
-    const conv = (p) => new THREE.Vector3(p[0], -p[1], -p[2]);       // OpenCV world (y down, z forward) -> three.js
-    function decode(s) {
+    const buf = u8.buffer, lo = C.lo, hi = C.hi;
+    const sec = (s) => {
       const q = new Int16Array(buf.slice(s.pos, s.pos + s.n * 6)), pos = new Float32Array(s.n * 3);
       for (let i = 0; i < s.n * 3; i++) {
         const a = i % 3, v = lo[a] + (q[i] + 32768) / 65535 * (hi[a] - lo[a]);
-        pos[i] = a === 0 ? v : -v;
+        pos[i] = a === 0 ? v : -v;                                    // OpenCV world (y down, z forward) -> three.js
       }
       return { pos, rgb: new Uint8Array(buf.slice(s.rgb, s.rgb + s.n * 3)) };
-    }
-    const scene = new THREE.Scene();
-    const bg = decode(C.sections[0]), g0 = new THREE.BufferGeometry();
-    g0.setAttribute("position", new THREE.BufferAttribute(bg.pos, 3));
-    g0.setAttribute("color", new THREE.BufferAttribute(bg.rgb, 3, true));
-    scene.add(new THREE.Points(g0, new THREE.PointsMaterial({ size: R * 0.019, vertexColors: true })));
-    const fgs = C.sections.slice(1).map(decode), nMax = Math.max(...fgs.map((f) => f.pos.length / 3));
-    const g1 = new THREE.BufferGeometry();
-    g1.setAttribute("position", new THREE.BufferAttribute(new Float32Array(nMax * 3), 3));
-    g1.setAttribute("color", new THREE.BufferAttribute(new Uint8Array(nMax * 3), 3, true));
-    const fgPts = new THREE.Points(g1, new THREE.PointsMaterial({ size: R * 0.015, vertexColors: true }));
-    fgPts.frustumCulled = false;
-    scene.add(fgPts);
+    };
+    clouds[name] = null;                                             // the base64 text is no longer needed
+    return (decoded[name] = { C, bg: sec(C.sections[0]), fgs: C.sections.slice(1).map(sec) });
+  }
+  const conv = (p) => new THREE.Vector3(p[0], -p[1], -p[2]);
+  const SEG = [[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [2, 3], [3, 4], [4, 1]], TRI = [[0, 1, 2], [0, 2, 3], [0, 3, 4], [0, 4, 1]];
 
-    function path(frs, color) {                                        // tube along the camera centres, arrowhead midway
-      const mat = new THREE.MeshBasicMaterial({ color }), curve = new THREE.CatmullRomCurve3(frs.map((f) => conv(f[0])));
-      scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 200, R * 0.0065, 8, false), mat));
-      const cone = new THREE.Mesh(new THREE.ConeGeometry(R * 0.02, R * 0.055, 18), mat);
-      cone.position.copy(curve.getPointAt(0.6));
-      cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), curve.getTangentAt(0.6));
-      scene.add(cone);
-    }
-    function frustum(color) {                                          // white faces + coloured edges, as in Fig. 1
-      const lines = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color }));
-      lines.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(16 * 3), 3));
-      const faces = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial(
-        { color: 0xffffff, transparent: true, opacity: 0.85, side: THREE.DoubleSide, depthWrite: false }));
-      faces.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(12 * 3), 3));
-      lines.frustumCulled = faces.frustumCulled = false;
-      scene.add(faces); scene.add(lines);
-      return { lines, faces };
-    }
-    const SEG = [[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [2, 3], [3, 4], [4, 1]], TRI = [[0, 1, 2], [0, 2, 3], [0, 3, 4], [0, 4, 1]];
-    function setFrustum(o, pts) {
-      const p = pts.map(conv), a = o.lines.geometry.attributes.position, b = o.faces.geometry.attributes.position;
-      SEG.forEach((s, i) => { p[s[0]].toArray(a.array, i * 6); p[s[1]].toArray(a.array, i * 6 + 3); });
-      TRI.forEach((t, i) => t.forEach((k, j) => p[k].toArray(b.array, i * 9 + j * 3)));
-      a.needsUpdate = b.needsUpdate = true;
-    }
-    path(C.src, SRC); path(C.tgt, NEW);
-    const fSrc = frustum(SRC), fNew = frustum(NEW);
-
-    const target = conv(C.target), home = conv(C.view.pos);
-    const cam = new THREE.PerspectiveCamera(40, 1, R * 0.01, R * 100);
-    const controls = new THREE.OrbitControls(cam, canvas);
-    controls.enableDamping = true;
-    controls.enableZoom = false;                                       // plain scrolling keeps scrolling the page
-    const fov = (aspect) => 2 * Math.atan(Math.max(C.view.fit[1], C.view.fit[0] / aspect) * 1.08) * 180 / Math.PI;
-    function reset() { cam.position.copy(home); controls.target.copy(target); controls.update(); }
-    canvas.addEventListener("wheel", (e) => {
-      if (!(e.ctrlKey || e.metaKey)) return;
-      e.preventDefault();
-      const d = cam.position.clone().sub(controls.target).multiplyScalar(Math.exp(Math.max(-60, Math.min(60, e.deltaY)) * 0.003));
-      cam.position.copy(controls.target.clone().add(d));
-    }, { passive: false });
-    box.querySelector(".tz-reset").addEventListener("click", reset);
-    reset();
-    function resize() {
-      const w = canvas.clientWidth, h = canvas.clientHeight, pr = renderer.getPixelRatio();
-      if (!w || !h) return;
-      if (canvas.width !== Math.round(w * pr) || canvas.height !== Math.round(h * pr)) renderer.setSize(w, h, false);
-      const f = fov(w / h);
-      if (cam.aspect !== w / h || cam.fov !== f) { cam.aspect = w / h; cam.fov = f; cam.updateProjectionMatrix(); }
-    }
-    const v = new THREE.Vector3(), srcMid = conv(C.src[Math.floor(N / 2)][0]), newEnd = conv(C.tgt[N - 1][0]);
-    function place(el, p3, dy) {
-      v.copy(p3).project(cam);
-      el.style.opacity = v.z < 1 && Math.abs(v.x) < 0.95 && Math.abs(v.y) < 0.95 ? 1 : 0;
-      const half = el.offsetWidth / 2 + 6;                             // keep the whole label inside the panel
-      el.style.left = (canvas.offsetLeft + Math.max(half, Math.min(canvas.clientWidth - half, (v.x + 1) / 2 * canvas.clientWidth))) + "px";
-      el.style.top = (canvas.offsetTop + (1 - v.y) / 2 * canvas.clientHeight + dy) + "px";
-    }
-    let frame = -1, onScreen = true;
+  function Viewer(box) {
+    const name = box.dataset.cloud;
+    let canvas = box.querySelector("canvas");                       // replaced by a fresh one after each context release
+    const clock = box.dataset.clock ? document.querySelector(box.dataset.clock)
+      : (box.closest(".data-case-row") || document).querySelector("video");
+    const labSrc = box.querySelector(".pv-lab-src"), labNew = box.querySelector(".pv-lab-new");
+    let D = null, live = null, saved = null, onScreen = false, loading = null;
     const t0 = performance.now();
-    function current() {                                               // follow the real video when it plays
-      if (clock && clock.readyState >= 2 && !clock.paused) return Math.min(N - 1, Math.floor(clock.currentTime * C.fps));
-      return Math.floor((performance.now() - t0) / 1000 * C.fps) % N;
-    }
-    function setFrame(f) {
-      if (f === frame) return;
-      frame = f;
-      const s = fgs[f], P = g1.attributes.position, Cc = g1.attributes.color;
-      P.array.set(s.pos); Cc.array.set(s.rgb); g1.setDrawRange(0, s.pos.length / 3);
-      P.needsUpdate = Cc.needsUpdate = true;
-      setFrustum(fSrc, C.src[f]); setFrustum(fNew, C.tgt[f]);
-    }
-    if ("IntersectionObserver" in window) new IntersectionObserver((es) => { onScreen = es[0].isIntersecting; }).observe(box);
-    function loop() {
-      if (onScreen) {
-        resize(); setFrame(current()); controls.update(); renderer.render(scene, cam);
-        place(labSrc, srcMid, 24); place(labNew, newEnd, -24);
+
+    function build() {                                                // scene + renderer for one on-screen period
+      const C = D.C, R = C.radius, N = C.frames;
+      let renderer;
+      try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); } catch (e) { return null; }
+      renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+      renderer.setClearColor(0xffffff);
+      const scene = new THREE.Scene(), g0 = new THREE.BufferGeometry();
+      g0.setAttribute("position", new THREE.BufferAttribute(D.bg.pos, 3));
+      g0.setAttribute("color", new THREE.BufferAttribute(D.bg.rgb, 3, true));
+      scene.add(new THREE.Points(g0, new THREE.PointsMaterial({ size: R * 0.019, vertexColors: true })));
+      const nMax = Math.max(...D.fgs.map((f) => f.pos.length / 3)), g1 = new THREE.BufferGeometry();
+      g1.setAttribute("position", new THREE.BufferAttribute(new Float32Array(nMax * 3), 3));
+      g1.setAttribute("color", new THREE.BufferAttribute(new Uint8Array(nMax * 3), 3, true));
+      const fgPts = new THREE.Points(g1, new THREE.PointsMaterial({ size: R * 0.015, vertexColors: true }));
+      fgPts.frustumCulled = false;
+      scene.add(fgPts);
+      function path(frs, color) {                                      // tube along the camera centres, arrowhead at 60%
+        const mat = new THREE.MeshBasicMaterial({ color }), curve = new THREE.CatmullRomCurve3(frs.map((f) => conv(f[0])));
+        scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 200, R * 0.0065, 8, false), mat));
+        const cone = new THREE.Mesh(new THREE.ConeGeometry(R * 0.02, R * 0.055, 18), mat);
+        cone.position.copy(curve.getPointAt(0.6));
+        cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), curve.getTangentAt(0.6));
+        scene.add(cone);
       }
-      requestAnimationFrame(loop);
+      function frustum(color) {                                        // white faces + coloured edges, as in Fig. 1
+        const lines = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color }));
+        lines.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(16 * 3), 3));
+        const faces = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial(
+          { color: 0xffffff, transparent: true, opacity: 0.85, side: THREE.DoubleSide, depthWrite: false }));
+        faces.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(12 * 3), 3));
+        lines.frustumCulled = faces.frustumCulled = false;
+        scene.add(faces); scene.add(lines);
+        return { lines, faces };
+      }
+      function setFrustum(o, pts) {
+        const p = pts.map(conv), a = o.lines.geometry.attributes.position, b = o.faces.geometry.attributes.position;
+        SEG.forEach((s, i) => { p[s[0]].toArray(a.array, i * 6); p[s[1]].toArray(a.array, i * 6 + 3); });
+        TRI.forEach((t, i) => t.forEach((k, j) => p[k].toArray(b.array, i * 9 + j * 3)));
+        a.needsUpdate = b.needsUpdate = true;
+      }
+      path(C.src, SRC); path(C.tgt, NEW);
+      const fSrc = frustum(SRC), fNew = frustum(NEW);
+      const target = conv(C.view.look || C.target), home = conv(C.view.pos);
+      const cam = new THREE.PerspectiveCamera(40, 1, R * 0.01, R * 100);
+      const controls = new THREE.OrbitControls(cam, canvas);
+      controls.enableDamping = true;
+      controls.enableZoom = false;
+      if (saved) { cam.position.copy(saved.pos); controls.target.copy(saved.target); } else { cam.position.copy(home); controls.target.copy(target); }
+      controls.update();
+      const fov = (aspect) => 2 * Math.atan(Math.max(C.view.fit[1], C.view.fit[0] / aspect) * 1.08) * 180 / Math.PI;
+      const v = new THREE.Vector3(), srcMid = conv(C.src[Math.floor(N / 2)][0]), newEnd = conv(C.tgt[N - 1][0]);
+      function place(el, p3, dy) {
+        if (!el) return;
+        v.copy(p3).project(cam);
+        el.style.opacity = v.z < 1 && Math.abs(v.x) < 0.95 && Math.abs(v.y) < 0.95 ? 1 : 0;
+        const half = el.offsetWidth / 2 + 6;                           // keep the whole label inside the panel
+        el.style.left = (canvas.offsetLeft + Math.max(half, Math.min(canvas.clientWidth - half, (v.x + 1) / 2 * canvas.clientWidth))) + "px";
+        const hh = el.offsetHeight / 2 + 4;
+        el.style.top = (canvas.offsetTop + Math.max(hh, Math.min(canvas.clientHeight - hh, (1 - v.y) / 2 * canvas.clientHeight + dy))) + "px";
+      }
+      let frame = -1, raf = 0;
+      function current() {                                             // follow the case's source video when it plays
+        if (clock && clock.readyState >= 2 && !clock.paused) return Math.min(N - 1, Math.floor(clock.currentTime * C.fps));
+        return Math.floor((performance.now() - t0) / 1000 * C.fps) % N;
+      }
+      function loop() {
+        const w = canvas.clientWidth, h = canvas.clientHeight, pr = renderer.getPixelRatio();
+        if (w && h) {
+          if (canvas.width !== Math.round(w * pr) || canvas.height !== Math.round(h * pr)) renderer.setSize(w, h, false);
+          const f = fov(w / h);
+          if (cam.aspect !== w / h || cam.fov !== f) { cam.aspect = w / h; cam.fov = f; cam.updateProjectionMatrix(); }
+          const k = current();
+          if (k !== frame) {
+            frame = k;
+            const s = D.fgs[k], P = g1.attributes.position, Cc = g1.attributes.color;
+            P.array.set(s.pos); Cc.array.set(s.rgb); g1.setDrawRange(0, s.pos.length / 3);
+            P.needsUpdate = Cc.needsUpdate = true;
+            setFrustum(fSrc, C.src[k]); setFrustum(fNew, C.tgt[k]);
+          }
+          controls.update(); renderer.render(scene, cam);
+          place(labSrc, srcMid, 22); place(labNew, newEnd, -22);
+        }
+        raf = requestAnimationFrame(loop);
+      }
+      raf = requestAnimationFrame(loop);
+      return {
+        reset() { cam.position.copy(home); controls.target.copy(target); controls.update(); },
+        zoom(k) { cam.position.copy(controls.target.clone().add(cam.position.clone().sub(controls.target).multiplyScalar(k))); },
+        stop() {
+          cancelAnimationFrame(raf);
+          saved = { pos: cam.position.clone(), target: controls.target.clone() };
+          controls.dispose();
+          scene.traverse((o) => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); });
+          renderer.dispose(); renderer.forceContextLoss();
+          const fresh = canvas.cloneNode(false);                       // a lost context cannot be reused on that canvas
+          canvas.replaceWith(fresh); canvas = fresh;
+        },
+      };
     }
-    box.classList.add("ready");
-    requestAnimationFrame(loop);
-  }).catch((e) => console.error("teaser viewer:", e));
+    function start() {
+      if (live || !onScreen) return;
+      if (!D) {
+        loading = loading || load(name).then((J) => { D = decode(name, J); box.classList.add("ready"); start(); })
+          .catch((e) => { box.classList.add("failed"); console.error("viewer " + name + ":", e); });
+        return;
+      }
+      live = build();
+    }
+    function stop() { if (live) { live.stop(); live = null; } }
+    const reset = box.querySelector(".pv-reset");
+    if (reset) reset.addEventListener("click", () => { saved = null; if (live) live.reset(); });
+    box.addEventListener("wheel", (e) => {                             // Ctrl/Cmd + scroll (and trackpad pinch) zooms
+      if (!live || !(e.ctrlKey || e.metaKey)) return;
+      e.preventDefault();
+      live.zoom(Math.exp(Math.max(-60, Math.min(60, e.deltaY)) * 0.003));
+    }, { passive: false });
+    return { box, enter() { onScreen = true; start(); }, leave() { onScreen = false; stop(); } };
+  }
+
+  function init() {                                                  // after parsing: the data case comes after this script
+    const viewers = Array.from(document.querySelectorAll(".pv[data-cloud]")).map(Viewer);
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((es) => es.forEach((e) => {
+        const v = viewers.find((x) => x.box === e.target);
+        if (v) (e.isIntersecting ? v.enter() : v.leave());
+      }), { rootMargin: "150px 0px" });
+      viewers.forEach((v) => io.observe(v.box));
+    } else {
+      viewers.forEach((v) => v.enter());
+    }
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();
 </script>
 
@@ -927,84 +989,84 @@
 <section>
   <div class="container-wide">
     <h2 class="section-title">Data Case</h2>
-    <p class="section-desc">Each Redirect4D-Bench track ships with a source RGB clip, the reconstructed 4D point cloud, and per-trajectory pseudo-GT mask + depth. The interactive viewer overlays the foreground/background point cloud, the <span style="color:#2891ff; font-weight:600;">target trajectory</span> (blue), and the <span style="color:#eb5a69; font-weight:600;">original source-video trajectory</span> (red).</p>
+    <p class="section-desc">Each RetakeBench track ships with a source RGB clip, the reconstructed 4D point cloud, and per-trajectory pseudo-GT mask + depth. The interactive viewer plays the foreground/background point cloud over time with the <span style="color:#2f6db5; font-weight:600;">source camera path</span> (blue) and the <span style="color:#e0524f; font-weight:600;">target camera path</span> (red); drag to orbit.</p>
 
     <div class="data-case-row">
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/camel/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Camel</p></div>
-      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/camel.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="camel"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/camel/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/camel/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Deer</p></div>
-      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/deer.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="deer"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot014/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #1</p></div>
-      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/robot014.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="robot014"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot014/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot014/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_zf/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #2</p></div>
-      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/robot_zf.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="robot_zf"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_zf/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_zf/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/tiger/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Tiger</p></div>
-      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/tiger.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="tiger"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/tiger/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/tiger/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cow/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Cow</p></div>
-      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/cow.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="cow"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cow/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cow/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
       <div class="data-case-row">
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot029/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #3</p></div>
-      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/robot029.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="robot029"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot029/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot029/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_9qZ/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #4</p></div>
-      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/robot_9qZ.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="robot_9qZ"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_9qZ/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_9qZ/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_drnc/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #5</p></div>
-      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/robot_drnc.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="robot_drnc"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_drnc/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_drnc/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cat/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Cat</p></div>
-      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/cat.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="cat"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cat/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/cat/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
 
     <div class="data-case-row">
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_snuf/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #6</p></div>
-      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/robot_snuf.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="robot_snuf"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_snuf/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_snuf/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_evlq/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #7</p></div>
-      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/robot_evlq.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="robot_evlq"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_evlq/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/robot_evlq/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
     <div class="data-case-row">
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer2/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Deer #2</p></div>
-      <div class="data-case-cell"><iframe src="/page_Redirect4D-Bench/web_assets/viewers/deer2.html" loading="lazy" allow="fullscreen"></iframe><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="deer2"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer2/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="/page_Redirect4D-Bench/web_assets/cases/deer2/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
@@ -1016,7 +1078,7 @@
 <section>
   <div class="container-wide">
     <h2 class="section-title">Comparison</h2>
-    <p class="section-desc">The seven cases of the paper, each with the seven baselines ordered from worst to best by their mean rank over <em>RotErr</em>, <em>TransErr</em>, and <em>R&middot;cIoU</em>, and scored with the full <em>CLIP&nbsp;+&nbsp;VBench</em> stack alongside Redirect4D-Bench's <em>Camera&nbsp;accuracy</em>, <em>Object&nbsp;fidelity</em>, and <em>Subject&nbsp;localization</em> metrics. Per-column best in <span style="color:var(--accent-green); font-weight:600;">green</span>, second best underlined. Click a case to switch.</p>
+    <p class="section-desc">The seven cases of the paper, each with the seven baselines ordered from worst to best by their mean rank over <em>RotErr</em>, <em>TransErr</em>, and <em>R&middot;cIoU</em>, and scored with the full <em>CLIP&nbsp;+&nbsp;VBench</em> stack alongside RetakeBench's <em>Camera&nbsp;accuracy</em>, <em>Object&nbsp;fidelity</em>, and <em>Subject&nbsp;localization</em> metrics. Per-column best in <span style="color:var(--accent-green); font-weight:600;">green</span>, second best underlined. Click a case to switch.</p>
 
     <div class="cmp-tabs" id="cmpTabs">
       <span class="cmp-tab active" data-case="cow">Cow</span>
@@ -1046,7 +1108,7 @@
         <th rowspan="3" class="col-method">Method</th>
         <th class="band band-trad" colspan="10">Traditional video metrics</th>
         <th rowspan="3" class="col-he">Visual check</th>
-        <th class="band band-r4d" colspan="7">Redirect4D-Bench metrics</th>
+        <th class="band band-r4d" colspan="7">RetakeBench metrics</th>
       </tr>
       <tr>
         <th class="grp" colspan="3">CLIP&nbsp;&uarr;</th>
@@ -1231,7 +1293,7 @@
         <th rowspan="3" class="col-method">Method</th>
         <th class="band band-trad" colspan="10">Traditional video metrics</th>
         <th rowspan="3" class="col-he">Visual check</th>
-        <th class="band band-r4d" colspan="7">Redirect4D-Bench metrics</th>
+        <th class="band band-r4d" colspan="7">RetakeBench metrics</th>
       </tr>
       <tr>
         <th class="grp" colspan="3">CLIP&nbsp;&uarr;</th>
@@ -1416,7 +1478,7 @@
         <th rowspan="3" class="col-method">Method</th>
         <th class="band band-trad" colspan="10">Traditional video metrics</th>
         <th rowspan="3" class="col-he">Visual check</th>
-        <th class="band band-r4d" colspan="7">Redirect4D-Bench metrics</th>
+        <th class="band band-r4d" colspan="7">RetakeBench metrics</th>
       </tr>
       <tr>
         <th class="grp" colspan="3">CLIP&nbsp;&uarr;</th>
@@ -1601,7 +1663,7 @@
         <th rowspan="3" class="col-method">Method</th>
         <th class="band band-trad" colspan="10">Traditional video metrics</th>
         <th rowspan="3" class="col-he">Visual check</th>
-        <th class="band band-r4d" colspan="7">Redirect4D-Bench metrics</th>
+        <th class="band band-r4d" colspan="7">RetakeBench metrics</th>
       </tr>
       <tr>
         <th class="grp" colspan="3">CLIP&nbsp;&uarr;</th>
@@ -1786,7 +1848,7 @@
         <th rowspan="3" class="col-method">Method</th>
         <th class="band band-trad" colspan="10">Traditional video metrics</th>
         <th rowspan="3" class="col-he">Visual check</th>
-        <th class="band band-r4d" colspan="7">Redirect4D-Bench metrics</th>
+        <th class="band band-r4d" colspan="7">RetakeBench metrics</th>
       </tr>
       <tr>
         <th class="grp" colspan="3">CLIP&nbsp;&uarr;</th>
@@ -1971,7 +2033,7 @@
         <th rowspan="3" class="col-method">Method</th>
         <th class="band band-trad" colspan="10">Traditional video metrics</th>
         <th rowspan="3" class="col-he">Visual check</th>
-        <th class="band band-r4d" colspan="7">Redirect4D-Bench metrics</th>
+        <th class="band band-r4d" colspan="7">RetakeBench metrics</th>
       </tr>
       <tr>
         <th class="grp" colspan="3">CLIP&nbsp;&uarr;</th>
@@ -2156,7 +2218,7 @@
         <th rowspan="3" class="col-method">Method</th>
         <th class="band band-trad" colspan="10">Traditional video metrics</th>
         <th rowspan="3" class="col-he">Visual check</th>
-        <th class="band band-r4d" colspan="7">Redirect4D-Bench metrics</th>
+        <th class="band band-r4d" colspan="7">RetakeBench metrics</th>
       </tr>
       <tr>
         <th class="grp" colspan="3">CLIP&nbsp;&uarr;</th>
@@ -2353,11 +2415,11 @@
 <section id="bibtex">
   <div class="container-wide">
     <h2 class="section-title">BibTeX</h2>
-    <p class="section-desc">If you find Redirect4D-Bench useful, please cite our work.</p>
+    <p class="section-desc">If you find RetakeBench useful, please cite our work.</p>
     <div class="bibtex-block">
       <button class="bibtex-copy" id="bibtexCopy">Copy</button>
-<pre id="bibtexText">@misc{cao2026redirect4dbench,
-  title  = {Redirect4D-Bench: A Scalable Benchmark for Camera Redirection of Monocular Dynamic Videos with Pseudo-4D Ground Truth},
+<pre id="bibtexText">@misc{cao2026retakebench,
+  title  = {RetakeBench: Can Video Models Re-Film a Real Moment?},
   author = {Wei Cao and Hao Zhang and Jiapeng Tang and Yulun Wu and Yingying Li and Ning Yu and Yaoyao Liu},
   year   = {2026},
 }</pre>
