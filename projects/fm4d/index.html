@@ -625,8 +625,18 @@
   .tz-card-label { margin: 0; text-align: center; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 600; font-size: 1rem; }
   .tz-card video { width: 100%; aspect-ratio: 832 / 480; object-fit: cover; border-radius: 8px; display: block; background: var(--bg-elev); }
   .tz-src { background: #e8eff8; } .tz-src .tz-card-label { color: #2f6db5; }
-  .tz-scene { justify-content: center; background: #fff; }
-  .tz-scene img { width: 100%; height: 100%; max-height: 520px; object-fit: contain; display: block; }
+  .tz-scene { position: relative; justify-content: center; padding: 0; overflow: hidden; background: #fff; border: 1px solid var(--border); }
+  .tz-scene .tz-still { width: 100%; height: 100%; max-height: 520px; object-fit: contain; display: block; }
+  .tz-scene canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity 0.3s; cursor: grab; touch-action: none; }
+  .tz-scene canvas:active { cursor: grabbing; }
+  .tz-scene.ready canvas { opacity: 1; }
+  .tz-scene.ready .tz-still { visibility: hidden; }
+  .tz-lab { position: absolute; transform: translate(-50%, -50%); display: none; pointer-events: none; white-space: nowrap; font-family: 'Times New Roman', Times, 'Liberation Serif', serif; font-weight: 700; font-size: 1.15rem; text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 6px #fff; transition: opacity 0.2s; }
+  .tz-lab-src { color: #2f6db5; } .tz-lab-new { color: #e0524f; }
+  .tz-reset { position: absolute; top: 10px; right: 10px; display: none; padding: 3px 12px; border: 1px solid var(--border); border-radius: 999px; background: rgba(255, 255, 255, 0.92); color: var(--text-dim); font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 0.78rem; cursor: pointer; }
+  .tz-reset:hover { color: var(--text); border-color: var(--accent-blue); }
+  .tz-hint { position: absolute; left: 0; right: 0; bottom: 6px; display: none; margin: 0; text-align: center; font-size: 0.74rem; color: var(--text-dim); pointer-events: none; text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 5px #fff; }
+  .tz-scene.ready .tz-lab, .tz-scene.ready .tz-reset, .tz-scene.ready .tz-hint { display: block; }
   .tz-question { margin: 28px 0 10px; text-align: center; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 600; font-size: 1.2rem; color: #e0524f; }
   .tz-retakes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .tz-a { background: #efe8f6; } .tz-a .tz-card-label { color: #6b4c9a; }
@@ -658,24 +668,6 @@
     <img class="hero-logo" src="/page_Redirect4D-Bench/web_assets/icons/large_icon.png" alt="Redirect4D-Bench">
     <h1>A Scalable Benchmark for Camera Redirection of Monocular Dynamic Videos with Pseudo-4D Ground Truth</h1>
 
-    <div class="authors">
-      <span class="author"><a href="https://vveicao.github.io/">Wei Cao</a><sup>1</sup>,</span>
-      <span class="author"><a href="https://haoz19.github.io/">Hao Zhang</a><sup>1</sup>,</span>
-      <span class="author"><a href="https://tangjiapeng.github.io/">Jiapeng Tang</a><sup>2</sup>,</span>
-      <span class="author"><a href="https://yulunwu0108.github.io/">Yulun Wu</a><sup>1</sup>,</span>
-      <span class="author"><a href="https://www.yingying.li/">Yingying Li</a><sup>1</sup>,</span>
-      <span class="author"><a href="https://ningyu1991.github.io/">Ning Yu</a><sup>3</sup>,</span>
-      <span class="author"><a href="https://yaoyaoliu.web.illinois.edu/">Yaoyao Liu</a><sup>1,*</sup></span>
-    </div>
-    <div class="affil">
-      <span class="institution"><sup>1</sup> University of Illinois Urbana-Champaign</span>
-      <span class="institution"><sup>2</sup> Technical University of Munich</span>
-      <span class="institution"><sup>3</sup> Netflix</span>
-    </div>
-    <div class="affil" style="font-size: 0.95rem; margin-top: -16px;">
-      <span><sup>*</sup> Corresponding author</span>
-    </div>
-
     <div class="links">
       <a class="btn" href="../redirect4d-bench/cao2026redirect4dbench.pdf" target="_blank" rel="noopener"><span class="icon"><i class="fas fa-file-pdf"></i></span><span>PDF</span></a>
       <a class="btn" href="#" target="_blank" rel="noopener"><span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv (coming soon)</span></a>
@@ -695,11 +687,17 @@
     <div class="tz-top">
       <div class="tz-col">
         <p class="tz-title">Real video</p>
-        <div class="tz-card tz-src"><p class="tz-card-label">Source camera</p><video autoplay muted loop playsinline preload="auto"><source src="web_assets/teaser/source.mp4" type="video/mp4"></video></div>
+        <div class="tz-card tz-src"><p class="tz-card-label">Source camera</p><video class="tz-clock" autoplay muted loop playsinline preload="auto"><source src="web_assets/teaser/source.mp4" type="video/mp4"></video></div>
       </div>
       <div class="tz-col">
         <p class="tz-title">4D scene and camera paths</p>
-        <div class="tz-card tz-scene"><img src="web_assets/teaser/scene.jpg" alt="4D scene with the source camera path (blue) and the new camera path (red)"></div>
+        <div class="tz-card tz-scene" id="tzViewer">
+          <img class="tz-still" src="web_assets/teaser/scene.jpg" alt="4D scene with the source camera path (blue) and the new camera path (red)">
+          <canvas aria-label="Dynamic 4D point cloud with the source camera path (blue) and the new camera path (red); drag to orbit"></canvas>
+          <span class="tz-lab tz-lab-src">source camera</span><span class="tz-lab tz-lab-new">new camera</span>
+          <button class="tz-reset" type="button">Reset view</button>
+          <p class="tz-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p>
+        </div>
       </div>
     </div>
     <p class="tz-question">Without a ground-truth video, which one is better?</p>
@@ -708,9 +706,135 @@
         <div class="tz-card tz-b"><p class="tz-card-label">Video model B</p><video autoplay muted loop playsinline preload="auto"><source src="web_assets/teaser/b.mp4" type="video/mp4"></video></div>
         <div class="tz-card tz-c"><p class="tz-card-label">Video model C</p><video autoplay muted loop playsinline preload="auto"><source src="web_assets/teaser/c.mp4" type="video/mp4"></video></div>
     </div>
-    <p class="tz-caption"><strong>Can video models re-film a real moment?</strong> A real video is filmed by a single camera (<span class="tz-blue">blue</span>). We ask three video models to re-film the same moment from a new camera (<span class="tz-red">red</span>). Without a ground-truth video of the new view, which retake is better?</p>
+    <p class="tz-caption" id="tzCaption"><strong>Can video models re-film a real moment?</strong> A real video is filmed by a single camera (<span class="tz-blue">blue</span>). We ask three video models to re-film the same moment from a new camera (<span class="tz-red">red</span>). Without a ground-truth video of the new view, which retake is better?</p>
   </div>
 </section>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function () {
+  /* Teaser: the dynamic 4D point cloud of the Go2 case with the source (blue) and new (red) camera paths. The robot and
+     both frustums follow the real video on the left; drag to orbit, right-drag to pan, Ctrl/Cmd + scroll to zoom. */
+  const box = document.getElementById("tzViewer");
+  if (!box || !window.THREE) return;
+  const canvas = box.querySelector("canvas"), clock = document.querySelector("video.tz-clock");
+  const labSrc = box.querySelector(".tz-lab-src"), labNew = box.querySelector(".tz-lab-new");
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); } catch (e) { return; }
+  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+  renderer.setClearColor(0xffffff);
+  const SRC = 0x2f6db5, NEW = 0xe0524f;
+  fetch("web_assets/teaser/scene_cloud.json").then((r) => r.json()).then((J) => {
+    const C = J.meta, bin = atob(J.data), u8 = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    const buf = u8.buffer, lo = C.lo, hi = C.hi, R = C.radius, N = C.frames;
+    const conv = (p) => new THREE.Vector3(p[0], -p[1], -p[2]);       // OpenCV world (y down, z forward) -> three.js
+    function decode(s) {
+      const q = new Int16Array(buf.slice(s.pos, s.pos + s.n * 6)), pos = new Float32Array(s.n * 3);
+      for (let i = 0; i < s.n * 3; i++) {
+        const a = i % 3, v = lo[a] + (q[i] + 32768) / 65535 * (hi[a] - lo[a]);
+        pos[i] = a === 0 ? v : -v;
+      }
+      return { pos, rgb: new Uint8Array(buf.slice(s.rgb, s.rgb + s.n * 3)) };
+    }
+    const scene = new THREE.Scene();
+    const bg = decode(C.sections[0]), g0 = new THREE.BufferGeometry();
+    g0.setAttribute("position", new THREE.BufferAttribute(bg.pos, 3));
+    g0.setAttribute("color", new THREE.BufferAttribute(bg.rgb, 3, true));
+    scene.add(new THREE.Points(g0, new THREE.PointsMaterial({ size: R * 0.019, vertexColors: true })));
+    const fgs = C.sections.slice(1).map(decode), nMax = Math.max(...fgs.map((f) => f.pos.length / 3));
+    const g1 = new THREE.BufferGeometry();
+    g1.setAttribute("position", new THREE.BufferAttribute(new Float32Array(nMax * 3), 3));
+    g1.setAttribute("color", new THREE.BufferAttribute(new Uint8Array(nMax * 3), 3, true));
+    const fgPts = new THREE.Points(g1, new THREE.PointsMaterial({ size: R * 0.015, vertexColors: true }));
+    fgPts.frustumCulled = false;
+    scene.add(fgPts);
+
+    function path(frs, color) {                                        // tube along the camera centres, arrowhead midway
+      const mat = new THREE.MeshBasicMaterial({ color }), curve = new THREE.CatmullRomCurve3(frs.map((f) => conv(f[0])));
+      scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 200, R * 0.0065, 8, false), mat));
+      const cone = new THREE.Mesh(new THREE.ConeGeometry(R * 0.02, R * 0.055, 18), mat);
+      cone.position.copy(curve.getPointAt(0.6));
+      cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), curve.getTangentAt(0.6));
+      scene.add(cone);
+    }
+    function frustum(color) {                                          // white faces + coloured edges, as in Fig. 1
+      const lines = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color }));
+      lines.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(16 * 3), 3));
+      const faces = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial(
+        { color: 0xffffff, transparent: true, opacity: 0.85, side: THREE.DoubleSide, depthWrite: false }));
+      faces.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(12 * 3), 3));
+      lines.frustumCulled = faces.frustumCulled = false;
+      scene.add(faces); scene.add(lines);
+      return { lines, faces };
+    }
+    const SEG = [[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [2, 3], [3, 4], [4, 1]], TRI = [[0, 1, 2], [0, 2, 3], [0, 3, 4], [0, 4, 1]];
+    function setFrustum(o, pts) {
+      const p = pts.map(conv), a = o.lines.geometry.attributes.position, b = o.faces.geometry.attributes.position;
+      SEG.forEach((s, i) => { p[s[0]].toArray(a.array, i * 6); p[s[1]].toArray(a.array, i * 6 + 3); });
+      TRI.forEach((t, i) => t.forEach((k, j) => p[k].toArray(b.array, i * 9 + j * 3)));
+      a.needsUpdate = b.needsUpdate = true;
+    }
+    path(C.src, SRC); path(C.tgt, NEW);
+    const fSrc = frustum(SRC), fNew = frustum(NEW);
+
+    const target = conv(C.target), home = conv(C.view.pos);
+    const cam = new THREE.PerspectiveCamera(40, 1, R * 0.01, R * 100);
+    const controls = new THREE.OrbitControls(cam, canvas);
+    controls.enableDamping = true;
+    controls.enableZoom = false;                                       // plain scrolling keeps scrolling the page
+    const fov = (aspect) => 2 * Math.atan(Math.max(C.view.fit[1], C.view.fit[0] / aspect) * 1.08) * 180 / Math.PI;
+    function reset() { cam.position.copy(home); controls.target.copy(target); controls.update(); }
+    canvas.addEventListener("wheel", (e) => {
+      if (!(e.ctrlKey || e.metaKey)) return;
+      e.preventDefault();
+      const d = cam.position.clone().sub(controls.target).multiplyScalar(Math.exp(Math.max(-60, Math.min(60, e.deltaY)) * 0.003));
+      cam.position.copy(controls.target.clone().add(d));
+    }, { passive: false });
+    box.querySelector(".tz-reset").addEventListener("click", reset);
+    reset();
+    function resize() {
+      const w = canvas.clientWidth, h = canvas.clientHeight, pr = renderer.getPixelRatio();
+      if (!w || !h) return;
+      if (canvas.width !== Math.round(w * pr) || canvas.height !== Math.round(h * pr)) renderer.setSize(w, h, false);
+      const f = fov(w / h);
+      if (cam.aspect !== w / h || cam.fov !== f) { cam.aspect = w / h; cam.fov = f; cam.updateProjectionMatrix(); }
+    }
+    const v = new THREE.Vector3(), srcMid = conv(C.src[Math.floor(N / 2)][0]), newEnd = conv(C.tgt[N - 1][0]);
+    function place(el, p3, dy) {
+      v.copy(p3).project(cam);
+      el.style.opacity = v.z < 1 && Math.abs(v.x) < 0.95 && Math.abs(v.y) < 0.95 ? 1 : 0;
+      const half = el.offsetWidth / 2 + 6;                             // keep the whole label inside the panel
+      el.style.left = (canvas.offsetLeft + Math.max(half, Math.min(canvas.clientWidth - half, (v.x + 1) / 2 * canvas.clientWidth))) + "px";
+      el.style.top = (canvas.offsetTop + (1 - v.y) / 2 * canvas.clientHeight + dy) + "px";
+    }
+    let frame = -1, onScreen = true;
+    const t0 = performance.now();
+    function current() {                                               // follow the real video when it plays
+      if (clock && clock.readyState >= 2 && !clock.paused) return Math.min(N - 1, Math.floor(clock.currentTime * C.fps));
+      return Math.floor((performance.now() - t0) / 1000 * C.fps) % N;
+    }
+    function setFrame(f) {
+      if (f === frame) return;
+      frame = f;
+      const s = fgs[f], P = g1.attributes.position, Cc = g1.attributes.color;
+      P.array.set(s.pos); Cc.array.set(s.rgb); g1.setDrawRange(0, s.pos.length / 3);
+      P.needsUpdate = Cc.needsUpdate = true;
+      setFrustum(fSrc, C.src[f]); setFrustum(fNew, C.tgt[f]);
+    }
+    if ("IntersectionObserver" in window) new IntersectionObserver((es) => { onScreen = es[0].isIntersecting; }).observe(box);
+    function loop() {
+      if (onScreen) {
+        resize(); setFrame(current()); controls.update(); renderer.render(scene, cam);
+        place(labSrc, srcMid, 24); place(labNew, newEnd, -24);
+      }
+      requestAnimationFrame(loop);
+    }
+    box.classList.add("ready");
+    requestAnimationFrame(loop);
+  }).catch((e) => console.error("teaser viewer:", e));
+})();
+</script>
 
 <!-- 01 Motivation (paper Fig. 2) -->
 <section>
