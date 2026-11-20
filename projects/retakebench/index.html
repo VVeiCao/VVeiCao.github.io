@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RetakeBench: Can Video Models Retake Dynamic Scenes from Extreme Viewpoints?</title>
+<link rel="icon" type="image/png" href="web_assets/icons/small_icon.png">
+<link rel="apple-touch-icon" href="web_assets/icons/small_icon.png">
+<link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,600,700|Noto+Sans:400,500,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta name="description" content="RetakeBench: a scalable benchmark for camera redirection of monocular dynamic videos, with pseudo-4D ground truth and two new metrics (camera accuracy, object fidelity).">
+
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-card: #f8fafc;
+    --bg-elev: #f1f5f9;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --text-dim: #475569;
+    --text-mute: #94a3b8;
+    --accent-blue: #2563eb;
+    --accent-orange: #ea580c;
+    --accent-green: #059669;
+    --accent-red: #dc2626;
+    --accent-yellow: #ca8a04;
+    --accent-purple: #7c3aed;
+    --code-bg: #f1f5f9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 20px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, .gs { font-family: 'Google Sans', 'Noto Sans', sans-serif; }
+  a { color: var(--accent-blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code, pre, .mono { font-family: 'Noto Sans', ui-monospace, monospace; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .container-narrow { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+  .container-wide { max-width: 1560px; margin: 0 auto; padding: 0 24px; }
+
+  /* Hero */
+  .hero {
+    padding: 56px 24px 44px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-logo {
+    max-width: 980px;
+    width: 95%;
+    height: auto;
+    display: block;
+    margin: 0 auto 22px;
+  }
+  .hero h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 6px auto 14px;
+    letter-spacing: -0.012em;
+    line-height: 1.22;
+    color: var(--text);
+  }
+  .hero .subtitle {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--text-dim);
+    margin: 0 auto 28px;
+    max-width: 850px;
+  }
+  .authors { color: var(--text); font-size: 1.25rem; margin: 22px 0 8px; font-family: 'Google Sans', 'Noto Sans', sans-serif; }
+  .authors .author { display: inline-block; margin: 0 8px; white-space: nowrap; }
+  .authors a { color: hsl(204, 86%, 47%); }
+  .authors a:hover { text-decoration: underline; color: hsl(204, 86%, 38%); }
+  .authors sup { color: var(--text); font-weight: 500; font-size: 0.85em; }
+  .affil {
+    color: var(--text-dim);
+    font-size: 1.18rem;
+    margin: 10px 0 30px;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+  }
+  .affil .institution { display: inline-block; margin: 0 10px; white-space: nowrap; }
+  .affil sup { color: var(--text); font-weight: 500; font-size: 0.85em; }
+
+  .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 22px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px;
+    background: #363636;
+    color: #fff;
+    border: 1px solid #363636;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 1rem;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .btn:hover { background: #1a1a1a; border-color: #1a1a1a; text-decoration: none; color: #fff; }
+  .btn .icon { font-size: 1.05rem; }
+
+  .tldr {
+    margin: 28px auto 0;
+    padding: 0 24px;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    text-align: center;
+    max-width: 1200px;
+    color: var(--text);
+  }
+  .tldr strong { color: var(--text); font-weight: 700; }
+
+  /* Sections */
+  section { padding: 56px 0; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: none; }
+  h2.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 14px;
+    color: var(--text);
+    letter-spacing: -0.012em;
+    text-align: center;
+  }
+  .section-desc {
+    color: var(--text-dim);
+    font-size: 1.2rem;
+    line-height: 1.55;
+    margin: 0 auto 30px;
+    max-width: 1500px;
+    text-align: center;
+    text-wrap: balance;
+  }
+  .section-desc code {
+    background: var(--code-bg);
+    color: var(--text);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.86em;
+  }
+
+  /* Asset image */
+  .asset-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+  }
+  .asset-figure { margin: 0; }
+  .asset-caption {
+    font-size: 0.85rem;
+    color: var(--text-mute);
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* 4D viewer row */
+  .viz-row {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr 1fr;
+    gap: 12px;
+    align-items: stretch;
+    margin: 14px 0;
+  }
+  @media (max-width: 900px) { .viz-row { grid-template-columns: 1fr; } }
+  .viz-cell { text-align: center; min-width: 0; display: flex; flex-direction: column; }
+  .viz-cell video, .viz-cell iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: block;
+  }
+  .viz-cell video { object-fit: cover; }
+  .viz-cell.center video, .viz-cell.center iframe {
+    aspect-ratio: 16 / 9;
+  }
+  .viz-cell iframe { border: 1px solid var(--border); }
+  .viz-cell .label {
+    margin-top: 5px;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* Baseline gallery */
+  .gallery-tabs {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+  }
+  .gallery-tab {
+    padding: 6px 14px;
+    background: var(--bg-card);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .gallery-tab:hover { color: var(--text); border-color: var(--accent-blue); }
+  .gallery-tab.active {
+    background: var(--accent-blue);
+    color: #fff;
+    border-color: var(--accent-blue);
+  }
+  .gallery-grid {
+    display: none;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+  .gallery-grid.active { display: grid; }
+  @media (max-width: 1100px) { .gallery-grid { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 700px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+  .gcell { text-align: center; }
+  .gcell video {
+    width: 100%; aspect-ratio: 16/10; object-fit: cover;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: block;
+  }
+  .gcell .glabel {
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 0.72rem;
+    margin-top: 5px;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+  .gcell .glabel.gt    { color: var(--accent-green); }
+  .gcell .glabel.depth { color: var(--accent-purple); }
+  .gcell .glabel.r4d   { color: var(--accent-orange); }
+  .gcell .glabel.src   { color: var(--accent-yellow); }
+
+  /* Quantitative tables */
+  .metric-block { margin-bottom: 28px; }
+  .metric-head {
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-orange);
+    margin: 0 0 10px;
+  }
+  table.metric {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    font-variant-numeric: tabular-nums;
+  }
+  table.metric th, table.metric td {
+    padding: 8px 12px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+  table.metric th:last-child, table.metric td:last-child { border-right: none; }
+  table.metric tr:last-child td { border-bottom: none; }
+  table.metric thead th {
+    background: var(--bg-elev);
+    color: var(--text-dim);
+    font-weight: 600;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+  }
+  table.metric td.method {
+    text-align: left;
+    color: var(--accent-yellow);
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+  table.metric td.best { color: var(--accent-green); font-weight: 700; }
+  table.metric td.second { color: var(--text); text-decoration: underline dashed var(--accent-green); text-underline-offset: 3px; }
+  .metric-note {
+    margin-top: 8px;
+    font-size: 0.78rem;
+    color: var(--text-mute);
+  }
+
+  /* Motivation section */
+  .motiv-block {
+    display: flex; flex-direction: column;
+    gap: 18px;
+  }
+  .motiv-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: stretch;
+  }
+  @media (max-width: 900px) { .motiv-top { grid-template-columns: 1fr; } }
+  .motiv-cell {
+    display: flex; flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+  .motiv-cell-label {
+    font-size: 0.85rem;
+    color: var(--text-mute);
+    margin: 8px 0 0;
+    text-align: center;
+  }
+  .motiv-source-large {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: block;
+  }
+  .motiv-pc-large {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: block;
+  }
+
+  /* Motivation results table (laid out at full container-wide width, no scroll) */
+  .motiv-table-wrap {
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .motiv-table {
+    width: 100%;
+    min-width: 1100px;
+    border-collapse: collapse;
+    background: var(--bg);
+    table-layout: fixed;
+  }
+  .motiv-table th, .motiv-table td {
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    vertical-align: middle;
+  }
+  .motiv-table th:last-child, .motiv-table td:last-child { border-right: none; }
+  .motiv-table tbody tr:last-child td { border-bottom: none; }
+  .motiv-table thead th {
+    background: var(--bg-elev);
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .motiv-table thead th.group {
+    color: var(--accent-blue);
+    font-size: 0.86rem;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+  }
+  .motiv-table colgroup col.col-method { width: 13%; }
+  .motiv-table colgroup col.col-video  { width: 16%; }
+  .motiv-table colgroup col.col-metric { width: 5.4%; }
+  .motiv-table colgroup col.col-he     { width: 17%; }
+  .motiv-table td.col-video { padding: 6px; }
+  .motiv-table td.col-method {
+    color: var(--accent-blue);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-align: left;
+    padding: 10px 12px;
+    white-space: nowrap;
+  }
+  .motiv-table td.col-video video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+    background: var(--bg-elev);
+  }
+  .motiv-table td.col-metric {
+    text-align: center;
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+  }
+  .motiv-table td.col-metric.best {
+    color: var(--accent-green);
+    font-weight: 700;
+  }
+  .motiv-table td.col-he {
+    text-align: center;
+    font-size: 1.05rem;
+    color: var(--text);
+    background: var(--bg-card);
+    line-height: 1.4;
+    padding: 12px 14px;
+  }
+  .motiv-table td.col-he .he-mark {
+    display: block;
+    font-size: 1.7rem;
+    margin: 0 0 4px;
+    line-height: 1;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+  }
+  .motiv-table td.col-he.fail .he-mark { color: var(--text-mute); }
+  .motiv-table td.col-he.pass .he-mark { color: var(--accent-green); }
+  .motiv-table td.col-he.pass {
+    color: var(--accent-green);
+    font-weight: 600;
+  }
+  .motiv-table td.col-he .he-note {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    font-weight: 400;
+    display: block;
+    margin-top: 4px;
+  }
+  .motiv-table td.col-he.pass .he-note { color: var(--accent-green); opacity: 0.85; }
+
+  /* Comparison section */
+  .cmp-tabs {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+    margin-bottom: 20px;
+  }
+  .cmp-tab {
+    padding: 8px 18px;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .cmp-tab:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+  .cmp-tab.active {
+    background: #363636;
+    color: #fff;
+    border-color: #363636;
+  }
+  .cmp-case-label {
+    text-align: center;
+    color: var(--text-mute);
+    font-size: 0.95rem;
+    margin: 0 0 14px;
+  }
+  .cmp-videos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 800px) { .cmp-videos { grid-template-columns: repeat(2, 1fr); } }
+  .cmp-vcell { text-align: center; }
+  .cmp-vcell video {
+    width: 100%; aspect-ratio: 16/9; object-fit: cover;
+    border-radius: 6px; border: 1px solid var(--border);
+    background: var(--bg-card); display: block;
+  }
+  .cmp-vname { margin-top: 8px; font-size: 0.95rem; color: var(--text); font-weight: 500; }
+
+  .cmp-table-wrap { width: 100%; border-radius: 6px; border: 1px solid var(--border); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .cmp-table {
+    width: 100%; min-width: 1100px; border-collapse: collapse; background: var(--bg);
+    table-layout: fixed;
+  }
+  .cmp-table th, .cmp-table td {
+    padding: 6px 4px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.82rem;
+  }
+  .cmp-table th:last-child, .cmp-table td:last-child { border-right: none; }
+  .cmp-table tbody tr:last-child td { border-bottom: none; }
+  .cmp-table thead th {
+    background: var(--bg-elev);
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 0.74rem;
+    white-space: nowrap;
+  }
+  .cmp-table thead th.band {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 8px 6px;
+  }
+  .cmp-table thead th.band-trad {
+    background: #f1f5f9;
+    color: var(--text-dim);
+  }
+  .cmp-table thead th.band-r4d {
+    background: rgba(5, 150, 105, 0.08);
+    color: var(--accent-green);
+  }
+  .cmp-table thead th.grp {
+    color: var(--accent-blue);
+    background: var(--bg-card);
+    font-size: 0.78rem;
+  }
+  .cmp-table th.col-method, .cmp-table td.col-method {
+    width: 9%; text-align: left; padding-left: 10px;
+    font-weight: 600; color: var(--text); white-space: nowrap;
+    font-size: 0.85rem;
+  }
+  .cmp-table tbody tr.r4d-row td.col-method { color: var(--accent-blue); font-weight: 700; }
+  .cmp-table td.best { color: var(--accent-green); font-weight: 700; }
+  .cmp-table th.col-he, .cmp-table td.col-he {
+    width: 5.5%; text-align: center; padding: 4px 2px;
+    background: var(--bg-card);
+    border-left: 2px solid var(--border);
+    border-right: 2px solid var(--border);
+  }
+  .cmp-table thead th.col-he {
+    font-size: 0.78rem; font-weight: 700; color: var(--text);
+  }
+  .cmp-table tbody td.col-he { font-size: 1.35rem; line-height: 1; }
+  .cmp-table td.col-he.pass { color: var(--accent-green); }
+  .cmp-table td.col-he.fail { color: var(--text-mute); }
+
+  /* Data Case section */
+  .data-case-row {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1fr 1fr;
+    gap: 12px;
+    margin: 18px 0 28px;
+    align-items: stretch;
+  }
+  @media (max-width: 1000px) { .data-case-row { grid-template-columns: 1fr 1fr; } }
+  .data-case-cell { display: flex; flex-direction: column; min-width: 0; }
+  .data-case-cell video, .data-case-cell iframe {
+    width: 100%; aspect-ratio: 16/9; object-fit: cover;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 6px; display: block;
+  }
+  .data-case-cell .dc-label {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--text-mute);
+    text-align: center;
+  }
+
+  /* BibTeX section */
+  .bibtex-block {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    position: relative;
+  }
+  .bibtex-block pre {
+    margin: 0;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text);
+    white-space: pre;
+  }
+  .bibtex-copy {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-dim);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .bibtex-copy:hover { color: var(--text); border-color: var(--accent-blue); }
+
+  /* Footer */
+  footer {
+    padding: 28px 24px;
+    text-align: center;
+    color: var(--text-mute);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+  footer code { background: var(--code-bg); padding: 2px 6px; border-radius: 3px; color: var(--text-dim); }
+
+  /* Teaser (paper Fig. 1) */
+  .teaser-sec { padding: 44px 0 52px; }
+  .tz-top { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; align-items: stretch; }
+  .tz-col { display: flex; flex-direction: column; min-width: 0; }
+  .tz-title { margin: 0 0 10px; text-align: center; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 600; font-size: 1.15rem; color: var(--text); }
+  .tz-card { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 10px 10px 12px; border-radius: 14px; min-width: 0; }
+  .tz-card-label { margin: 0; text-align: center; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 600; font-size: 1rem; }
+  .tz-card video { width: 100%; aspect-ratio: 832 / 480; object-fit: cover; border-radius: 8px; display: block; background: var(--bg-elev); }
+  .tz-src { background: #e8eff8; } .tz-src .tz-card-label { color: #2f6db5; }
+  .tz-scene { justify-content: center; padding: 0; border: 1px solid var(--border); }
+  .tz-scene .tz-still { width: 100%; height: 100%; max-height: 520px; object-fit: contain; display: block; }
+  .pv { position: relative; overflow: hidden; background: #fff; }
+  .pv canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity 0.3s; cursor: grab; touch-action: none; }
+  .pv canvas:active { cursor: grabbing; }
+  .pv.ready canvas { opacity: 1; }
+  .pv.ready .tz-still, .pv.ready .pv-wait { visibility: hidden; }
+  .pv-wait { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; margin: 0; font-size: 0.8rem; color: var(--text-mute); }
+  .pv-lab { position: absolute; transform: translate(-50%, -50%); display: none; pointer-events: none; white-space: nowrap; font-family: 'Times New Roman', Times, 'Liberation Serif', serif; font-weight: 700; font-size: 1.15rem; text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 6px #fff; transition: opacity 0.2s; }
+  .pv-lab-src { color: #2f6db5; } .pv-lab-new { color: #e0524f; }
+  .pv-reset { position: absolute; top: 10px; right: 10px; display: none; padding: 3px 12px; border: 1px solid var(--border); border-radius: 999px; background: rgba(255, 255, 255, 0.92); color: var(--text-dim); font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 0.78rem; line-height: 1.5; cursor: pointer; }
+  .pv-reset:hover { color: var(--text); border-color: var(--accent-blue); }
+  .pv-hint { position: absolute; left: 0; right: 0; bottom: 6px; display: none; margin: 0; text-align: center; font-size: 0.74rem; color: var(--text-dim); pointer-events: none; text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 5px #fff; }
+  .pv.ready .pv-lab, .pv.ready .pv-reset, .pv.ready .pv-hint { display: block; }
+  .data-case-cell .pv { width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--border); border-radius: 6px; }
+  .data-case-cell .pv-lab { font-size: 0.82rem; }
+  .data-case-cell .pv-reset { top: 6px; right: 6px; padding: 1px 8px; font-size: 0.68rem; }
+  .tz-question { margin: 28px 0 10px; text-align: center; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 600; font-size: 1.2rem; color: #e0524f; }
+  .tz-retakes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .tz-a { background: #efe8f6; } .tz-a .tz-card-label { color: #6b4c9a; }
+  .tz-b { background: #fbf1df; } .tz-b .tz-card-label { color: #9a6a12; }
+  .tz-c { background: #e5f2f2; } .tz-c .tz-card-label { color: #2c7373; }
+  .tz-caption { max-width: 1200px; margin: 22px auto 0; font-size: 1.02rem; line-height: 1.55; color: var(--text-dim); text-align: center; }
+  .tz-caption strong { color: var(--text); }
+  .tz-blue { color: #2f6db5; font-weight: 600; } .tz-red { color: #e0524f; font-weight: 600; }
+  @media (max-width: 900px) { .tz-top, .tz-retakes { grid-template-columns: 1fr; } }
+
+  /* Visual-check icons (the paper figures' tick / half / cross) */
+  .vc-icon { width: 1.05em; height: 1.05em; vertical-align: -0.16em; display: inline-block; }
+  .motiv-table td.col-he .he-mark .vc-icon { width: 1.6rem; height: 1.6rem; }
+  .motiv-pc-img { display: flex; align-items: center; justify-content: center; overflow: hidden; background: #fff; }
+  .motiv-pc-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .cmp-videos { grid-template-columns: repeat(4, 1fr); }
+  .cmp-vname .vc-icon { margin-right: 4px; }
+  .cmp-table td.second { text-decoration: underline; text-underline-offset: 3px; }
+  .cmp-table th.col-he, .cmp-table td.col-he { min-width: 118px; }
+  .cmp-table tbody td.col-he { font-size: 1.1rem; white-space: normal; padding-left: 8px; padding-right: 8px; }
+  .cmp-table td.col-he .vc-reason { display: block; margin-top: 4px; font-size: 0.7rem; line-height: 1.2; color: var(--text-dim); }
+
+  /* Reliability validation (PFERD) */
+  .rel-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 36px; align-items: center; margin-bottom: 32px; }
+  @media (max-width: 900px) { .rel-top { grid-template-columns: 1fr; } }
+  .rel-steps { list-style: none; counter-reset: rel; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+  .rel-steps li { counter-increment: rel; position: relative; padding-left: 46px; min-width: 0; }
+  .rel-steps li::before { content: counter(rel); position: absolute; left: 0; top: 2px; width: 30px; height: 30px; border-radius: 50%;
+    background: #363636; color: #fff; font: 700 0.9rem/30px 'Google Sans', 'Noto Sans', sans-serif; text-align: center; }
+  .rel-steps h3 { margin: 0 0 4px; font-size: 1.05rem; font-weight: 700; color: var(--text); text-wrap: balance; }
+  .rel-steps p { margin: 0; font-size: 0.95rem; line-height: 1.55; color: var(--text-dim); }
+  .rel-chart { margin: 0; }
+  .rel-chart img { display: block; width: 100%; max-width: 620px; height: auto; margin: 0 auto; }
+  .rel-chart figcaption, .rel-caption { font-size: 0.82rem; line-height: 1.5; color: var(--text-dim); margin: 10px auto 0; max-width: 1200px; }
+  .rel-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 24px 0 0; }
+  .rel-stat { border: 1px solid var(--border); border-radius: 6px; background: var(--bg-card); padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .rel-num { font: 700 1.5rem/1.2 'Google Sans', 'Noto Sans', sans-serif; color: var(--accent-green); font-variant-numeric: tabular-nums; }
+  .rel-what { font-size: 0.8rem; line-height: 1.4; color: var(--text-dim); }
+  #relTabs .cmp-tab { font-family: 'Google Sans', 'Noto Sans', sans-serif; }
+  .rel-map { margin: 0 auto 14px; max-width: 760px; }
+  .rel-map video { display: block; width: 100%; height: auto; aspect-ratio: 990 / 472; background: #fff; }
+  .rel-videos .cmp-vcell { min-width: 0; }
+  .rel-videos .cmp-vcell video { aspect-ratio: 832 / 480; }
+  .rel-videos .cmp-vname { font-size: 0.88rem; }
+  .rel-tag { display: inline-block; padding: 0 7px; border-radius: 999px; border: 1px solid var(--g); color: var(--g);
+    font-size: 0.68rem; font-weight: 700; line-height: 1.5; vertical-align: 1px; letter-spacing: 0.02em; }
+  .rel-vscore { margin-top: 2px; font-size: 0.85rem; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+  .rel-key { align-self: center; font-size: 0.8rem; line-height: 1.5; color: var(--text-dim); text-align: left; min-width: 0; }
+  .rel-key p { margin: 0 0 8px; } .rel-key p:last-child { margin: 0; }
+  .rel-c-real { color: #EB6834; font-weight: 600; } .rel-c-ours { color: #2A78D6; font-weight: 600; } .rel-c-gen { color: #C99700; font-weight: 600; }
+
+  [hidden] { display: none !important; }
+  /* one column width for every section, so every tile has one size */
+  .container, .container-wide { max-width: 1440px; }
+  /* tighter vertical rhythm */
+  section { padding: 38px 0; }
+  .hero { padding: 40px 24px 28px; }
+  .section-desc { margin-bottom: 22px; }
+  .teaser-sec { padding: 28px 0 30px; }
+  /* one tile size everywhere: four per row, the videos' 832 x 480 frame */
+  .cmp-videos, .data-case-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; align-items: start; }
+  .cmp-videos { margin-bottom: 18px; }
+  .data-case-row { margin: 0 0 18px; }
+  @media (max-width: 800px) { .cmp-videos, .data-case-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .cmp-vcell { min-width: 0; }
+  .cmp-vcell video, .cmp-vcell img, .data-case-cell video, .data-case-cell .pv, .rel-videos .cmp-vcell video {
+    width: 100%; aspect-ratio: 832 / 480; height: auto; object-fit: cover; display: block; }
+  .cmp-vcell img { border-radius: 6px; border: 1px solid var(--border); }
+  .mot-scene img { object-fit: contain; background: #fff; }
+  .data-case-cell .pv { position: relative; overflow: hidden; }
+  /* Motivation: the method videos moved into the tile row; the table keeps the scores, verdict on one line */
+  .mot-grid { margin-bottom: 18px; }
+  .motiv-table { min-width: 760px; }
+  .motiv-table colgroup col.col-he { width: 24%; }
+  .motiv-table td.col-he { white-space: nowrap; }
+  .motiv-table td.col-he .he-mark { display: inline-block; vertical-align: middle; margin: 0 8px 0 0; }
+  .motiv-table td.col-he .he-note { display: inline; margin: 0; vertical-align: middle; }
+  /* figures use the column */
+  .asset-figure, .asset-img { width: 100%; max-width: none; }
+  .rel-chart img { max-width: 100%; }
+  /* teaser: the 4D scene takes the height of the source card, so neither card has empty space */
+  .tz-src { justify-content: flex-start; }
+  .tz-scene { position: relative; min-height: 0; }
+  .tz-scene .tz-still { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; }
+  @media (max-width: 900px) { .tz-scene .tz-still { position: static; height: auto; } }   /* stacked: as on the original page */
+  /* Reliability: one grid; the top view takes 2 x 2 tiles, the caption fills the last slot */
+  .rel-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; align-items: start; }
+  .rel-grid .rel-map { grid-column: 1 / 3; grid-row: 1 / 3; align-self: stretch; position: relative; margin: 0; max-width: none;
+    border: 1px solid var(--border); border-radius: 6px; background: #fff; overflow: hidden; }
+  .rel-grid .rel-map video { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: contain; background: #fff; }
+  .rel-grid .rel-key, .rel-grid .rel-caption { align-self: center; margin: 0; max-width: none; text-align: left; }
+  @media (max-width: 800px) {
+    .rel-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .rel-grid .rel-map { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 968 / 660; }
+  }
+
+  .btn.soon { opacity: 0.55; cursor: default; }
+  .btn.soon:hover { background: #363636; border-color: #363636; }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="container-wide">
+    <h1>Can Video Models Retake Dynamic Scenes from Extreme Viewpoints?</h1>
+    <div class="links">
+      <span class="btn soon"><span class="icon"><i class="fas fa-file-pdf"></i></span><span>PDF (coming soon)</span></span>
+      <span class="btn soon"><span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv (coming soon)</span></span>
+      <span class="btn soon"><span class="icon"><i class="fab fa-github"></i></span><span>Code (coming soon)</span></span>
+      <a class="btn" href="https://huggingface.co/datasets/vveicao/redirect4d-bench" target="_blank" rel="noopener"><span class="icon">🤗</span><span>Dataset</span></a>
+      <a class="btn" href="#bibtex"><span class="icon"><i class="fas fa-quote-left"></i></span><span>BibTeX</span></a>
+    </div>
+    <p class="tldr">
+      <strong>TL;DR:</strong> RetakeBench is a scalable benchmark for camera redirection of monocular dynamic videos, with per-clip pseudo-4D ground truth that directly measures camera following and subject placement.
+    </p>
+  </div>
+</header>
+
+
+<section class="teaser-sec" id="overview">
+  <div class="container-wide">
+    <div class="tz-top">
+      <div class="tz-col">
+        <p class="tz-title">Real video</p>
+        <div class="tz-card tz-src"><p class="tz-card-label">Source camera</p><video class="tz-clock" autoplay muted loop playsinline preload="auto"><source src="web_assets/teaser/source.mp4" type="video/mp4"></video></div>
+      </div>
+      <div class="tz-col">
+        <p class="tz-title">4D scene and camera paths</p>
+        <div class="tz-card tz-scene pv" data-cloud="teaser" data-clock="video.tz-clock">
+          <img class="tz-still" src="web_assets/teaser/scene.jpg" alt="4D scene with the source camera path (blue) and the new camera path (red)">
+          <canvas aria-label="Dynamic 4D point cloud with the source camera path (blue) and the new camera path (red); drag to orbit"></canvas>
+          <span class="pv-lab pv-lab-src">source camera</span><span class="pv-lab pv-lab-new">new camera</span>
+          <button class="pv-reset" type="button">Reset view</button>
+          <p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p>
+        </div>
+      </div>
+    </div>
+    <p class="tz-question">Without a ground-truth video, which one is better?</p>
+    <div class="tz-retakes">
+        <div class="tz-card tz-a"><p class="tz-card-label">Video model A</p><video autoplay muted loop playsinline preload="auto"><source src="web_assets/teaser/a.mp4" type="video/mp4"></video></div>
+        <div class="tz-card tz-b"><p class="tz-card-label">Video model B</p><video autoplay muted loop playsinline preload="auto"><source src="web_assets/teaser/b.mp4" type="video/mp4"></video></div>
+        <div class="tz-card tz-c"><p class="tz-card-label">Video model C</p><video autoplay muted loop playsinline preload="auto"><source src="web_assets/teaser/c.mp4" type="video/mp4"></video></div>
+    </div>
+    <p class="tz-caption" id="tzCaption"><span class="tz-blue">Blue</span>: source camera &middot; <span class="tz-red">red</span>: new camera &middot; drag the 4D scene to orbit</p>
+  </div>
+</section>
+<script src="web_assets/lib/three.min.js"></script>
+<script src="web_assets/lib/OrbitControls.js"></script>
+<script>
+(function () {
+  /* Dynamic 4D point-cloud viewers (teaser + data case): every element with class "pv" and data-cloud="<name>" gets one.
+     The cloud is web_assets/clouds/<name>.js, loaded as a <script> (fetch() is refused on file:// pages). A viewer
+     builds its WebGL context only while on screen and frees it when scrolled away (browsers allow ~16 contexts). The
+     foreground and both frustums follow the source video of the same case. Drag to orbit, right-drag to pan,
+     Ctrl/Cmd + scroll to zoom (plain scrolling keeps scrolling the page). */
+  if (!window.THREE) return;
+  const SRC = 0x2f6db5, NEW = 0xe0524f;
+  const clouds = (window.SCENE_CLOUDS = window.SCENE_CLOUDS || {}), decoded = {};
+  function load(name) {
+    if (clouds[name]) return Promise.resolve(clouds[name]);
+    return new Promise((ok, fail) => {
+      const s = document.createElement("script");
+      s.src = "web_assets/clouds/" + name + ".js";
+      s.onload = () => (clouds[name] ? ok(clouds[name]) : fail(new Error("cloud " + name + " missing")));
+      s.onerror = () => fail(new Error("cloud " + name + " did not load"));
+      document.head.appendChild(s);
+    });
+  }
+  function decode(name, J) {                                          // int16 positions + uint8 colours, once per cloud
+    if (decoded[name]) return decoded[name];
+    const C = J.meta, bin = atob(J.data), u8 = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    const buf = u8.buffer, lo = C.lo, hi = C.hi;
+    const sec = (s) => {
+      const q = new Int16Array(buf.slice(s.pos, s.pos + s.n * 6)), pos = new Float32Array(s.n * 3);
+      for (let i = 0; i < s.n * 3; i++) {
+        const a = i % 3, v = lo[a] + (q[i] + 32768) / 65535 * (hi[a] - lo[a]);
+        pos[i] = a === 0 ? v : -v;                                    // OpenCV world (y down, z forward) -> three.js
+      }
+      return { pos, rgb: new Uint8Array(buf.slice(s.rgb, s.rgb + s.n * 3)) };
+    };
+    clouds[name] = null;                                             // the base64 text is no longer needed
+    return (decoded[name] = { C, bg: sec(C.sections[0]), fgs: C.sections.slice(1).map(sec) });
+  }
+  const conv = (p) => new THREE.Vector3(p[0], -p[1], -p[2]);
+  const SEG = [[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [2, 3], [3, 4], [4, 1]], TRI = [[0, 1, 2], [0, 2, 3], [0, 3, 4], [0, 4, 1]];
+
+  function Viewer(box) {
+    const name = box.dataset.cloud;
+    let canvas = box.querySelector("canvas");                       // replaced by a fresh one after each context release
+    const clock = box.dataset.clock ? document.querySelector(box.dataset.clock)
+      : (box.closest(".data-case-row") || document).querySelector("video");
+    const labSrc = box.querySelector(".pv-lab-src"), labNew = box.querySelector(".pv-lab-new");
+    let D = null, live = null, saved = null, onScreen = false, loading = null;
+    const t0 = performance.now();
+
+    function build() {                                                // scene + renderer for one on-screen period
+      const C = D.C, R = C.radius, N = C.frames;
+      let renderer;
+      try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); } catch (e) { return null; }
+      renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+      renderer.setClearColor(0xffffff);
+      const scene = new THREE.Scene(), g0 = new THREE.BufferGeometry();
+      g0.setAttribute("position", new THREE.BufferAttribute(D.bg.pos, 3));
+      g0.setAttribute("color", new THREE.BufferAttribute(D.bg.rgb, 3, true));
+      scene.add(new THREE.Points(g0, new THREE.PointsMaterial({ size: R * 0.019, vertexColors: true })));
+      const nMax = Math.max(...D.fgs.map((f) => f.pos.length / 3)), g1 = new THREE.BufferGeometry();
+      g1.setAttribute("position", new THREE.BufferAttribute(new Float32Array(nMax * 3), 3));
+      g1.setAttribute("color", new THREE.BufferAttribute(new Uint8Array(nMax * 3), 3, true));
+      const fgPts = new THREE.Points(g1, new THREE.PointsMaterial({ size: R * 0.015, vertexColors: true }));
+      fgPts.frustumCulled = false;
+      scene.add(fgPts);
+      function path(frs, color) {                                      // tube along the camera centres, arrowhead at 60%
+        const mat = new THREE.MeshBasicMaterial({ color }), curve = new THREE.CatmullRomCurve3(frs.map((f) => conv(f[0])));
+        scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 200, R * 0.0065, 8, false), mat));
+        const cone = new THREE.Mesh(new THREE.ConeGeometry(R * 0.02, R * 0.055, 18), mat);
+        cone.position.copy(curve.getPointAt(0.6));
+        cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), curve.getTangentAt(0.6));
+        scene.add(cone);
+      }
+      function frustum(color) {                                        // white faces + coloured edges, as in Fig. 1
+        const lines = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color }));
+        lines.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(16 * 3), 3));
+        const faces = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial(
+          { color: 0xffffff, transparent: true, opacity: 0.85, side: THREE.DoubleSide, depthWrite: false }));
+        faces.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(12 * 3), 3));
+        lines.frustumCulled = faces.frustumCulled = false;
+        scene.add(faces); scene.add(lines);
+        return { lines, faces };
+      }
+      function setFrustum(o, pts) {
+        const p = pts.map(conv), a = o.lines.geometry.attributes.position, b = o.faces.geometry.attributes.position;
+        SEG.forEach((s, i) => { p[s[0]].toArray(a.array, i * 6); p[s[1]].toArray(a.array, i * 6 + 3); });
+        TRI.forEach((t, i) => t.forEach((k, j) => p[k].toArray(b.array, i * 9 + j * 3)));
+        a.needsUpdate = b.needsUpdate = true;
+      }
+      path(C.src, SRC); path(C.tgt, NEW);
+      const fSrc = frustum(SRC), fNew = frustum(NEW);
+      const target = conv(C.view.look || C.target), home = conv(C.view.pos);
+      const cam = new THREE.PerspectiveCamera(40, 1, R * 0.01, R * 100);
+      const controls = new THREE.OrbitControls(cam, canvas);
+      controls.enableDamping = true;
+      controls.enableZoom = false;
+      if (saved) { cam.position.copy(saved.pos); controls.target.copy(saved.target); } else { cam.position.copy(home); controls.target.copy(target); }
+      controls.update();
+      const fov = (aspect) => 2 * Math.atan(Math.max(C.view.fit[1], C.view.fit[0] / aspect) * 1.08) * 180 / Math.PI;
+      const v = new THREE.Vector3(), srcMid = conv(C.src[Math.floor(N / 2)][0]), newEnd = conv(C.tgt[N - 1][0]);
+      function place(el, p3, dy) {
+        if (!el) return;
+        v.copy(p3).project(cam);
+        el.style.opacity = v.z < 1 && Math.abs(v.x) < 0.95 && Math.abs(v.y) < 0.95 ? 1 : 0;
+        const half = el.offsetWidth / 2 + 6;                           // keep the whole label inside the panel
+        el.style.left = (canvas.offsetLeft + Math.max(half, Math.min(canvas.clientWidth - half, (v.x + 1) / 2 * canvas.clientWidth))) + "px";
+        const hh = el.offsetHeight / 2 + 4;
+        el.style.top = (canvas.offsetTop + Math.max(hh, Math.min(canvas.clientHeight - hh, (1 - v.y) / 2 * canvas.clientHeight + dy))) + "px";
+      }
+      let frame = -1, raf = 0;
+      function current() {                                             // follow the case's source video when it plays
+        if (clock && clock.readyState >= 2 && !clock.paused) return Math.min(N - 1, Math.floor(clock.currentTime * C.fps));
+        return Math.floor((performance.now() - t0) / 1000 * C.fps) % N;
+      }
+      function loop() {
+        const w = canvas.clientWidth, h = canvas.clientHeight, pr = renderer.getPixelRatio();
+        if (w && h) {
+          if (canvas.width !== Math.round(w * pr) || canvas.height !== Math.round(h * pr)) renderer.setSize(w, h, false);
+          const f = fov(w / h);
+          if (cam.aspect !== w / h || cam.fov !== f) { cam.aspect = w / h; cam.fov = f; cam.updateProjectionMatrix(); }
+          const k = current();
+          if (k !== frame) {
+            frame = k;
+            const s = D.fgs[k], P = g1.attributes.position, Cc = g1.attributes.color;
+            P.array.set(s.pos); Cc.array.set(s.rgb); g1.setDrawRange(0, s.pos.length / 3);
+            P.needsUpdate = Cc.needsUpdate = true;
+            setFrustum(fSrc, C.src[k]); setFrustum(fNew, C.tgt[k]);
+          }
+          controls.update(); renderer.render(scene, cam);
+          place(labSrc, srcMid, 22); place(labNew, newEnd, -22);
+        }
+        raf = requestAnimationFrame(loop);
+      }
+      raf = requestAnimationFrame(loop);
+      return {
+        reset() { cam.position.copy(home); controls.target.copy(target); controls.update(); },
+        zoom(k) { cam.position.copy(controls.target.clone().add(cam.position.clone().sub(controls.target).multiplyScalar(k))); },
+        stop() {
+          cancelAnimationFrame(raf);
+          saved = { pos: cam.position.clone(), target: controls.target.clone() };
+          controls.dispose();
+          scene.traverse((o) => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); });
+          renderer.dispose(); renderer.forceContextLoss();
+          const fresh = canvas.cloneNode(false);                       // a lost context cannot be reused on that canvas
+          canvas.replaceWith(fresh); canvas = fresh;
+        },
+      };
+    }
+    function start() {
+      if (live || !onScreen) return;
+      if (!D) {
+        loading = loading || load(name).then((J) => { D = decode(name, J); box.classList.add("ready"); start(); })
+          .catch((e) => { box.classList.add("failed"); console.error("viewer " + name + ":", e); });
+        return;
+      }
+      live = build();
+    }
+    function stop() { if (live) { live.stop(); live = null; } }
+    const reset = box.querySelector(".pv-reset");
+    if (reset) reset.addEventListener("click", () => { saved = null; if (live) live.reset(); });
+    box.addEventListener("wheel", (e) => {                             // Ctrl/Cmd + scroll (and trackpad pinch) zooms
+      if (!live || !(e.ctrlKey || e.metaKey)) return;
+      e.preventDefault();
+      live.zoom(Math.exp(Math.max(-60, Math.min(60, e.deltaY)) * 0.003));
+    }, { passive: false });
+    return { box, enter() { onScreen = true; start(); }, leave() { onScreen = false; stop(); } };
+  }
+
+  function init() {                                                  // after parsing: the data case comes after this script
+    const viewers = Array.from(document.querySelectorAll(".pv[data-cloud]")).map(Viewer);
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((es) => es.forEach((e) => {
+        const v = viewers.find((x) => x.box === e.target);
+        if (v) (e.isIntersecting ? v.enter() : v.leave());
+      }), { rootMargin: "150px 0px" });
+      viewers.forEach((v) => io.observe(v.box));
+    } else {
+      viewers.forEach((v) => v.enter());
+    }
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})();
+</script>
+
+
+<section id="motivation">
+  <div class="container-wide">
+    <h2 class="section-title">Motivation</h2>
+    <p class="section-desc"><strong>Higher CLIP and VBench scores, wrong retake.</strong> Method A wins 9 of the 10 columns; the visual check says wrong view, robot collapses.</p>
+
+    <div class="motiv-block">
+      <div class="cmp-videos mot-grid">
+        <div class="cmp-vcell"><video autoplay muted loop playsinline preload="auto"><source src="web_assets/motivation/source.mp4" type="video/mp4"></video><div class="cmp-vname">Source video &middot; yaw &minus;90&deg;</div></div>
+        <div class="cmp-vcell mot-scene"><img src="web_assets/motivation/scene.jpg" alt="Foreground-complete 4D point cloud with the target camera path in red"><div class="cmp-vname">4D scene &middot; <span class="tz-red">target path</span></div></div>
+        <div class="cmp-vcell"><video autoplay muted loop playsinline preload="auto"><source src="web_assets/motivation/a.mp4" type="video/mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg> Method A</div></div>
+        <div class="cmp-vcell"><video autoplay muted loop playsinline preload="auto"><source src="web_assets/motivation/b.mp4" type="video/mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg> Method B</div></div>
+      </div>
+
+      <div class="motiv-table-wrap">
+      <table class="motiv-table">
+        <colgroup>
+          <col class="col-method">
+          <col class='col-metric'><col class='col-metric'><col class='col-metric'><col class='col-metric'><col class='col-metric'><col class='col-metric'><col class='col-metric'><col class='col-metric'><col class='col-metric'><col class='col-metric'>
+          <col class="col-he">
+        </colgroup>
+        <thead>
+          <tr>
+            <th rowspan="2">Method</th>
+            <th class="group" colspan="3">CLIP&nbsp;&uarr;</th>
+            <th class="group" colspan="7">VBench&nbsp;&uarr;</th>
+            <th rowspan="2">Visual check</th>
+          </tr>
+          <tr>
+            <th class="col-metric">T</th><th class="col-metric">F</th><th class="col-metric">V</th><th class="col-metric">SC</th><th class="col-metric">BG</th><th class="col-metric">TF</th><th class="col-metric">MS</th><th class="col-metric">AQ</th><th class="col-metric">IQ</th><th class="col-metric">OC</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-method">Method A</td>
+            <td class="col-metric best">0.350</td><td class="col-metric best">0.973</td><td class="col-metric best">0.906</td><td class="col-metric best">0.888</td><td class="col-metric best">0.916</td><td class="col-metric best">0.940</td><td class="col-metric">0.978</td><td class="col-metric best">0.555</td><td class="col-metric best">0.695</td><td class="col-metric best">0.318</td>
+            <td class="col-he fail"><span class="he-mark"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg></span><span class="he-note">Wrong view, robot collapses</span></td>
+          </tr>
+          <tr>
+            <td class="col-method">Method B</td>
+            <td class="col-metric">0.328</td><td class="col-metric">0.971</td><td class="col-metric">0.893</td><td class="col-metric">0.837</td><td class="col-metric">0.910</td><td class="col-metric">0.925</td><td class="col-metric best">0.980</td><td class="col-metric">0.507</td><td class="col-metric">0.660</td><td class="col-metric">0.313</td>
+            <td class="col-he pass"><span class="he-mark"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg></span><span class="he-note">Correct view, robot intact</span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="metric-note">CLIP-T/F/V and VBench (SC, BG, TF, MS, AQ, IQ, OC), higher is better; green: the higher of the two.</p>
+    </div>
+  </div>
+</section>
+
+<section id="comparison">
+  <div class="container-wide">
+    <h2 class="section-title">Comparison</h2>
+    <p class="section-desc"><strong>The correct retake scores best on RetakeBench.</strong> Four cases, seven methods.</p>
+
+    <div class="cmp-tabs" id="cmpTabs">
+      <span class="cmp-tab active" data-case="cow">Cow</span>
+      <span class="cmp-tab" data-case="dancer3">Dancer 3</span>
+      <span class="cmp-tab" data-case="robot2">Robot 2</span>
+      <span class="cmp-tab" data-case="pig">Pig</span>
+    </div>
+
+<div class="cmp-pane" data-case="cow" style="display:block">
+  <p class="cmp-case-label">Cow &middot; yaw &minus;120&deg;</p>
+  <div class="cmp-videos">
+    <div class="cmp-vcell"><video autoplay muted loop playsinline preload="auto"><source src="web_assets/cases/cow/input.mp4" type="video/mp4"></video><div class="cmp-vname">Input video</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline preload="auto"><source src="web_assets/cases/cow/worldforge.mp4" type="video/mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><title>wrong viewpoint</title><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg> WorldForge</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline preload="auto"><source src="web_assets/cases/cow/rcm_moge2.mp4" type="video/mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><title>wrong viewpoint</title><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg> ReCamMaster</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline preload="auto"><source src="web_assets/cases/cow/redirector_moge2.mp4" type="video/mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><title>wrong viewpoint</title><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg> ReDirector</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline preload="auto"><source src="web_assets/cases/cow/gen3c_method1.mp4" type="video/mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><title>subject deformed</title><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg> Gen3C</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline preload="auto"><source src="web_assets/cases/cow/tc_method2.mp4" type="video/mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><title>subject deformed</title><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg> TrajectoryCrafter</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline preload="auto"><source src="web_assets/cases/cow/neoverse.mp4" type="video/mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><title>correct view</title><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg> NeoVerse</div></div>
+    <div class="cmp-vcell"><video autoplay muted loop playsinline preload="auto"><source src="web_assets/cases/cow/manifold4d.mp4" type="video/mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><title>correct view</title><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg> Manifold4D</div></div>
+  </div>
+  <div class="cmp-table-wrap"><table class="cmp-table">
+    <thead>
+      <tr>
+        <th rowspan="3" class="col-method">Method</th>
+        <th class="band band-trad" colspan="10">Traditional video metrics</th>
+        <th rowspan="3" class="col-he">Visual check</th>
+        <th class="band band-r4d" colspan="7">RetakeBench metrics</th>
+      </tr>
+      <tr>
+        <th class="grp" colspan="3">CLIP&nbsp;&uarr;</th>
+        <th class="grp" colspan="7">VBench&nbsp;&uarr;</th>
+        <th class="grp" colspan="3">Camera acc.&nbsp;&darr;</th>
+        <th class="grp" colspan="2">Object fid.&nbsp;&uarr;</th>
+        <th class="grp" colspan="2">Subject loc.&nbsp;&uarr;</th>
+      </tr>
+      <tr>
+        <th class="col-m">T</th><th class="col-m">F</th><th class="col-m">V</th>
+        <th class="col-m">SC</th><th class="col-m">BG</th><th class="col-m">TF</th><th class="col-m">MS</th><th class="col-m">AQ</th><th class="col-m">IQ</th><th class="col-m">OC</th>
+        <th class="col-m">RotErr</th><th class="col-m">TransErr</th><th class="col-m">TransErr<sub>raw</sub></th>
+        <th class="col-m">D</th><th class="col-m">R</th>
+        <th class="col-m">cIoU</th><th class="col-m">R&middot;cIoU</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-method">WorldForge</td>
+        <td class="col-m ">0.292</td>
+        <td class="col-m second">0.970</td>
+        <td class="col-m ">0.867</td>
+        <td class="col-m ">0.926</td>
+        <td class="col-m second">0.930</td>
+        <td class="col-m best">0.955</td>
+        <td class="col-m best">0.981</td>
+        <td class="col-m ">0.436</td>
+        <td class="col-m ">0.699</td>
+        <td class="col-m ">0.289</td>
+        <td class="col-he vc-fail"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg><span class="vc-reason">Wrong viewpoint</span></td>
+        <td class="col-m ">54.79</td>
+        <td class="col-m ">0.618</td>
+        <td class="col-m ">0.603</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.458</td>
+        <td class="col-m ">0.458</td>
+      </tr>
+      <tr>
+        <td class="col-method">ReCamMaster</td>
+        <td class="col-m ">0.297</td>
+        <td class="col-m ">0.953</td>
+        <td class="col-m second">0.906</td>
+        <td class="col-m second">0.930</td>
+        <td class="col-m ">0.918</td>
+        <td class="col-m ">0.931</td>
+        <td class="col-m ">0.961</td>
+        <td class="col-m ">0.425</td>
+        <td class="col-m ">0.708</td>
+        <td class="col-m second">0.291</td>
+        <td class="col-he vc-fail"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg><span class="vc-reason">Wrong viewpoint</span></td>
+        <td class="col-m ">19.37</td>
+        <td class="col-m ">0.178</td>
+        <td class="col-m ">0.153</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.310</td>
+        <td class="col-m ">0.310</td>
+      </tr>
+      <tr>
+        <td class="col-method">ReDirector</td>
+        <td class="col-m best">0.309</td>
+        <td class="col-m best">0.985</td>
+        <td class="col-m best">0.946</td>
+        <td class="col-m best">0.955</td>
+        <td class="col-m best">0.960</td>
+        <td class="col-m second">0.939</td>
+        <td class="col-m second">0.963</td>
+        <td class="col-m best">0.452</td>
+        <td class="col-m best">0.737</td>
+        <td class="col-m best">0.297</td>
+        <td class="col-he vc-fail"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg><span class="vc-reason">Wrong viewpoint</span></td>
+        <td class="col-m ">11.92</td>
+        <td class="col-m ">0.186</td>
+        <td class="col-m ">0.194</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.414</td>
+        <td class="col-m ">0.414</td>
+      </tr>
+      <tr>
+        <td class="col-method">Gen3C</td>
+        <td class="col-m ">0.289</td>
+        <td class="col-m ">0.949</td>
+        <td class="col-m ">0.771</td>
+        <td class="col-m ">0.824</td>
+        <td class="col-m ">0.923</td>
+        <td class="col-m ">0.926</td>
+        <td class="col-m ">0.957</td>
+        <td class="col-m ">0.430</td>
+        <td class="col-m ">0.531</td>
+        <td class="col-m ">0.283</td>
+        <td class="col-he vc-partial"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg><span class="vc-reason">Subject deformed</span></td>
+        <td class="col-m ">12.52</td>
+        <td class="col-m ">0.136</td>
+        <td class="col-m second">0.112</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.711</td>
+        <td class="col-m second">0.674</td>
+        <td class="col-m ">0.479</td>
+      </tr>
+      <tr>
+        <td class="col-method">TrajectoryCrafter</td>
+        <td class="col-m ">0.296</td>
+        <td class="col-m ">0.955</td>
+        <td class="col-m ">0.780</td>
+        <td class="col-m ">0.849</td>
+        <td class="col-m ">0.865</td>
+        <td class="col-m ">0.897</td>
+        <td class="col-m ">0.935</td>
+        <td class="col-m ">0.384</td>
+        <td class="col-m ">0.693</td>
+        <td class="col-m ">0.266</td>
+        <td class="col-he vc-partial"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg><span class="vc-reason">Subject deformed</span></td>
+        <td class="col-m ">11.39</td>
+        <td class="col-m ">0.137</td>
+        <td class="col-m ">0.143</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.800</td>
+        <td class="col-m ">0.642</td>
+        <td class="col-m ">0.513</td>
+      </tr>
+      <tr>
+        <td class="col-method">NeoVerse</td>
+        <td class="col-m ">0.294</td>
+        <td class="col-m second">0.970</td>
+        <td class="col-m ">0.818</td>
+        <td class="col-m ">0.873</td>
+        <td class="col-m ">0.902</td>
+        <td class="col-m ">0.924</td>
+        <td class="col-m ">0.960</td>
+        <td class="col-m second">0.437</td>
+        <td class="col-m ">0.666</td>
+        <td class="col-m ">0.275</td>
+        <td class="col-he vc-ok"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg><span class="vc-reason">Correct view</span></td>
+        <td class="col-m second">9.90</td>
+        <td class="col-m second">0.112</td>
+        <td class="col-m second">0.112</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.956</td>
+        <td class="col-m best">0.697</td>
+        <td class="col-m best">0.666</td>
+      </tr>
+      <tr>
+        <td class="col-method">Manifold4D</td>
+        <td class="col-m second">0.302</td>
+        <td class="col-m ">0.961</td>
+        <td class="col-m ">0.879</td>
+        <td class="col-m ">0.896</td>
+        <td class="col-m ">0.910</td>
+        <td class="col-m ">0.909</td>
+        <td class="col-m ">0.938</td>
+        <td class="col-m ">0.410</td>
+        <td class="col-m second">0.733</td>
+        <td class="col-m ">0.287</td>
+        <td class="col-he vc-ok"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg><span class="vc-reason">Correct view</span></td>
+        <td class="col-m best">3.67</td>
+        <td class="col-m best">0.054</td>
+        <td class="col-m best">0.090</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.564</td>
+        <td class="col-m second">0.564</td>
+      </tr>
+    </tbody></table></div>
+</div>
+<div class="cmp-pane" data-case="dancer3" style="display:none">
+  <p class="cmp-case-label">Dancer 3 &middot; yaw &minus;110&deg;, pitch &minus;20&deg;, radius scale 1.1</p>
+  <div class="cmp-videos">
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/dancer3/input.mp4"></video><div class="cmp-vname">Input video</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/dancer3/redirector_moge2.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><title>subject off target</title><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg> ReDirector</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/dancer3/rcm_moge2.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><title>subject off target</title><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg> ReCamMaster</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/dancer3/gen3c_method1.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><title>subject deformed</title><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg> Gen3C</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/dancer3/manifold4d.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><title>background artifacts</title><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg> Manifold4D</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/dancer3/tc_method2.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><title>background artifacts</title><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg> TrajectoryCrafter</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/dancer3/worldforge.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><title>wrong viewpoint</title><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg> WorldForge</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/dancer3/neoverse.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><title>correct view</title><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg> NeoVerse</div></div>
+  </div>
+  <div class="cmp-table-wrap"><table class="cmp-table">
+    <thead>
+      <tr>
+        <th rowspan="3" class="col-method">Method</th>
+        <th class="band band-trad" colspan="10">Traditional video metrics</th>
+        <th rowspan="3" class="col-he">Visual check</th>
+        <th class="band band-r4d" colspan="7">RetakeBench metrics</th>
+      </tr>
+      <tr>
+        <th class="grp" colspan="3">CLIP&nbsp;&uarr;</th>
+        <th class="grp" colspan="7">VBench&nbsp;&uarr;</th>
+        <th class="grp" colspan="3">Camera acc.&nbsp;&darr;</th>
+        <th class="grp" colspan="2">Object fid.&nbsp;&uarr;</th>
+        <th class="grp" colspan="2">Subject loc.&nbsp;&uarr;</th>
+      </tr>
+      <tr>
+        <th class="col-m">T</th><th class="col-m">F</th><th class="col-m">V</th>
+        <th class="col-m">SC</th><th class="col-m">BG</th><th class="col-m">TF</th><th class="col-m">MS</th><th class="col-m">AQ</th><th class="col-m">IQ</th><th class="col-m">OC</th>
+        <th class="col-m">RotErr</th><th class="col-m">TransErr</th><th class="col-m">TransErr<sub>raw</sub></th>
+        <th class="col-m">D</th><th class="col-m">R</th>
+        <th class="col-m">cIoU</th><th class="col-m">R&middot;cIoU</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-method">ReDirector</td>
+        <td class="col-m ">0.301</td>
+        <td class="col-m ">0.956</td>
+        <td class="col-m ">0.834</td>
+        <td class="col-m ">0.861</td>
+        <td class="col-m ">0.878</td>
+        <td class="col-m ">0.914</td>
+        <td class="col-m ">0.967</td>
+        <td class="col-m second">0.451</td>
+        <td class="col-m ">0.429</td>
+        <td class="col-m second">0.299</td>
+        <td class="col-he vc-fail"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg><span class="vc-reason">Subject off target</span></td>
+        <td class="col-m ">22.83</td>
+        <td class="col-m ">0.665</td>
+        <td class="col-m ">0.641</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m second">0.956</td>
+        <td class="col-m ">0.176</td>
+        <td class="col-m ">0.168</td>
+      </tr>
+      <tr>
+        <td class="col-method">ReCamMaster</td>
+        <td class="col-m ">0.278</td>
+        <td class="col-m ">0.952</td>
+        <td class="col-m ">0.834</td>
+        <td class="col-m best">0.882</td>
+        <td class="col-m ">0.871</td>
+        <td class="col-m second">0.932</td>
+        <td class="col-m ">0.974</td>
+        <td class="col-m best">0.461</td>
+        <td class="col-m second">0.597</td>
+        <td class="col-m ">0.266</td>
+        <td class="col-he vc-fail"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg><span class="vc-reason">Subject off target</span></td>
+        <td class="col-m ">17.13</td>
+        <td class="col-m ">0.323</td>
+        <td class="col-m second">0.398</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.689</td>
+        <td class="col-m ">0.346</td>
+        <td class="col-m ">0.238</td>
+      </tr>
+      <tr>
+        <td class="col-method">Gen3C</td>
+        <td class="col-m second">0.319</td>
+        <td class="col-m ">0.945</td>
+        <td class="col-m ">0.798</td>
+        <td class="col-m ">0.774</td>
+        <td class="col-m ">0.852</td>
+        <td class="col-m ">0.921</td>
+        <td class="col-m ">0.972</td>
+        <td class="col-m ">0.425</td>
+        <td class="col-m ">0.445</td>
+        <td class="col-m ">0.262</td>
+        <td class="col-he vc-partial"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg><span class="vc-reason">Subject deformed</span></td>
+        <td class="col-m second">5.20</td>
+        <td class="col-m ">0.158</td>
+        <td class="col-m ">0.743</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.244</td>
+        <td class="col-m best">0.571</td>
+        <td class="col-m ">0.140</td>
+      </tr>
+      <tr>
+        <td class="col-method">Manifold4D</td>
+        <td class="col-m ">0.288</td>
+        <td class="col-m best">0.964</td>
+        <td class="col-m second">0.843</td>
+        <td class="col-m ">0.856</td>
+        <td class="col-m best">0.899</td>
+        <td class="col-m ">0.908</td>
+        <td class="col-m ">0.972</td>
+        <td class="col-m ">0.438</td>
+        <td class="col-m ">0.439</td>
+        <td class="col-m ">0.290</td>
+        <td class="col-he vc-partial"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg><span class="vc-reason">Background artifacts</span></td>
+        <td class="col-m ">7.43</td>
+        <td class="col-m ">0.174</td>
+        <td class="col-m ">0.739</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.667</td>
+        <td class="col-m ">0.363</td>
+        <td class="col-m ">0.242</td>
+      </tr>
+      <tr>
+        <td class="col-method">TrajectoryCrafter</td>
+        <td class="col-m ">0.311</td>
+        <td class="col-m ">0.949</td>
+        <td class="col-m ">0.812</td>
+        <td class="col-m ">0.813</td>
+        <td class="col-m ">0.860</td>
+        <td class="col-m ">0.910</td>
+        <td class="col-m ">0.972</td>
+        <td class="col-m ">0.435</td>
+        <td class="col-m ">0.506</td>
+        <td class="col-m ">0.265</td>
+        <td class="col-he vc-partial"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg><span class="vc-reason">Background artifacts</span></td>
+        <td class="col-m ">5.37</td>
+        <td class="col-m second">0.136</td>
+        <td class="col-m ">0.623</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.444</td>
+        <td class="col-m second">0.369</td>
+        <td class="col-m ">0.164</td>
+      </tr>
+      <tr>
+        <td class="col-method">WorldForge</td>
+        <td class="col-m best">0.328</td>
+        <td class="col-m second">0.962</td>
+        <td class="col-m best">0.855</td>
+        <td class="col-m second">0.871</td>
+        <td class="col-m second">0.885</td>
+        <td class="col-m best">0.952</td>
+        <td class="col-m best">0.984</td>
+        <td class="col-m ">0.435</td>
+        <td class="col-m best">0.614</td>
+        <td class="col-m best">0.300</td>
+        <td class="col-he vc-fail"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg><span class="vc-reason">Wrong viewpoint</span></td>
+        <td class="col-m ">13.20</td>
+        <td class="col-m ">0.162</td>
+        <td class="col-m ">0.593</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.933</td>
+        <td class="col-m ">0.319</td>
+        <td class="col-m second">0.297</td>
+      </tr>
+      <tr>
+        <td class="col-method">NeoVerse</td>
+        <td class="col-m ">0.300</td>
+        <td class="col-m ">0.957</td>
+        <td class="col-m ">0.812</td>
+        <td class="col-m ">0.843</td>
+        <td class="col-m ">0.867</td>
+        <td class="col-m ">0.923</td>
+        <td class="col-m second">0.976</td>
+        <td class="col-m second">0.451</td>
+        <td class="col-m ">0.517</td>
+        <td class="col-m ">0.284</td>
+        <td class="col-he vc-ok"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg><span class="vc-reason">Correct view</span></td>
+        <td class="col-m best">4.47</td>
+        <td class="col-m best">0.113</td>
+        <td class="col-m best">0.305</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.359</td>
+        <td class="col-m best">0.359</td>
+      </tr>
+    </tbody></table></div>
+</div>
+<div class="cmp-pane" data-case="pig" style="display:none">
+  <p class="cmp-case-label">Pig &middot; yaw &minus;120&deg;, pitch &minus;20&deg;</p>
+  <div class="cmp-videos">
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/pig/input.mp4"></video><div class="cmp-vname">Input video</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/pig/worldforge.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><title>wrong viewpoint</title><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg> WorldForge</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/pig/rcm_moge2.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><title>subject off target</title><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg> ReCamMaster</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/pig/redirector_moge2.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><title>wrong viewpoint</title><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg> ReDirector</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/pig/gen3c_method1.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><title>subject deformed</title><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg> Gen3C</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/pig/tc_method2.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><title>subject deformed</title><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg> TrajectoryCrafter</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/pig/manifold4d.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><title>correct view</title><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg> Manifold4D</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/pig/neoverse.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><title>correct view</title><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg> NeoVerse</div></div>
+  </div>
+  <div class="cmp-table-wrap"><table class="cmp-table">
+    <thead>
+      <tr>
+        <th rowspan="3" class="col-method">Method</th>
+        <th class="band band-trad" colspan="10">Traditional video metrics</th>
+        <th rowspan="3" class="col-he">Visual check</th>
+        <th class="band band-r4d" colspan="7">RetakeBench metrics</th>
+      </tr>
+      <tr>
+        <th class="grp" colspan="3">CLIP&nbsp;&uarr;</th>
+        <th class="grp" colspan="7">VBench&nbsp;&uarr;</th>
+        <th class="grp" colspan="3">Camera acc.&nbsp;&darr;</th>
+        <th class="grp" colspan="2">Object fid.&nbsp;&uarr;</th>
+        <th class="grp" colspan="2">Subject loc.&nbsp;&uarr;</th>
+      </tr>
+      <tr>
+        <th class="col-m">T</th><th class="col-m">F</th><th class="col-m">V</th>
+        <th class="col-m">SC</th><th class="col-m">BG</th><th class="col-m">TF</th><th class="col-m">MS</th><th class="col-m">AQ</th><th class="col-m">IQ</th><th class="col-m">OC</th>
+        <th class="col-m">RotErr</th><th class="col-m">TransErr</th><th class="col-m">TransErr<sub>raw</sub></th>
+        <th class="col-m">D</th><th class="col-m">R</th>
+        <th class="col-m">cIoU</th><th class="col-m">R&middot;cIoU</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-method">WorldForge</td>
+        <td class="col-m ">0.334</td>
+        <td class="col-m ">0.964</td>
+        <td class="col-m best">0.935</td>
+        <td class="col-m second">0.891</td>
+        <td class="col-m ">0.938</td>
+        <td class="col-m best">0.959</td>
+        <td class="col-m second">0.985</td>
+        <td class="col-m ">0.539</td>
+        <td class="col-m ">0.657</td>
+        <td class="col-m second">0.314</td>
+        <td class="col-he vc-fail"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg><span class="vc-reason">Wrong viewpoint</span></td>
+        <td class="col-m ">48.23</td>
+        <td class="col-m ">1.194</td>
+        <td class="col-m ">1.265</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m second">0.911</td>
+        <td class="col-m ">0.464</td>
+        <td class="col-m ">0.423</td>
+      </tr>
+      <tr>
+        <td class="col-method">ReCamMaster</td>
+        <td class="col-m ">0.330</td>
+        <td class="col-m second">0.971</td>
+        <td class="col-m ">0.853</td>
+        <td class="col-m ">0.865</td>
+        <td class="col-m ">0.881</td>
+        <td class="col-m ">0.940</td>
+        <td class="col-m ">0.980</td>
+        <td class="col-m second">0.563</td>
+        <td class="col-m second">0.683</td>
+        <td class="col-m ">0.268</td>
+        <td class="col-he vc-fail"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg><span class="vc-reason">Subject off target</span></td>
+        <td class="col-m ">24.78</td>
+        <td class="col-m ">0.670</td>
+        <td class="col-m ">0.546</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.086</td>
+        <td class="col-m ">0.086</td>
+      </tr>
+      <tr>
+        <td class="col-method">ReDirector</td>
+        <td class="col-m ">0.333</td>
+        <td class="col-m best">0.983</td>
+        <td class="col-m second">0.923</td>
+        <td class="col-m best">0.893</td>
+        <td class="col-m second">0.942</td>
+        <td class="col-m second">0.951</td>
+        <td class="col-m ">0.982</td>
+        <td class="col-m ">0.553</td>
+        <td class="col-m ">0.609</td>
+        <td class="col-m ">0.311</td>
+        <td class="col-he vc-fail"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg><span class="vc-reason">Wrong viewpoint</span></td>
+        <td class="col-m ">15.48</td>
+        <td class="col-m ">0.729</td>
+        <td class="col-m ">0.699</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.469</td>
+        <td class="col-m ">0.469</td>
+      </tr>
+      <tr>
+        <td class="col-method">Gen3C</td>
+        <td class="col-m ">0.325</td>
+        <td class="col-m ">0.965</td>
+        <td class="col-m ">0.883</td>
+        <td class="col-m ">0.841</td>
+        <td class="col-m ">0.927</td>
+        <td class="col-m ">0.925</td>
+        <td class="col-m ">0.983</td>
+        <td class="col-m ">0.536</td>
+        <td class="col-m ">0.601</td>
+        <td class="col-m ">0.302</td>
+        <td class="col-he vc-partial"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg><span class="vc-reason">Subject deformed</span></td>
+        <td class="col-m ">5.60</td>
+        <td class="col-m ">0.195</td>
+        <td class="col-m ">0.347</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.822</td>
+        <td class="col-m best">0.742</td>
+        <td class="col-m ">0.610</td>
+      </tr>
+      <tr>
+        <td class="col-method">TrajectoryCrafter</td>
+        <td class="col-m second">0.336</td>
+        <td class="col-m ">0.968</td>
+        <td class="col-m ">0.875</td>
+        <td class="col-m ">0.796</td>
+        <td class="col-m ">0.916</td>
+        <td class="col-m ">0.920</td>
+        <td class="col-m ">0.975</td>
+        <td class="col-m ">0.515</td>
+        <td class="col-m ">0.669</td>
+        <td class="col-m ">0.303</td>
+        <td class="col-he vc-fail"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg><span class="vc-reason">Subject deformed</span></td>
+        <td class="col-m ">3.86</td>
+        <td class="col-m ">0.171</td>
+        <td class="col-m ">0.593</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.778</td>
+        <td class="col-m second">0.728</td>
+        <td class="col-m ">0.566</td>
+      </tr>
+      <tr>
+        <td class="col-method">Manifold4D</td>
+        <td class="col-m second">0.336</td>
+        <td class="col-m best">0.983</td>
+        <td class="col-m ">0.909</td>
+        <td class="col-m ">0.858</td>
+        <td class="col-m best">0.944</td>
+        <td class="col-m ">0.949</td>
+        <td class="col-m best">0.986</td>
+        <td class="col-m ">0.510</td>
+        <td class="col-m best">0.692</td>
+        <td class="col-m best">0.339</td>
+        <td class="col-he vc-ok"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg><span class="vc-reason">Correct view</span></td>
+        <td class="col-m best">2.20</td>
+        <td class="col-m second">0.116</td>
+        <td class="col-m second">0.193</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.679</td>
+        <td class="col-m second">0.679</td>
+      </tr>
+      <tr>
+        <td class="col-method">NeoVerse</td>
+        <td class="col-m best">0.344</td>
+        <td class="col-m best">0.983</td>
+        <td class="col-m ">0.899</td>
+        <td class="col-m ">0.845</td>
+        <td class="col-m ">0.929</td>
+        <td class="col-m ">0.924</td>
+        <td class="col-m ">0.970</td>
+        <td class="col-m best">0.567</td>
+        <td class="col-m ">0.680</td>
+        <td class="col-m ">0.297</td>
+        <td class="col-he vc-ok"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg><span class="vc-reason">Correct view</span></td>
+        <td class="col-m second">3.22</td>
+        <td class="col-m best">0.051</td>
+        <td class="col-m best">0.117</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.711</td>
+        <td class="col-m best">0.711</td>
+      </tr>
+    </tbody></table></div>
+</div>
+<div class="cmp-pane" data-case="robot2" style="display:none">
+  <p class="cmp-case-label">Robot 2 &middot; pitch &minus;50&deg;, radius scale 0.6</p>
+  <div class="cmp-videos">
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/robot2/input.mp4"></video><div class="cmp-vname">Input video</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/robot2/rcm_moge2.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><title>subject off target</title><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg> ReCamMaster</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/robot2/redirector_moge2.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><title>subject off target</title><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg> ReDirector</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/robot2/tc_method2.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><title>subject deformed</title><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg> TrajectoryCrafter</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/robot2/worldforge.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><title>minor artifacts</title><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg> WorldForge</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/robot2/gen3c_method1.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><title>subject deformed</title><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg> Gen3C</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/robot2/neoverse.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><title>correct view</title><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg> NeoVerse</div></div>
+    <div class="cmp-vcell"><video muted loop playsinline preload="none" data-src="web_assets/cases/robot2/manifold4d.mp4"></video><div class="cmp-vname"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><title>correct view</title><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg> Manifold4D</div></div>
+  </div>
+  <div class="cmp-table-wrap"><table class="cmp-table">
+    <thead>
+      <tr>
+        <th rowspan="3" class="col-method">Method</th>
+        <th class="band band-trad" colspan="10">Traditional video metrics</th>
+        <th rowspan="3" class="col-he">Visual check</th>
+        <th class="band band-r4d" colspan="7">RetakeBench metrics</th>
+      </tr>
+      <tr>
+        <th class="grp" colspan="3">CLIP&nbsp;&uarr;</th>
+        <th class="grp" colspan="7">VBench&nbsp;&uarr;</th>
+        <th class="grp" colspan="3">Camera acc.&nbsp;&darr;</th>
+        <th class="grp" colspan="2">Object fid.&nbsp;&uarr;</th>
+        <th class="grp" colspan="2">Subject loc.&nbsp;&uarr;</th>
+      </tr>
+      <tr>
+        <th class="col-m">T</th><th class="col-m">F</th><th class="col-m">V</th>
+        <th class="col-m">SC</th><th class="col-m">BG</th><th class="col-m">TF</th><th class="col-m">MS</th><th class="col-m">AQ</th><th class="col-m">IQ</th><th class="col-m">OC</th>
+        <th class="col-m">RotErr</th><th class="col-m">TransErr</th><th class="col-m">TransErr<sub>raw</sub></th>
+        <th class="col-m">D</th><th class="col-m">R</th>
+        <th class="col-m">cIoU</th><th class="col-m">R&middot;cIoU</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-method">ReCamMaster</td>
+        <td class="col-m ">0.282</td>
+        <td class="col-m second">0.949</td>
+        <td class="col-m ">0.802</td>
+        <td class="col-m ">0.862</td>
+        <td class="col-m second">0.894</td>
+        <td class="col-m best">0.960</td>
+        <td class="col-m second">0.984</td>
+        <td class="col-m best">0.434</td>
+        <td class="col-m second">0.714</td>
+        <td class="col-m ">0.252</td>
+        <td class="col-he vc-fail"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg><span class="vc-reason">Subject off target</span></td>
+        <td class="col-m ">3.44</td>
+        <td class="col-m ">0.253</td>
+        <td class="col-m ">0.285</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.246</td>
+        <td class="col-m ">0.246</td>
+      </tr>
+      <tr>
+        <td class="col-method">ReDirector</td>
+        <td class="col-m ">0.264</td>
+        <td class="col-m best">0.951</td>
+        <td class="col-m ">0.738</td>
+        <td class="col-m ">0.868</td>
+        <td class="col-m ">0.858</td>
+        <td class="col-m ">0.950</td>
+        <td class="col-m ">0.979</td>
+        <td class="col-m ">0.400</td>
+        <td class="col-m ">0.705</td>
+        <td class="col-m ">0.211</td>
+        <td class="col-he vc-fail"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg><span class="vc-reason">Subject off target</span></td>
+        <td class="col-m ">2.25</td>
+        <td class="col-m ">0.179</td>
+        <td class="col-m ">0.148</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.933</td>
+        <td class="col-m ">0.342</td>
+        <td class="col-m ">0.319</td>
+      </tr>
+      <tr>
+        <td class="col-method">TrajectoryCrafter</td>
+        <td class="col-m second">0.304</td>
+        <td class="col-m ">0.926</td>
+        <td class="col-m ">0.788</td>
+        <td class="col-m ">0.829</td>
+        <td class="col-m ">0.852</td>
+        <td class="col-m second">0.953</td>
+        <td class="col-m ">0.979</td>
+        <td class="col-m ">0.401</td>
+        <td class="col-m ">0.701</td>
+        <td class="col-m ">0.262</td>
+        <td class="col-he vc-partial"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg><span class="vc-reason">Subject deformed</span></td>
+        <td class="col-m ">0.95</td>
+        <td class="col-m ">0.056</td>
+        <td class="col-m ">0.119</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.267</td>
+        <td class="col-m ">0.635</td>
+        <td class="col-m ">0.169</td>
+      </tr>
+      <tr>
+        <td class="col-method">WorldForge</td>
+        <td class="col-m ">0.295</td>
+        <td class="col-m ">0.928</td>
+        <td class="col-m ">0.807</td>
+        <td class="col-m ">0.858</td>
+        <td class="col-m best">0.915</td>
+        <td class="col-m ">0.949</td>
+        <td class="col-m ">0.980</td>
+        <td class="col-m second">0.433</td>
+        <td class="col-m ">0.686</td>
+        <td class="col-m second">0.273</td>
+        <td class="col-he vc-partial"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg><span class="vc-reason">Minor artifacts</span></td>
+        <td class="col-m ">3.02</td>
+        <td class="col-m ">0.094</td>
+        <td class="col-m ">0.048</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.591</td>
+        <td class="col-m ">0.591</td>
+      </tr>
+      <tr>
+        <td class="col-method">Gen3C</td>
+        <td class="col-m ">0.295</td>
+        <td class="col-m ">0.923</td>
+        <td class="col-m ">0.805</td>
+        <td class="col-m ">0.845</td>
+        <td class="col-m second">0.894</td>
+        <td class="col-m ">0.952</td>
+        <td class="col-m best">0.986</td>
+        <td class="col-m ">0.416</td>
+        <td class="col-m ">0.663</td>
+        <td class="col-m best">0.283</td>
+        <td class="col-he vc-partial"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg><span class="vc-reason">Subject deformed</span></td>
+        <td class="col-m ">1.07</td>
+        <td class="col-m second">0.040</td>
+        <td class="col-m second">0.040</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.356</td>
+        <td class="col-m best">0.696</td>
+        <td class="col-m ">0.247</td>
+      </tr>
+      <tr>
+        <td class="col-method">NeoVerse</td>
+        <td class="col-m best">0.308</td>
+        <td class="col-m ">0.948</td>
+        <td class="col-m second">0.819</td>
+        <td class="col-m best">0.871</td>
+        <td class="col-m ">0.839</td>
+        <td class="col-m ">0.945</td>
+        <td class="col-m ">0.983</td>
+        <td class="col-m ">0.410</td>
+        <td class="col-m ">0.712</td>
+        <td class="col-m ">0.246</td>
+        <td class="col-he vc-ok"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg><span class="vc-reason">Correct view</span></td>
+        <td class="col-m second">0.93</td>
+        <td class="col-m second">0.040</td>
+        <td class="col-m best">0.028</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.651</td>
+        <td class="col-m second">0.651</td>
+      </tr>
+      <tr>
+        <td class="col-method">Manifold4D</td>
+        <td class="col-m ">0.293</td>
+        <td class="col-m ">0.937</td>
+        <td class="col-m best">0.824</td>
+        <td class="col-m second">0.871</td>
+        <td class="col-m ">0.863</td>
+        <td class="col-m ">0.946</td>
+        <td class="col-m ">0.980</td>
+        <td class="col-m ">0.430</td>
+        <td class="col-m best">0.721</td>
+        <td class="col-m ">0.255</td>
+        <td class="col-he vc-ok"><svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg><span class="vc-reason">Correct view</span></td>
+        <td class="col-m best">0.39</td>
+        <td class="col-m best">0.008</td>
+        <td class="col-m ">0.074</td>
+        <td class="col-m best">1.000</td>
+        <td class="col-m ">0.978</td>
+        <td class="col-m second">0.683</td>
+        <td class="col-m best">0.668</td>
+      </tr>
+    </tbody></table></div>
+</div>
+
+      <p class="metric-note">Visual check: <svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="correct"><circle r="10" fill="#6BBE66"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4.2 0.2L-1.2 3.2L4.3-2.7"/></g></svg> correct &middot; <svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="partly correct"><circle r="10" fill="#F2A33A"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-4 0H4"/></g></svg> partly correct &middot; <svg class="vc-icon" viewBox="-10 -10 20 20" aria-label="wrong"><circle r="10" fill="#FF4141"/><g stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M-3-3L3 3M-3 3L3-3"/></g></svg> wrong. Green: best per column; underlined: second. RotErr in degrees.</p>
+  </div>
+</section>
+
+<script>
+  (function() {
+    const tabs = document.querySelectorAll('#cmpTabs .cmp-tab');
+    const panes = document.querySelectorAll('.cmp-pane');
+    function activate(slug) {
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.case === slug));
+      panes.forEach(p => {
+        const on = p.dataset.case === slug;
+        p.style.display = on ? 'block' : 'none';
+        p.querySelectorAll('video').forEach(v => {
+          if (on) {
+            if (v.dataset.src && !v.getAttribute('src')) { v.src = v.dataset.src; }
+            v.currentTime = 0; v.play().catch(()=>{});
+          } else { v.pause(); }
+        });
+      });
+    }
+    tabs.forEach(t => t.addEventListener('click', () => activate(t.dataset.case)));
+  })();
+</script>
+
+<section id="reliability">
+  <div class="container-wide">
+    <h2 class="section-title">Reliability Validation</h2>
+    <p class="section-desc"><strong>Our pseudo ground truth ranks methods like a real camera does.</strong> Checked on real multi-view video.</p>
+
+    <div class="rel-top">
+      <div>
+        <ol class="rel-steps">
+          <li>
+            <h3>A real camera at the target view</h3>
+            <p>PFERD films horses with ten calibrated cameras. The target camera turns from camera A to camera B (frames 0&ndash;30) and holds at B (frames 30&ndash;44), so B films the real target view.</p>
+          </li>
+          <li>
+            <h3>Every video scored twice</h3>
+            <p>All 350 videos (50 cases &times; 7 methods) get the hold-frame <em>R&middot;cMaskIoU</em> against our pseudo GT and against the real mask.</p>
+          </li>
+        </ol>
+        <div class="rel-stats">
+          <div class="rel-stat"><span class="rel-num"><em>r</em>&nbsp;=&nbsp;0.98</span><span class="rel-what">method scores, pseudo vs. real</span></div>
+          <div class="rel-stat"><span class="rel-num"><em>&rho;</em>&nbsp;=&nbsp;1</span><span class="rel-what">identical method ranking</span></div>
+          <div class="rel-stat"><span class="rel-num">84.4%</span><span class="rel-what">of method pairs per case keep their order</span></div>
+        </div>
+      </div>
+      <figure class="rel-chart">
+        <img src="web_assets/reliability/scores.png" alt="Scatter of the seven method means: score against our pseudo GT mask versus score against the real reference, all near the diagonal, ranks 1 to 7 identical">
+        <figcaption>Mean hold-frame <em>R&middot;cMaskIoU</em> of each method; numbers are ranks.</figcaption>
+      </figure>
+    </div>
+
+<div class="rel-pane" data-case="pferd_48">
+  <div class="rel-grid rel-videos"><figure class="rel-map"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/map_pferd_48.mp4" aria-label="Top view: real cameras A and B, the virtual target camera moving from A to B, and the horse"></video></figure><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_src.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#EB6834">Real</span> Source video (camera A)</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_real.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#EB6834">Real</span> Reference (camera B)</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_pseudo.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#2A78D6">Ours</span> Pseudo GT mask</div></div><div class="rel-key"><p><span class="rel-c-real">Orange</span>: real mask &middot; <span class="rel-c-ours">blue</span>: our pseudo GT &middot; <span class="rel-c-gen">yellow</span>: generated.</p><p>Scores: hold-frame <em>R&middot;cMaskIoU</em>, pseudo / real.</p></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_neoverse.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#C99700">Generated</span> NeoVerse</div><div class="rel-vscore">0.665 / 0.627</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_manifold4d.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#C99700">Generated</span> Manifold4D</div><div class="rel-vscore">0.620 / 0.628</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_trajectorycrafter.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#C99700">Generated</span> TrajectoryCrafter</div><div class="rel-vscore">0.000 / 0.000</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_worldforge.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#C99700">Generated</span> WorldForge</div><div class="rel-vscore">0.383 / 0.360</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_gen3c.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#C99700">Generated</span> Gen3C</div><div class="rel-vscore">0.276 / 0.260</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_recammaster.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#C99700">Generated</span> ReCamMaster</div><div class="rel-vscore">0.000 / 0.000</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_redirector.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#C99700">Generated</span> ReDirector</div><div class="rel-vscore">0.000 / 0.000</div></div><p class="rel-caption">Example case (Horse 4, yaw 123&deg; from A to B). On the hold frames every generated video is scored twice: against our pseudo GT mask (<span class="rel-c-ours">blue</span>) and against the real mask from camera B (<span class="rel-c-real">orange</span>).</p></div>
+</div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    const tabs = document.querySelectorAll('#relTabs .cmp-tab');
+    const panes = document.querySelectorAll('.rel-pane');
+    // the videos of a case share one clock: none loops on its own; when the source video ends, all restart together
+    const start = (p) => p.querySelectorAll('video').forEach((v) => {
+      if (v.dataset.src && !v.getAttribute('src')) v.src = v.dataset.src;
+      v.currentTime = 0; v.play().catch(() => {});
+    });
+    panes.forEach((p) => {
+      const lead = p.querySelector('video');
+      lead.addEventListener('ended', () => { if (!p.hidden) start(p); });
+    });
+    tabs.forEach((t) => t.addEventListener('click', () => {
+      tabs.forEach((x) => x.classList.toggle('active', x === t));
+      panes.forEach((p) => {
+        const on = p.dataset.case === t.dataset.case;
+        p.hidden = !on;
+        if (on) start(p); else p.querySelectorAll('video').forEach((v) => v.pause());
+      });
+    }));
+  })();
+</script>
+
+
+<section id="pipeline">
+  <div class="container">
+    <h2 class="section-title">Construction Pipeline</h2>
+    <p class="section-desc"><strong>Training-free.</strong> Web clip &rarr; masks &rarr; 4D reconstruction &rarr; target camera path &rarr; pseudo-GT mask and depth.</p>
+    <figure class="asset-figure">
+      <img class="asset-img" src="web_assets/kept/images/construction_pipeline.png" alt="Construction pipeline">
+    </figure>
+  </div>
+</section>
+
+<section id="metrics">
+  <div class="container">
+    <h2 class="section-title">Metric Protocol</h2>
+    <p class="section-desc"><strong>Two questions per video.</strong> Did the camera follow the path? Is the subject intact and in place?</p>
+    <figure class="asset-figure">
+      <img class="asset-img" src="web_assets/kept/images/metric_protocol.png" alt="Metric protocol">
+    </figure>
+  </div>
+</section>
+
+<section id="data">
+  <div class="container-wide">
+    <h2 class="section-title">Data Case</h2>
+    <p class="section-desc"><strong>What each case ships with.</strong> Source clip, 4D point cloud, target mask and depth.</p>
+
+    <div class="data-case-row">
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/camel/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Camel</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="camel"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/camel/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/camel/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+    </div>
+    <div class="data-case-row">
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/deer/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Deer</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="deer"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/deer/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/deer/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+    </div>
+    <div class="data-case-row">
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot014/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #1</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="robot014"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot014/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot014/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+    </div>
+    <div class="data-case-row">
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_zf/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #2</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="robot_zf"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_zf/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_zf/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+    </div>
+    <div class="data-case-row">
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/tiger/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Tiger</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="tiger"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/tiger/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/tiger/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+    </div>
+    <div class="data-case-row">
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cow/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Cow</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="cow"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cow/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cow/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+    </div>
+      <div class="data-case-row">
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot029/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #3</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="robot029"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot029/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot029/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+    </div>
+    <div class="data-case-row">
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_9qZ/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #4</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="robot_9qZ"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_9qZ/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_9qZ/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+    </div>
+    <div class="data-case-row">
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_drnc/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #5</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="robot_drnc"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_drnc/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_drnc/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+    </div>
+    <div class="data-case-row">
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cat/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Cat</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="cat"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cat/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cat/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+    </div>
+
+    <div class="data-case-row">
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_snuf/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #6</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="robot_snuf"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_snuf/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_snuf/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+    </div>
+    <div class="data-case-row">
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_evlq/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #7</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="robot_evlq"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_evlq/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_evlq/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+    </div>
+    <div class="data-case-row">
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/deer2/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Deer #2</p></div>
+      <div class="data-case-cell"><div class="pv" data-cloud="deer2"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/deer2/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/deer2/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+    </div>
+
+  </div>
+</section>
+
+<section id="bibtex">
+  <div class="container-wide">
+    <h2 class="section-title">BibTeX</h2>
+    <p class="section-desc">If you find RetakeBench useful, please cite our work.</p>
+    <div class="bibtex-block">
+      <button class="bibtex-copy" id="bibtexCopy">Copy</button>
+<pre id="bibtexText">@misc{cao2026retakebench,
+  title  = {RetakeBench: Can Video Models Retake Dynamic Scenes from Extreme Viewpoints?},
+  author = {Wei Cao and Hao Zhang and Jiapeng Tang and Yulun Wu and Yingying Li and Ning Yu and Yaoyao Liu},
+  year   = {2026},
+}</pre>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    const btn = document.getElementById('bibtexCopy');
+    const pre = document.getElementById('bibtexText');
+    if (!btn || !pre) return;
+    btn.addEventListener('click', () => {
+      navigator.clipboard.writeText(pre.innerText).then(() => {
+        const original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = original; }, 1600);
+      }).catch(() => { btn.textContent = 'Copy failed'; });
+    });
+  })();
+</script>
+
+<footer>
+  <p>Dataset: <a href="https://huggingface.co/datasets/vveicao/redirect4d-bench"><code>huggingface.co/datasets/vveicao/redirect4d-bench</code></a> · Code: coming soon</p>
+  <p>Page template inspired by <a href="https://nerfies.github.io">Nerfies</a>. Point clouds rendered with <a href="https://threejs.org">three.js</a>.</p>
+  <div style="margin: 18px auto 0; text-align: center;">
+    <a href="https://clustrmaps.com/site/1c9xu" title="Visit tracker">
+      <img src="//clustrmaps.com/map_v2.png?cl=ffffff&w=300&t=n&d=1aiymEDqE0gY4RhGlSPh80LBr5uF8oPkp7ImCW3B_Nw" alt="Visitor map" style="max-width: 300px; border: 0;">
+    </a>
+  </div>
+</footer>
+
+</body>
+</html>
