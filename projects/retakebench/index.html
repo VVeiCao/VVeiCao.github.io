@@ -736,6 +736,14 @@
     .rel-grid .rel-map { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 968 / 660; }
   }
 
+  /* user 2026-11-20: 网页横着占得太满了 -> narrower than the supp page's 1440px */
+  .container, .container-wide { max-width: 1120px; }
+  /* the full per-case table then needs a slightly tighter grid to fit without scrolling */
+  .cmp-table { min-width: 0; table-layout: auto; }
+  .cmp-table th, .cmp-table td { padding: 6px 2px; font-size: 0.78rem; }
+  .cmp-table thead th { font-size: 0.72rem; }
+  .cmp-table th.col-method, .cmp-table td.col-method { width: auto; padding-left: 8px; font-size: 0.8rem; }
+  .cmp-table th.col-he, .cmp-table td.col-he { min-width: 90px; }
   .btn.soon { opacity: 0.55; cursor: default; }
   .btn.soon:hover { background: #363636; border-color: #363636; }
 </style>
@@ -1798,66 +1806,6 @@
     tabs.forEach(t => t.addEventListener('click', () => activate(t.dataset.case)));
   })();
 </script>
-
-<section id="reliability">
-  <div class="container-wide">
-    <h2 class="section-title">Reliability Validation</h2>
-    <p class="section-desc"><strong>Our pseudo ground truth ranks methods like a real camera does.</strong> Checked on real multi-view video.</p>
-
-    <div class="rel-top">
-      <div>
-        <ol class="rel-steps">
-          <li>
-            <h3>A real camera at the target view</h3>
-            <p>PFERD films horses with ten calibrated cameras. The target camera turns from camera A to camera B (frames 0&ndash;30) and holds at B (frames 30&ndash;44), so B films the real target view.</p>
-          </li>
-          <li>
-            <h3>Every video scored twice</h3>
-            <p>All 350 videos (50 cases &times; 7 methods) get the hold-frame <em>R&middot;cMaskIoU</em> against our pseudo GT and against the real mask.</p>
-          </li>
-        </ol>
-        <div class="rel-stats">
-          <div class="rel-stat"><span class="rel-num"><em>r</em>&nbsp;=&nbsp;0.98</span><span class="rel-what">method scores, pseudo vs. real</span></div>
-          <div class="rel-stat"><span class="rel-num"><em>&rho;</em>&nbsp;=&nbsp;1</span><span class="rel-what">identical method ranking</span></div>
-          <div class="rel-stat"><span class="rel-num">84.4%</span><span class="rel-what">of method pairs per case keep their order</span></div>
-        </div>
-      </div>
-      <figure class="rel-chart">
-        <img src="web_assets/reliability/scores.png" alt="Scatter of the seven method means: score against our pseudo GT mask versus score against the real reference, all near the diagonal, ranks 1 to 7 identical">
-        <figcaption>Mean hold-frame <em>R&middot;cMaskIoU</em> of each method; numbers are ranks.</figcaption>
-      </figure>
-    </div>
-
-<div class="rel-pane" data-case="pferd_48">
-  <div class="rel-grid rel-videos"><figure class="rel-map"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/map_pferd_48.mp4" aria-label="Top view: real cameras A and B, the virtual target camera moving from A to B, and the horse"></video></figure><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_src.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#EB6834">Real</span> Source video (camera A)</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_real.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#EB6834">Real</span> Reference (camera B)</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_pseudo.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#2A78D6">Ours</span> Pseudo GT mask</div></div><div class="rel-key"><p><span class="rel-c-real">Orange</span>: real mask &middot; <span class="rel-c-ours">blue</span>: our pseudo GT &middot; <span class="rel-c-gen">yellow</span>: generated.</p><p>Scores: hold-frame <em>R&middot;cMaskIoU</em>, pseudo / real.</p></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_neoverse.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#C99700">Generated</span> NeoVerse</div><div class="rel-vscore">0.665 / 0.627</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_manifold4d.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#C99700">Generated</span> Manifold4D</div><div class="rel-vscore">0.620 / 0.628</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_trajectorycrafter.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#C99700">Generated</span> TrajectoryCrafter</div><div class="rel-vscore">0.000 / 0.000</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_worldforge.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#C99700">Generated</span> WorldForge</div><div class="rel-vscore">0.383 / 0.360</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_gen3c.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#C99700">Generated</span> Gen3C</div><div class="rel-vscore">0.276 / 0.260</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_recammaster.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#C99700">Generated</span> ReCamMaster</div><div class="rel-vscore">0.000 / 0.000</div></div><div class="cmp-vcell"><video autoplay muted playsinline preload="auto" src="web_assets/reliability/v/pferd_48_redirector.mp4"></video><div class="cmp-vname"><span class="rel-tag" style="--g:#C99700">Generated</span> ReDirector</div><div class="rel-vscore">0.000 / 0.000</div></div><p class="rel-caption">Example case (Horse 4, yaw 123&deg; from A to B). On the hold frames every generated video is scored twice: against our pseudo GT mask (<span class="rel-c-ours">blue</span>) and against the real mask from camera B (<span class="rel-c-real">orange</span>).</p></div>
-</div>
-  </div>
-</section>
-
-<script>
-  (function () {
-    const tabs = document.querySelectorAll('#relTabs .cmp-tab');
-    const panes = document.querySelectorAll('.rel-pane');
-    // the videos of a case share one clock: none loops on its own; when the source video ends, all restart together
-    const start = (p) => p.querySelectorAll('video').forEach((v) => {
-      if (v.dataset.src && !v.getAttribute('src')) v.src = v.dataset.src;
-      v.currentTime = 0; v.play().catch(() => {});
-    });
-    panes.forEach((p) => {
-      const lead = p.querySelector('video');
-      lead.addEventListener('ended', () => { if (!p.hidden) start(p); });
-    });
-    tabs.forEach((t) => t.addEventListener('click', () => {
-      tabs.forEach((x) => x.classList.toggle('active', x === t));
-      panes.forEach((p) => {
-        const on = p.dataset.case === t.dataset.case;
-        p.hidden = !on;
-        if (on) start(p); else p.querySelectorAll('video').forEach((v) => v.pause());
-      });
-    }));
-  })();
-</script>
-
 
 <section id="pipeline">
   <div class="container">
