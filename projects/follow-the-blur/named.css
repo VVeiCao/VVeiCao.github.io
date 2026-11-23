@@ -1,0 +1,154 @@
+/* Named-edition additions: affiliations and link buttons under the authors.
+   Everything else is inherited from project-page.css, which stays identical
+   to the anonymous page. */
+
+.publication-authors .author-block {
+  margin: 0 0.28em;
+}
+
+.project-logo {
+  display: block;
+  width: 200px;
+  height: auto;
+  margin: -28px auto 4px;
+}
+
+.publication-authors a {
+  color: #2f5fa7;
+  text-decoration: none;
+}
+
+.publication-authors a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.publication-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 18px 44px;
+  margin: 14px 0 4px;
+}
+
+.publication-logos a {
+  display: inline-flex;
+  opacity: 0.9;
+}
+
+.publication-logos a:hover {
+  opacity: 1;
+}
+
+.publication-logos img {
+  display: block;
+  width: auto;
+}
+
+.publication-logos .is-stability-ai img {
+  height: 30px;
+}
+
+.publication-logos .is-uiuc img {
+  height: 34px;
+}
+
+.publication-authors sup,
+.publication-affiliations sup {
+  margin-left: 1px;
+  font-size: 0.62em;
+}
+
+.publication-affiliations {
+  margin-top: 4px;
+  color: #64676c;
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.publication-affiliations .author-block {
+  margin: 0 0.7em;
+}
+
+.publication-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0 6px;
+}
+
+.link-button {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: #202124;
+  color: #fff;
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+a.link-button:hover {
+  background: #3c4043;
+}
+
+.link-button.is-disabled {
+  background: #f1f3f4;
+  color: #64676c;
+  cursor: default;
+}
+
+.link-button small {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+@media (max-width: 680px) {
+  .project-logo {
+    width: 150px;
+    margin-top: -20px;
+  }
+
+  .publication-affiliations {
+    font-size: 14px;
+  }
+
+  .publication-logos .is-stability-ai img {
+    height: 25px;
+  }
+
+  .publication-logos .is-uiuc img {
+    height: 28px;
+  }
+}
+
+/* BibTeX section above the footer. */
+
+.bibtex-section {
+  order: 9;
+  padding-top: var(--section-space, 56px);
+  padding-bottom: var(--section-space, 56px);
+  border-top: 1px solid var(--paper-line);
+}
+
+.bibtex {
+  margin: 0;
+  padding: 18px 20px;
+  border: 1px solid var(--paper-line);
+  border-radius: 8px;
+  background: var(--paper-soft);
+  color: #333;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

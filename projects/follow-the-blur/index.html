@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex">
+  <meta
+    name="description"
+    content="Follow-the-Blur: training-free 4D control of video world models."
+  >
+  <title>Follow-the-Blur — Training-Free 4D Control of Video World Models</title>
+  <link rel="icon" type="image/png" href="/page_FollowTheBlur/assets/favicon.png">
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  >
+  <link rel="stylesheet" href="./project-page.css">
+  <link rel="stylesheet" href="./named.css">
+  <style>
+    body > header, body > section { order: 0 !important; }
+    .project-logo { width: 260px; margin: -12px auto 6px; }
+    .project-name { color: #4338ca; }
+    .project-name .blur { color: #b57bf5; filter: blur(1.6px); }
+    .ftb-wide { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+    .ftb-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 12px; }
+    .ftb-grid .head { font-weight: 600; font-size: 15px; text-align: center; color: #33324a; padding-bottom: 2px; }
+    .ftb-grid img, .ftb-step img { display: block; width: 100%; height: auto; border-radius: 8px; background: #eeeef6; }
+    .ftb-steps { display: grid; gap: 34px; }
+    .ftb-step { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 28px; align-items: center; }
+    .ftb-step h3 { margin: 0 0 8px; font-size: 21px; color: #4338ca; }
+    .ftb-step p { margin: 0; line-height: 1.65; font-size: 16.5px; color: #33324a; }
+    .ftb-step .num { display: inline-grid; place-items: center; width: 30px; height: 30px; margin-right: 10px; border-radius: 50%;
+                     background: #4338ca; color: #fff; font-size: 16px; font-weight: 700; vertical-align: 2px; }
+    .ftb-step .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .ftb-step .cap { font-size: 13.5px; text-align: center; color: #62617a; margin-top: 4px; }
+    @media (max-width: 760px) {
+      .ftb-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .ftb-grid .head { display: none; }
+      .ftb-step { grid-template-columns: 1fr; gap: 14px; }
+    }
+  </style>
+</head>
+<body data-edition="release">
+  <header class="publication-hero">
+    <div class="publication-container">
+      <img class="project-logo" src="/page_FollowTheBlur/assets/logo.png" alt="Follow-the-Blur logo">
+      <div class="project-name">Follow-the-<span class="blur">Blur</span></div>
+      <h1 class="publication-title">
+        Training-Free 4D Control of Video World Models
+      </h1>
+      <div class="publication-links">
+        <a class="link-button" href="https://github.com/VVeiCao/Follow-the-Blur">Code</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="paper-section is-soft tldr-section">
+    <div class="text-container">
+      <p class="tldr">
+        <strong>TL;DR:</strong>
+        Move the objects of an image in 3D, and a pretrained video model turns
+        the rigid move into a natural video. Nothing is trained.
+      </p>
+    </div>
+  </section>
+
+  <section class="paper-section">
+    <div class="ftb-wide">
+      <h2 class="section-title">Results</h2>
+      <div class="ftb-grid">
+        <div class="head">Input image</div>
+        <div class="head">Rigid depth (the 4D control)</div>
+        <div class="head">Stage 1 — refined depth</div>
+        <div class="head">Stage 2 — output video</div>
+
+        <img src="/page_FollowTheBlur/assets/cases/camel/input.jpg" alt="Camel case: input image" loading="lazy">
+        <img src="/page_FollowTheBlur/assets/cases/camel/rigid.webp" alt="Camel case: rigid depth" loading="lazy">
+        <img src="/page_FollowTheBlur/assets/cases/camel/refined.webp" alt="Camel case: refined depth" loading="lazy">
+        <img src="/page_FollowTheBlur/assets/cases/camel/output.webp" alt="Camel case: output video" loading="lazy">
+
+        <img src="/page_FollowTheBlur/assets/cases/back_carry/input.jpg" alt="Back-carry case: input image" loading="lazy">
+        <img src="/page_FollowTheBlur/assets/cases/back_carry/rigid.webp" alt="Back-carry case: rigid depth" loading="lazy">
+        <img src="/page_FollowTheBlur/assets/cases/back_carry/refined.webp" alt="Back-carry case: refined depth" loading="lazy">
+        <img src="/page_FollowTheBlur/assets/cases/back_carry/output.webp" alt="Back-carry case: output video" loading="lazy">
+
+        <img src="/page_FollowTheBlur/assets/cases/tree_climb/input.jpg" alt="Tree-climb case: input image" loading="lazy">
+        <img src="/page_FollowTheBlur/assets/cases/tree_climb/rigid.webp" alt="Tree-climb case: rigid depth" loading="lazy">
+        <img src="/page_FollowTheBlur/assets/cases/tree_climb/refined.webp" alt="Tree-climb case: refined depth" loading="lazy">
+        <img src="/page_FollowTheBlur/assets/cases/tree_climb/output.webp" alt="Tree-climb case: output video" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <section class="paper-section is-soft">
+    <div class="ftb-wide">
+      <h2 class="section-title">How It Works</h2>
+      <div class="ftb-steps">
+        <div class="ftb-step">
+          <div>
+            <h3><span class="num">1</span>The 4D control</h3>
+            <p>
+              The objects of the image are lifted to 3D proxies. The user gives
+              each proxy one rigid transform per frame, and a camera path. Here
+              the dog walks round the car and jumps in. The proxies only slide
+              and turn: the dog never moves a leg.
+            </p>
+          </div>
+          <img src="/page_FollowTheBlur/assets/steps/scene.webp" alt="The dog scene as a point cloud, the dog moving along its path" loading="lazy">
+        </div>
+        <div class="ftb-step">
+          <div>
+            <h3><span class="num">2</span>Render the rigid depth</h3>
+            <p>
+              The posed proxies are rendered over the background depth, frame by
+              frame. The result is the rigid depth: the placement of every
+              object is exact, but the motion is that of a statue.
+            </p>
+          </div>
+          <img src="/page_FollowTheBlur/assets/cases/dog_door/rigid.webp" alt="Rigid depth of the dog case" loading="lazy">
+        </div>
+        <div class="ftb-step">
+          <div>
+            <h3><span class="num">3</span>Follow the blur, then generate</h3>
+            <p>
+              Stage 1 lets the video model redraw the depth while it follows
+              only the blur of the render, so the dog rears up, grips the handle
+              and jumps. Stage 2 generates the video from this refined depth and
+              the input image.
+            </p>
+          </div>
+          <div class="pair">
+            <div>
+              <img src="/page_FollowTheBlur/assets/cases/dog_door/refined.webp" alt="Refined depth of the dog case" loading="lazy">
+              <div class="cap">Stage 1 — refined depth</div>
+            </div>
+            <div>
+              <img src="/page_FollowTheBlur/assets/cases/dog_door/output.webp" alt="Output video of the dog case" loading="lazy">
+              <div class="cap">Stage 2 — output video</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="paper-section abstract-section">
+    <div class="text-container">
+      <h2 class="section-title">Abstract</h2>
+      <p class="abstract-copy">
+        Controlling a video world model with text keeps its motion natural but
+        leaves the placement of objects and the camera ambiguous. Existing 4D
+        control methods resolve this ambiguity with 3D trajectories for objects
+        and the camera, but these trajectories are coarse, so the methods
+        struggle with complex motion such as interactions between objects. To
+        obtain both precise placement and natural motion, we introduce
+        <strong>Follow-the-Blur</strong>, a training-free framework that
+        combines the spatial control of 4D trajectories with the motion prior of
+        a pretrained video world model. Our key insight is that the coarse
+        trajectories given by 4D control carry only low-frequency information,
+        whereas the high-frequency details of natural motion, such as bending
+        limbs and bodies in contact, are already encoded in this motion prior.
+        To harness this prior, we render the 4D control as a depth video and
+        refine it by our proposed <em>dual-band denoising</em>. In the low band,
+        the model <strong>follows the blur</strong> of the render, while in the
+        high band it synthesizes fine details from its prior. A second stage
+        then generates the final video from the refined depth, in which bodies
+        move and interact naturally. Experiments on Interact4D, our new
+        benchmark of interactions among people, animals, and objects, show that
+        Follow-the-Blur follows the 4D control more closely and yields more
+        natural interactions than trained 4D control methods.
+      </p>
+    </div>
+  </section>
+</body>
+</html>
