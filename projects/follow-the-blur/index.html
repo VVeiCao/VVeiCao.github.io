@@ -1988,6 +1988,60 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
 .link-button { display: inline-block; padding: 7px 20px; border-radius: 999px; background: #22232b; color: #fff; font-size: 15px; font-weight: 600; text-decoration: none; }
 .link-button:hover { background: #4338ca; }
 .publication-authors a { color: #2f5fa7; text-decoration: none; }
+
+/* ---- project page (11-23): smaller hero cards, wider and uniform media ---- */
+.hero-features { width: min(100%, 780px); gap: 12px; margin-top: 22px; }
+.hero-feature, .hero-feature:first-child { gap: 4px; padding: 12px 12px 12px; border-top-width: 4px; border-radius: 10px; }
+.hero-feature-icon { width: 70px; height: 44px; }
+.hero-feature-icon svg { width: 38px; height: 38px; }
+.hero-feature strong { font-size: 17px; }
+.hero-feature small { margin-top: 2px; font-size: 13px; }
+:root, body, .qualitative-section, .authored-comparison-section { --page-wide: 1640px; }
+.teaser-wrap { width: min(100%, 1800px); padding: 0 28px; }
+.teaser-column-headings.is-three { grid-template-columns: 200px repeat(3, minmax(0, 1fr)); gap: 12px; }
+.teaser-column-headings.is-three .teaser-heading-video { grid-column: 4; }
+.media-grid.is-three { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.method-wrap { width: min(100%, 1800px); }
+.method-figure { width: min(100%, 1640px); } .method-figure.is-narrow { width: min(100%, 1100px); }
+.qualitative-context-row.is-two, .qualitative-hero-row { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 14px !important; width: calc((100% - 28px) * 2 / 3 + 14px) !important; max-width: none !important; margin-left: auto; margin-right: auto; }
+.qualitative-baseline-row.is-three { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 14px !important; width: 100% !important; max-width: none !important; }
+@media (max-width: 1100px) { .media-grid.is-three { grid-template-columns: 1fr; } .qualitative-context-row.is-two, .qualitative-hero-row { width: 100% !important; } }
+@media (max-width: 760px) { .qualitative-baseline-row.is-three { grid-template-columns: 1fr !important; } }
+
+/* ---- dual-band denoising, step by step (11-23) ---- */
+.dbd { width: min(100%, 1640px); margin: 44px auto 0; }
+.dbd-title { margin: 0 0 6px; text-align: center; font-size: 24px; }
+.dbd-stage { margin-top: 18px; --gap: calc(100% * 16 / 1840); }
+.dbd-labels { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--gap); margin-bottom: 8px; }
+.dbd-labels span { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; font-weight: 700; font-size: 16px; text-align: center; color: #3c4043; }
+.dbd-labels small { font-weight: 400; font-size: 13px; color: var(--paper-muted, #5f6368); }
+.dbd-labels .is-low { color: #c4623a; } .dbd-labels .is-high, .dbd-labels .is-out { color: #1f5f5b; }
+.dbd-frame { position: relative; aspect-ratio: 1840 / 252; }
+.dbd-video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity .12s linear; }
+.dbd-video.is-on { opacity: 1; }
+.dbd-boxes, .dbd-ops { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--gap); pointer-events: none; }
+.dbd-boxes i { border-radius: 8px; box-shadow: inset 0 0 0 1px rgba(32, 33, 36, .18); transition: box-shadow .2s, opacity .2s; }
+.dbd-boxes .is-low { box-shadow: inset 0 0 0 3px #c4623a; }
+.dbd-boxes .is-high { box-shadow: inset 0 0 0 3px #1f5f5b; }
+.dbd-boxes .is-out { box-shadow: inset 0 0 0 3px #1f5f5b; }
+.dbd.is-released .dbd-boxes .is-low { box-shadow: inset 0 0 0 2px rgba(32, 33, 36, .25); background: rgba(255, 255, 255, .62); }
+.dbd.is-released .dbd-labels .is-low { color: #9aa0a6; }
+.dbd-ops { grid-template-columns: repeat(3, minmax(0, 1fr)); left: 12.5%; right: 12.5%; column-gap: 0; align-items: center; justify-items: center; }
+.dbd-ops b { display: grid; place-items: center; min-width: 30px; height: 30px; padding: 0 7px; border-radius: 999px; background: #fff; box-shadow: 0 1px 5px rgba(32, 33, 36, .28); font-size: 15px; color: #3c4043; }
+.dbd-ops b:first-child { font-size: 12px; color: #c4623a; }
+.dbd.is-released .dbd-ops b:nth-child(2) { opacity: .35; }
+.dbd-controls { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 18px; align-items: center; width: min(100%, 1100px); margin: 20px auto 0; }
+.dbd-play { width: 44px; height: 44px; border: 0; border-radius: 50%; background: #202124; color: #fff; font-size: 14px; cursor: pointer; }
+.dbd-play:hover { background: #1f5f5b; }
+.dbd-phases { display: grid; grid-template-columns: 20fr 16fr; gap: 4px; margin: 0 9px 6px; font-size: 13px; font-weight: 700; text-align: center; }
+.dbd-phases span { padding: 3px 0; border-radius: 6px; color: #fff; }
+.dbd-phases .is-follow { background: #c4623a; } .dbd-phases .is-release { background: #1f5f5b; }
+.dbd-range { width: 100%; margin: 0; accent-color: #202124; cursor: pointer; }
+.dbd-readout { display: flex; flex-direction: column; min-width: 150px; font-size: 15px; font-variant-numeric: tabular-nums; }
+.dbd-phase { font-weight: 700; color: #c4623a; } .dbd.is-released .dbd-phase { color: #1f5f5b; }
+.dbd-note { width: min(100%, 860px); min-height: 3.2em; margin: 14px auto 0; text-align: center; color: var(--paper-muted, #5f6368); font-size: 15px; line-height: 1.6; }
+@media (max-width: 760px) { .dbd-labels span { font-size: 11px; } .dbd-labels small { display: none; } .dbd-ops b { min-width: 18px; height: 18px; font-size: 10px; padding: 0 3px; } .dbd-ops b:first-child { font-size: 8px; }
+  .dbd-controls { grid-template-columns: auto minmax(0, 1fr); } .dbd-readout { grid-column: 1 / -1; flex-direction: row; gap: 10px; justify-content: center; } }
 </style>
 </head>
 <body>
@@ -2027,7 +2081,33 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
   <div class="method-wrap"><div class="method-tabs" role="tablist" aria-label="Example"><button class="method-tab is-active" type="button" data-tab="camel">Camel</button><button class="method-tab" type="button" data-tab="back">Back carry</button><button class="method-tab" type="button" data-tab="tree">Tree climb</button><button class="method-tab" type="button" data-tab="door">Dog and door</button></div><div class="method-steps" data-video-sync data-tab="camel"><div class="method-step"><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/teaser/camel_input.jpg" alt=""></div><div class="method-step-text"><span class="method-step-num">1</span><strong>Input image and 4D control</strong><p>The 4D control moves rigid proxies along coarse 3D trajectories.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/camel__rigid.mp4"></video></div><div class="method-step-text"><span class="method-step-num">2</span><strong>Rigid depth</strong><p>The control is rendered as a depth video. The bodies only slide: nothing bends.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/camel__blur.mp4"></video></div><div class="method-step-text"><span class="method-step-num">3</span><strong>Its blur: the low band</strong><p>Blurred, the render only says where things are and where they go. This is all Stage 1 keeps from it.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/camel__refined.mp4"></video></div><div class="method-step-text"><span class="method-step-num">4</span><strong>Stage 1: refined depth</strong><p>In the early denoising steps the low band follows the blur; the model fills in the high band from its motion prior.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/camel__out.mp4" data-lead></video></div><div class="method-step-text"><span class="method-step-num">5</span><strong>Stage 2: video</strong><p>A depth-conditioned model turns the refined depth into the video.</p></div></div></div><div class="method-steps" data-video-sync data-tab="back" hidden><div class="method-step"><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/teaser/back_input.jpg" alt=""></div><div class="method-step-text"><span class="method-step-num">1</span><strong>Input image and 4D control</strong><p>The 4D control moves rigid proxies along coarse 3D trajectories.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/back__rigid.mp4"></video></div><div class="method-step-text"><span class="method-step-num">2</span><strong>Rigid depth</strong><p>The control is rendered as a depth video. The bodies only slide: nothing bends.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/back__blur.mp4"></video></div><div class="method-step-text"><span class="method-step-num">3</span><strong>Its blur: the low band</strong><p>Blurred, the render only says where things are and where they go. This is all Stage 1 keeps from it.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/back__refined.mp4"></video></div><div class="method-step-text"><span class="method-step-num">4</span><strong>Stage 1: refined depth</strong><p>In the early denoising steps the low band follows the blur; the model fills in the high band from its motion prior.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/back__out.mp4" data-lead></video></div><div class="method-step-text"><span class="method-step-num">5</span><strong>Stage 2: video</strong><p>A depth-conditioned model turns the refined depth into the video.</p></div></div></div><div class="method-steps" data-video-sync data-tab="tree" hidden><div class="method-step"><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/teaser/tree_input.jpg" alt=""></div><div class="method-step-text"><span class="method-step-num">1</span><strong>Input image and 4D control</strong><p>The 4D control moves rigid proxies along coarse 3D trajectories.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/tree__rigid.mp4"></video></div><div class="method-step-text"><span class="method-step-num">2</span><strong>Rigid depth</strong><p>The control is rendered as a depth video. The bodies only slide: nothing bends.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/tree__blur.mp4"></video></div><div class="method-step-text"><span class="method-step-num">3</span><strong>Its blur: the low band</strong><p>Blurred, the render only says where things are and where they go. This is all Stage 1 keeps from it.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/tree__refined.mp4"></video></div><div class="method-step-text"><span class="method-step-num">4</span><strong>Stage 1: refined depth</strong><p>In the early denoising steps the low band follows the blur; the model fills in the high band from its motion prior.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/tree__out.mp4" data-lead></video></div><div class="method-step-text"><span class="method-step-num">5</span><strong>Stage 2: video</strong><p>A depth-conditioned model turns the refined depth into the video.</p></div></div></div><div class="method-steps" data-video-sync data-tab="door" hidden><div class="method-step"><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/teaser/door_input.jpg" alt=""></div><div class="method-step-text"><span class="method-step-num">1</span><strong>Input image and 4D control</strong><p>The 4D control moves rigid proxies along coarse 3D trajectories.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/door__rigid.mp4"></video></div><div class="method-step-text"><span class="method-step-num">2</span><strong>Rigid depth</strong><p>The control is rendered as a depth video. The bodies only slide: nothing bends.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/door__blur.mp4"></video></div><div class="method-step-text"><span class="method-step-num">3</span><strong>Its blur: the low band</strong><p>Blurred, the render only says where things are and where they go. This is all Stage 1 keeps from it.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/door__refined.mp4"></video></div><div class="method-step-text"><span class="method-step-num">4</span><strong>Stage 1: refined depth</strong><p>In the early denoising steps the low band follows the blur; the model fills in the high band from its motion prior.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/door__out.mp4" data-lead></video></div><div class="method-step-text"><span class="method-step-num">5</span><strong>Stage 2: video</strong><p>A depth-conditioned model turns the refined depth into the video.</p></div></div></div></div>
   <p class="section-lead" style="margin-top:38px">The same pipeline as in the paper:</p>
   <figure class="method-figure"><img loading="lazy" src="/page_FollowTheBlur/web_assets/fig/overview.jpg" alt="Overview of Follow-the-Blur"><figcaption>Overview (Fig. 3 of the paper)</figcaption></figure>
-  <figure class="method-figure is-narrow"><img loading="lazy" src="/page_FollowTheBlur/web_assets/fig/dualband.jpg" alt="Dual-band denoising"><figcaption>Dual-band denoising (Fig. 4 of the paper)</figcaption></figure>
+  <div class="dbd" id="dualband-demo" data-base="/page_FollowTheBlur/web_assets/steps/camel/" data-first="4" data-last="40" data-follow-end="24">
+    <h3 class="dbd-title">Dual-band denoising, step by step</h3>
+    <p class="section-lead">Stage 1 on the camel case. At every Follow step the low band of the sample is put back to the blur of the rigid depth, and the model keeps drawing the high band. Then the constraint is released. Drag the slider or press play.</p>
+    <div class="dbd-stage">
+      <div class="dbd-labels">
+        <span>Rigid depth</span>
+        <span class="is-low">Low band<small>the blur of the rigid depth</small></span>
+        <span class="is-high">High band<small>drawn by the model</small></span>
+        <span class="is-out">Prediction at step <b class="dbd-k">4</b></span>
+      </div>
+      <div class="dbd-frame">
+        <video class="dbd-video is-on" muted loop playsinline preload="auto"></video>
+        <video class="dbd-video" muted loop playsinline preload="auto"></video>
+        <div class="dbd-boxes" aria-hidden="true"><i></i><i class="is-low"></i><i class="is-high"></i><i class="is-out"></i></div>
+        <div class="dbd-ops" aria-hidden="true"><b>blur</b><b>+</b><b>=</b></div>
+      </div>
+    </div>
+    <div class="dbd-controls">
+      <button class="dbd-play" type="button" aria-label="Pause">❚❚</button>
+      <div class="dbd-track">
+        <div class="dbd-phases"><span class="is-follow">Follow the blur</span><span class="is-release">Release</span></div>
+        <input class="dbd-range" type="range" min="4" max="40" step="1" value="4" aria-label="Denoising step">
+      </div>
+      <div class="dbd-readout"><strong>Step <span class="dbd-k">4</span> / 40</strong><span class="dbd-phase">Follow the blur</span></div>
+    </div>
+    <p class="dbd-note"></p>
+  </div>
 </section>
 
 <section class="qualitative-section" id="comparison">
@@ -2046,23 +2126,57 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
   </div>
 </section>
 
-<section class="paper-section study-section" id="study">
-  <div class="text-container"><h2 class="section-title">User Study</h2>
-    <p class="section-lead">Twenty participants compared the four methods on 20 Interact4D cases, among them the eight above, without method names and in random order, and picked one video for each of three questions. Share of the 400 votes per question (Tab. 2 of the paper).</p>
-    <table class="study-table">
-      <tr><th>Method</th><th>Fidelity<small>motion closest to the reference</small></th><th>Naturalness<small>most natural motion</small></th><th>Quality<small>best-looking video</small></th></tr>
-      <tr><td>VerseCrafter</td><td>7.0%</td><td>8.8%</td><td>12.5%</td></tr>
-      <tr><td>SymphoMotion</td><td>8.3%</td><td>7.3%</td><td>11.3%</td></tr>
-      <tr><td>WorldDirector</td><td>17.5%</td><td>16.0%</td><td>18.5%</td></tr>
-      <tr class="is-ours"><td>Follow-the-Blur (Ours)</td><td>67.3%</td><td>68.0%</td><td>57.8%</td></tr>
-    </table>
-  </div>
-</section>
 <footer class="site-footer">All videos are muted and loop; the videos of a case play in step.</footer>
 <script src="/page_FollowTheBlur/web_assets/lib/three.min.js"></script>
 <script src="/page_FollowTheBlur/web_assets/lib/OrbitControls.js"></script>
 <script src="/page_FollowTheBlur/web_assets/lib/viewer.js"></script>
 <script src="/page_FollowTheBlur/web_assets/lib/page.js"></script>
 
+<script>
+(function () {
+  var root = document.getElementById("dualband-demo"); if (!root) return;
+  var base = root.dataset.base, first = +root.dataset.first, last = +root.dataset.last, followEnd = +root.dataset.followEnd;
+  var vids = root.querySelectorAll(".dbd-video"), range = root.querySelector(".dbd-range"), play = root.querySelector(".dbd-play");
+  var ks = root.querySelectorAll(".dbd-k"), phase = root.querySelector(".dbd-phase"), note = root.querySelector(".dbd-note");
+  var on = 0, step = first, playing = true, visible = false, timer = null, pending = 0;
+  function src(k) { return base + "step_" + (k < 10 ? "0" : "") + k + ".mp4"; }
+  function text(k) {
+    var rel = k > followEnd;
+    root.classList.toggle("is-released", rel);
+    phase.textContent = rel ? "Release" : "Follow the blur";
+    note.textContent = k === first ? "The sample starts as the rigid depth with noise added, so the first prediction is still close to the stiff render."
+      : !rel ? "The low band is replaced by the blur of the rigid depth before every step: the bodies stay where the control puts them. The high band is the model's own, and limbs begin to form in it."
+      : k < last ? "The constraint is off. The model finishes the video freely and sharpens the bodies; the layout it followed stays."
+      : "The refined depth: the camel unfolds its legs and stands up, and the man sits on it. This video is the control of Stage 2.";
+    for (var i = 0; i < ks.length; i++) ks[i].textContent = k;
+  }
+  function show(k) {
+    step = k; range.value = k; text(k);
+    var cur = vids[on], nxt = vids[1 - on], id = ++pending;
+    nxt.src = src(k);
+    nxt.addEventListener("loadeddata", function ready() {
+      nxt.removeEventListener("loadeddata", ready); if (id !== pending) return;
+      try { nxt.currentTime = cur.currentTime || 0; } catch (e) {}
+      nxt.play().catch(function () {});
+      nxt.classList.add("is-on"); cur.classList.remove("is-on"); cur.pause(); on = 1 - on;
+    });
+    nxt.load();
+    if (k < last) { fetch(src(k + 1)).catch(function () {}); }
+  }
+  function tick() {
+    clearTimeout(timer); if (!playing || !visible) return;
+    timer = setTimeout(function () { show(step >= last ? first : step + 1); tick(); }, step >= last ? 4200 : step === first ? 1800 : 850);
+  }
+  function setPlaying(p) { playing = p; play.textContent = p ? "❚❚" : "▶"; play.setAttribute("aria-label", p ? "Pause" : "Play"); tick(); }
+  play.addEventListener("click", function () { setPlaying(!playing); });
+  range.addEventListener("input", function () { setPlaying(false); show(+range.value); });
+  new IntersectionObserver(function (es) {
+    visible = es[0].isIntersecting;
+    if (visible) { if (!vids[on].src) show(first); else vids[on].play().catch(function () {}); tick(); }
+    else { clearTimeout(timer); vids[on].pause(); }
+  }, { threshold: 0.15 }).observe(root);
+  text(first);
+})();
+</script>
 </body>
 </html>
