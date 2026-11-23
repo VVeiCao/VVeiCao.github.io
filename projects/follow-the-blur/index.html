@@ -1,176 +1,2068 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="robots" content="noindex">
-  <meta
-    name="description"
-    content="Follow-the-Blur: training-free 4D control of video world models."
-  >
-  <title>Follow-the-Blur — Training-Free 4D Control of Video World Models</title>
-  <link rel="icon" type="image/png" href="/page_FollowTheBlur/assets/favicon.png">
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-  >
-  <link rel="stylesheet" href="./project-page.css">
-  <link rel="stylesheet" href="./named.css">
-  <style>
-    body > header, body > section { order: 0 !important; }
-    .project-logo { width: 260px; margin: -12px auto 6px; }
-    .project-name { color: #4338ca; }
-    .project-name .blur { color: #b57bf5; filter: blur(1.6px); }
-    .ftb-wide { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
-    .ftb-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 12px; }
-    .ftb-grid .head { font-weight: 600; font-size: 15px; text-align: center; color: #33324a; padding-bottom: 2px; }
-    .ftb-grid img, .ftb-step img { display: block; width: 100%; height: auto; border-radius: 8px; background: #eeeef6; }
-    .ftb-steps { display: grid; gap: 34px; }
-    .ftb-step { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 28px; align-items: center; }
-    .ftb-step h3 { margin: 0 0 8px; font-size: 21px; color: #4338ca; }
-    .ftb-step p { margin: 0; line-height: 1.65; font-size: 16.5px; color: #33324a; }
-    .ftb-step .num { display: inline-grid; place-items: center; width: 30px; height: 30px; margin-right: 10px; border-radius: 50%;
-                     background: #4338ca; color: #fff; font-size: 16px; font-weight: 700; vertical-align: 2px; }
-    .ftb-step .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .ftb-step .cap { font-size: 13.5px; text-align: center; color: #62617a; margin-top: 4px; }
-    @media (max-width: 760px) {
-      .ftb-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .ftb-grid .head { display: none; }
-      .ftb-step { grid-template-columns: 1fr; gap: 14px; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Follow-the-Blur — Training-Free 4D Control of Video World Models</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="/page_FollowTheBlur/assets/favicon.png">
+<style>
+:root {
+  --paper-blue: #202124;
+  --paper-violet: #202124;
+  --paper-ink: #202124;
+  --paper-muted: #64676c;
+  --paper-line: #dadce0;
+  --paper-soft: #f8f9fa;
+  --paper-tint: #f8f9fa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  background: #fff;
+  color: var(--paper-ink);
+  font-family: "Noto Sans", Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.publication-hero {
+  position: relative;
+  order: 1;
+  overflow: hidden;
+  padding: 68px 24px 42px;
+  background: #fff;
+  text-align: center;
+}
+
+.publication-container {
+  position: relative;
+  width: min(100%, 1040px);
+  margin: 0 auto;
+}
+
+.project-name {
+  margin-bottom: 13px;
+  color: #17181a;
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: clamp(44px, 6vw, 72px);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+}
+
+.publication-title {
+  max-width: 900px;
+  margin: 0 auto 22px;
+  color: #36383c;
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: clamp(25px, 3vw, 38px);
+  font-weight: 450;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.publication-authors {
+  color: #575c69;
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.author-block {
+  display: inline-block;
+}
+
+.is-object-motion {
+  --feature-color: #0070c0;
+  --feature-rgb: 0 112 192;
+}
+
+.is-object-insertion {
+  --feature-color: #ed7d31;
+  --feature-rgb: 237 125 49;
+}
+
+.is-joint-control {
+  --feature-color: #7554d6;
+  --feature-rgb: 117 84 214;
+}
+
+.hero-features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  width: min(100%, 1040px);
+  margin: 28px auto 0;
+  overflow: hidden;
+  border: 1px solid #c9cdd2;
+  border-radius: 9px;
+}
+
+.hero-feature {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+  padding: 13px 17px;
+  border-left: 1px solid var(--paper-line);
+  background: #fff;
+  text-align: left;
+}
+
+.hero-feature:first-child {
+  border-left: 0;
+}
+
+.hero-feature-icon {
+  display: grid;
+  flex: none;
+  width: 62px;
+  height: 46px;
+  place-items: center;
+}
+
+.hero-feature-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hero-feature strong,
+.hero-feature small {
+  display: block;
+}
+
+.hero-feature strong {
+  color: var(--paper-ink);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.hero-feature small {
+  margin-top: 3px;
+  color: var(--paper-muted);
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.paper-section {
+  padding: 34px 24px;
+}
+
+.paper-section.is-soft {
+  border-top: 1px solid var(--paper-line);
+  border-bottom: 1px solid var(--paper-line);
+  background: var(--paper-soft);
+}
+
+.tldr-section {
+  order: 3;
+}
+
+.abstract-section {
+  order: 5;
+}
+
+.supplementary-section {
+  order: 4;
+  padding: 22px 24px 10px;
+}
+
+.text-container {
+  width: min(100%, 860px);
+  margin: 0 auto;
+}
+
+.section-title {
+  margin: 0 0 15px;
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  text-align: center;
+}
+
+.tldr {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.65;
+  text-align: center;
+}
+
+.tldr strong {
+  color: var(--paper-ink);
+}
+
+.abstract-copy {
+  margin: 0;
+  color: #333;
+  font-family: "Noto Sans", sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  text-align: justify;
+}
+
+.teaser-section {
+  order: 2;
+  padding: 30px 4px 42px;
+}
+
+main.teaser-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.teaser-column-headings {
+  display: grid;
+  grid-template-columns:
+    235px
+    minmax(0, 0.5fr)
+    repeat(3, minmax(0, 1fr));
+  gap: 3px;
+  padding: 0 0 11px;
+  border-bottom: 1px solid var(--paper-line);
+  color: #4a4d52;
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.teaser-heading-input {
+  grid-column: 2;
+  white-space: nowrap;
+}
+
+.teaser-heading-puppet {
+  grid-column: 3;
+}
+
+.teaser-heading-depth {
+  grid-column: 4;
+}
+
+.teaser-heading-video {
+  grid-column: 5;
+}
+
+.case {
+  display: grid;
+  /* Wide enough for the busiest icon equation, bear + T-Rex + camera, at the
+     shared icon height. */
+  grid-template-columns: 232px minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0 10px;
+  border-top: 1px solid var(--paper-line);
+}
+
+.case:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.feature-rail {
+  position: relative;
+  display: flex;
+  min-height: 150px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 6px 12px 6px 0;
+  border-right: 1px solid var(--paper-line);
+  background: transparent;
+}
+
+.feature-row-index {
+  position: absolute;
+  top: 0;
+  right: 12px;
+  color: #a0a4aa;
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.feature-row-visual {
+  display: block;
+  width: 100%;
+  height: 44px;
+  margin-bottom: 10px;
+}
+
+.feature-equation {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+/* The icons are cropped to their content, so one height gives every subject
+   the same visual weight; long subjects are capped by width instead. */
+.feature-module {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: flex-end;
+  min-width: 0;
+  height: 40px;
+}
+
+.feature-module img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 76px;
+  max-height: 40px;
+}
+
+.is-camera-module img {
+  max-height: 30px;
+}
+
+.feature-equation .feature-plus {
+  align-self: center;
+}
+
+.feature-plus {
+  display: grid;
+  flex: none;
+  width: 8px;
+  color: #111;
+  font-family: Arial, sans-serif;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1;
+  place-items: center;
+}
+
+.feature-rail h2 {
+  margin: 0;
+  color: var(--paper-ink);
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+  white-space: nowrap;
+}
+
+.feature-rail p {
+  margin: 5px 0 0;
+  color: var(--paper-muted);
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+
+.feature-row .media-title {
+  display: none;
+}
+
+.case-details {
+  position: relative;
+  flex: none;
+  color: var(--paper-muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.case-details summary {
+  cursor: pointer;
+  user-select: none;
+}
+
+.case-details code {
+  display: block;
+  max-width: min(520px, 70vw);
+  margin-top: 7px;
+  overflow-wrap: anywhere;
+  color: #555;
+  font-size: 11px;
+}
+
+.media-grid {
+  display: grid;
+  /* The input column is half a video column, so one image and each image in a
+     stacked pair share one size, and the pair is the same height as a video. */
+  grid-template-columns: minmax(0, 0.5fr) repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 3px;
+}
+
+.teaser-input-stack {
+  display: grid;
+  align-self: start;
+  gap: 3px;
+}
+
+/* A single input is the same size as each image in a pair, and sits in the
+   middle of the taller video row. */
+.teaser-input-stack.is-single-input {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.teaser-input-stack.is-single-input .media-card {
+  width: 100%;
+}
+
+.media-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column-reverse;
+  margin: 0;
+  text-align: center;
+}
+
+.media-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  margin: 9px 0 0;
+  color: #353a47;
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.media-title small,
+.teaser-column-headings small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 1px;
+  color: var(--paper-muted);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.2;
+}
+
+.media-title small::before,
+.teaser-column-headings small::before {
+  content: "";
+  width: 13px;
+  height: 13px;
+  flex: none;
+  background: #0070c0;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='black' d='M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32v208h-32V96c0-17.7-14.3-32-32-32s-32 14.3-32 32v272l-41.4-55.2c-10.6-14.1-30.7-17-44.8-6.4s-17 30.7-6.4 44.8l96 128c9.4 12.5 24.2 20.8 40.6 20.8H336c61.9 0 112-50.1 112-112V160c0-17.7-14.3-32-32-32s-32 14.3-32 32v80h-32V96c0-17.7-14.3-32-32-32s-32 14.3-32 32v144h-32V32z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='black' d='M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32v208h-32V96c0-17.7-14.3-32-32-32s-32 14.3-32 32v272l-41.4-55.2c-10.6-14.1-30.7-17-44.8-6.4s-17 30.7-6.4 44.8l96 128c9.4 12.5 24.2 20.8 40.6 20.8H336c61.9 0 112-50.1 112-112V160c0-17.7-14.3-32-32-32s-32 14.3-32 32v80h-32V96c0-17.7-14.3-32-32-32s-32 14.3-32 32v144h-32V32z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.media-title:has(small) {
+  flex-direction: column;
+  gap: 1px;
+}
+
+.media-frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 832 / 480;
+  border: 1px solid var(--paper-line);
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.media-frame > img,
+.media-frame > video,
+.media-frame > iframe,
+.video-stack > video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+
+/* "drag to orbit" hint over the interactive point clouds, added by
+   addOrbitHint() in qualitative-cases.js. */
+.orbit-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.media-frame.is-orbit-ready .orbit-hint {
+  opacity: 1;
+  transition-delay: 0.8s;
+}
+
+.media-frame.is-orbited .orbit-hint {
+  display: none;
+}
+
+.orbit-hint-hand {
+  width: 34px;
+  height: 34px;
+  filter: drop-shadow(0 0 1px rgba(32, 33, 36, 0.75)) drop-shadow(0 2px 4px rgba(32, 33, 36, 0.35));
+  animation: orbit-hint-sway 2.4s ease-in-out infinite;
+}
+
+.orbit-hint-hand::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='black' d='M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32v208h-32V96c0-17.7-14.3-32-32-32s-32 14.3-32 32v272l-41.4-55.2c-10.6-14.1-30.7-17-44.8-6.4s-17 30.7-6.4 44.8l96 128c9.4 12.5 24.2 20.8 40.6 20.8H336c61.9 0 112-50.1 112-112V160c0-17.7-14.3-32-32-32s-32 14.3-32 32v80h-32V96c0-17.7-14.3-32-32-32s-32 14.3-32 32v144h-32V32z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='black' d='M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32v208h-32V96c0-17.7-14.3-32-32-32s-32 14.3-32 32v272l-41.4-55.2c-10.6-14.1-30.7-17-44.8-6.4s-17 30.7-6.4 44.8l96 128c9.4 12.5 24.2 20.8 40.6 20.8H336c61.9 0 112-50.1 112-112V160c0-17.7-14.3-32-32-32s-32 14.3-32 32v80h-32V96c0-17.7-14.3-32-32-32s-32 14.3-32 32v144h-32V32z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.orbit-hint-label {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 1px 3px rgba(32, 33, 36, 0.2);
+  color: #353a47;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+@keyframes orbit-hint-sway {
+  0%,
+  100% {
+    transform: translateX(-16px) rotate(-10deg);
+  }
+  50% {
+    transform: translateX(16px) rotate(10deg);
+  }
+}
+
+.qualitative-section {
+  order: 6;
+  padding: 54px 24px 72px;
+  border-top: 1px solid var(--paper-line);
+  background: var(--paper-soft);
+}
+
+.qualitative-container {
+  width: min(100%, 1740px);
+  margin: 0 auto;
+}
+
+.qualitative-header {
+  max-width: 850px;
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
+.qualitative-header h2 {
+  margin: 0 0 10px;
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.qualitative-header p,
+.qualitative-case-heading p {
+  margin: 0;
+  color: var(--paper-muted);
+  font-size: 15px;
+}
+
+.qualitative-carousel {
+  position: relative;
+  padding: 0 54px;
+  outline: none;
+}
+
+.qualitative-progress {
+  margin-bottom: 18px;
+  padding: 17px 18px 11px;
+  border: 1px solid var(--paper-line);
+  border-radius: 7px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.qualitative-progress-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.qualitative-progress-kicker {
+  display: block;
+  color: #6a6d72;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.qualitative-progress-current-title {
+  display: block;
+  margin-top: 4px;
+  color: #292e3a;
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.qualitative-progress-count {
+  display: flex;
+  flex: none;
+  align-items: baseline;
+  gap: 6px;
+  color: #8a8f9c;
+  font-size: 13px;
+}
+
+.qualitative-progress-count strong {
+  color: var(--paper-ink);
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 27px;
+  line-height: 1;
+}
+
+.qualitative-progress-bar {
+  height: 4px;
+  margin-top: 14px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e9ebf1;
+}
+
+.qualitative-progress-bar > span {
+  display: block;
+  width: 0;
+  min-width: 28px;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--paper-ink);
+  transition: width 360ms ease;
+}
+
+.qualitative-progress-list {
+  position: relative;
+  display: flex;
+  gap: 9px;
+  margin-top: 13px;
+  padding: 2px 1px 8px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-color: #bdc5db transparent;
+  scrollbar-width: thin;
+}
+
+.qualitative-progress-item {
+  position: relative;
+  display: grid;
+  flex: 0 0 210px;
+  grid-template-columns: 31px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  min-height: 64px;
+  padding: 9px 11px;
+  overflow: hidden;
+  border: 1px solid #e1e4eb;
+  border-radius: 5px;
+  background: #fff;
+  color: #343947;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.qualitative-progress-item:hover {
+  border-color: #8b8f95;
+}
+
+.qualitative-progress-number {
+  display: grid;
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  background: #eff1f5;
+  color: #737988;
+  font-size: 10px;
+  font-weight: 800;
+  place-items: center;
+}
+
+.qualitative-progress-copy {
+  min-width: 0;
+}
+
+.qualitative-progress-copy strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qualitative-progress-copy strong {
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.qualitative-progress-copy small {
+  display: -webkit-box;
+  margin-top: 3px;
+  overflow: hidden;
+  color: #7a808e;
+  font-size: 11px;
+  line-height: 1.3;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.qualitative-progress-item.is-complete {
+  border-color: #cfd2d6;
+  background: #fff;
+}
+
+.qualitative-progress-item.is-complete .qualitative-progress-number {
+  background: #e6e8eb;
+  color: #52565b;
+}
+
+.qualitative-progress-item.is-active {
+  border-color: var(--paper-ink);
+  background: #fff;
+  box-shadow: inset 0 -3px 0 var(--paper-ink);
+  color: var(--paper-ink);
+}
+
+.qualitative-progress-item.is-active .qualitative-progress-number {
+  background: var(--paper-ink);
+  color: #fff;
+}
+
+.qualitative-progress-item.is-active .qualitative-progress-copy small {
+  color: var(--paper-muted);
+}
+
+.qualitative-progress-item:focus-visible {
+  outline: 3px solid rgb(32 33 36 / 18%);
+  outline-offset: 2px;
+}
+
+.qualitative-carousel-stage {
+  position: relative;
+}
+
+.qualitative-carousel-viewport {
+  overflow: hidden;
+  border: 1px solid var(--paper-line);
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.qualitative-carousel-track {
+  display: flex;
+  align-items: flex-start;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.qualitative-carousel .qualitative-case {
+  flex: 0 0 100%;
+  min-width: 0;
+  padding: 34px 18px 42px;
+  border: 0;
+}
+
+.qualitative-carousel .qualitative-case + .qualitative-case {
+  margin-top: 0;
+}
+
+.qualitative-carousel-button {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  padding: 0 0 4px;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 50%;
+  background: rgb(28 28 31 / 88%);
+  box-shadow: 0 4px 14px rgb(0 0 0 / 20%);
+  color: #fff;
+  font: 400 34px/1 Arial, sans-serif;
+  cursor: pointer;
+  place-items: center;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    background 160ms ease;
+}
+
+.qualitative-carousel-button.is-previous {
+  left: -49px;
+}
+
+.qualitative-carousel-button.is-next {
+  right: -49px;
+}
+
+.qualitative-carousel-button:hover:not(:disabled),
+.qualitative-carousel-button:focus-visible {
+  background: #000;
+  transform: translateY(-50%) scale(1.06);
+}
+
+.qualitative-carousel-button:focus-visible {
+  outline: 3px solid rgb(57 119 255 / 35%);
+  outline-offset: 3px;
+}
+
+.qualitative-carousel-button:disabled {
+  opacity: 0.22;
+  cursor: default;
+}
+
+.qualitative-carousel-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.qualitative-case {
+  padding: 34px 0 50px;
+  border-top: 1px solid var(--paper-line);
+}
+
+.qualitative-case + .qualitative-case {
+  margin-top: 6px;
+}
+
+.qualitative-case-heading {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.qualitative-case-heading h3 {
+  margin: 0 0 7px;
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.qualitative-context-row,
+.qualitative-hero-row,
+.qualitative-baseline-row {
+  display: grid;
+  align-items: start;
+}
+
+.qualitative-context-row {
+  grid-template-columns: minmax(0, 1fr);
+  width: min(34%, 420px);
+  margin: 0 auto;
+}
+
+.qualitative-context-row .media-title {
+  min-height: 36px;
+  margin-top: 7px;
+  color: var(--paper-muted);
+  font-size: 14px;
+}
+
+.qualitative-hero-row {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  width: min(100%, 1420px);
+  margin: 28px auto 0;
+  padding: 8px 8px 12px;
+}
+
+.qualitative-hero-row .media-title {
+  min-height: 46px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.baseline-output-title {
+  margin: 34px 0 13px;
+  color: #444;
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.qualitative-baseline-row {
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 12px;
+  width: min(100%, 1240px);
+  margin: 0 auto;
+  padding: 4px 3px 15px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+}
+
+.qualitative-baseline-row .media-title {
+  min-height: 39px;
+  font-size: 14px;
+}
+
+.javascript-note {
+  margin: 1rem 0 0;
+  color: var(--paper-muted);
+  text-align: center;
+}
+
+.site-footer {
+  order: 9;
+  padding: 30px 24px 40px;
+  border-top: 1px solid var(--paper-line);
+  color: #888;
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 1100px) {
+  .case {
+    grid-template-columns: 232px minmax(0, 1fr);
+    align-items: flex-start;
+  }
+
+  .media-grid {
+    grid-template-columns: minmax(0, 0.5fr) repeat(3, minmax(0, 1fr));
+    gap: 12px 8px;
+  }
+
+  .teaser-column-headings {
+    display: none;
+  }
+
+  .feature-row .media-title {
+    display: flex;
+  }
+}
+
+@media (max-width: 680px) {
+  .publication-hero {
+    padding: 54px 18px 38px;
+  }
+
+  .publication-authors {
+    font-size: 16px;
+  }
+
+  .hero-features {
+    grid-template-columns: 1fr;
+    width: min(100%, 430px);
+  }
+
+  .hero-feature {
+    border-top: 1px solid var(--paper-line);
+    border-left: 0;
+  }
+
+  .hero-feature:first-child {
+    border-top: 0;
+  }
+
+  .paper-section,
+  .teaser-section,
+  .qualitative-section {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .case {
+    grid-template-columns: 1fr;
+    gap: 9px;
+    padding: 16px 0 18px;
+  }
+
+  .feature-rail {
+    display: flex;
+    min-height: 0;
+    align-items: flex-start;
+    padding: 13px 42px 15px 13px;
+    border-right: 0;
+    border-bottom: 1px solid var(--paper-line);
+  }
+
+  .feature-row-visual {
+    width: 100%;
+    height: 72px;
+    margin: 0 0 7px;
+  }
+
+  .feature-rail h2 {
+    align-self: auto;
+    font-size: 18px;
+  }
+
+  .feature-rail p {
+    align-self: auto;
+    margin-top: 3px;
+  }
+
+  .case-details {
+    margin-top: 12px;
+    text-align: left;
+  }
+
+  .media-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .qualitative-context-row,
+  .qualitative-hero-row {
+    grid-template-columns: 1fr;
+    width: min(100%, 680px);
+  }
+
+  .qualitative-context-row {
+    width: min(70%, 400px);
+  }
+
+  .qualitative-baseline-row {
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
+  }
+
+  .qualitative-carousel {
+    padding: 0;
+  }
+
+      .qualitative-progress {
+    margin-bottom: 13px;
+    padding: 14px 12px 8px;
+  }
+
+  .qualitative-progress-heading {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .qualitative-progress-current-title {
+    font-size: 14px;
+  }
+
+  .qualitative-progress-count {
+    gap: 4px;
+  }
+
+  .qualitative-progress-count strong {
+    font-size: 23px;
+  }
+
+  .qualitative-progress-item {
+    flex-basis: 178px;
+  }
+
+  .qualitative-carousel .qualitative-case {
+    padding: 28px 11px 34px;
+  }
+
+  .qualitative-carousel-button {
+    top: 48%;
+    width: 38px;
+    height: 38px;
+    background: rgb(20 20 22 / 78%);
+    font-size: 31px;
+  }
+
+  .qualitative-carousel-button.is-previous {
+    left: 6px;
+  }
+
+  .qualitative-carousel-button.is-next {
+    right: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qualitative-carousel-track,
+  .qualitative-progress-bar > span,
+  .qualitative-progress-item {
+    transition: none;
+  }
+
+  .orbit-hint-hand {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Bear + T-Rex teaser block (see bear-teaser.js)
+   Shares .teaser-section / .case / .media-grid with the hiker block; only the
+   pieces that block does not have are defined here.
+   --------------------------------------------------------------------------- */
+
+.bear-teaser-section {
+  order: 2;
+  padding-top: 8px;
+  border-top: 1px solid var(--paper-line);
+}
+
+.bear-seed-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 7px;
+}
+
+.bear-seed-label {
+  margin-right: 2px;
+  color: var(--paper-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.bear-seed-button {
+  padding: 2px 7px;
+  border: 1px solid var(--paper-line);
+  border-radius: 999px;
+  background: #fff;
+  color: #4a4d52;
+  cursor: pointer;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.bear-seed-button:hover {
+  border-color: #9aa0a8;
+  color: var(--paper-ink);
+}
+
+.bear-seed-button.is-active {
+  border-color: #111;
+  background: #111;
+  color: #fff;
+}
+
+@media (max-width: 1100px) {
+  .bear-teaser-section .media-card.is-bear-generated .media-title {
+    display: flex;
+  }
+}
+
+/* Showcase rows (release edition): the same four-column teaser form, but the
+   cases carry no icon equation, so the rail is heading-only. */
+.showcase-section {
+  order: 8;
+  padding-top: 8px;
+  border-top: 1px solid var(--paper-line);
+}
+
+.showcase-section .feature-rail {
+  min-height: 0;
+}
+
+/* Method figure. Sits between the teaser and the single-case showcase. */
+.supplementary-figure {
+  width: min(100%, 880px);
+  margin: 0 auto;
+}
+
+.supplementary-figure video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--paper-line);
+  border-radius: 6px;
+  background: #000;
+}
+
+.pipeline-section {
+  order: 6;
+}
+
+.pipeline-figure {
+  width: min(100%, 1320px);
+  margin: 18px auto 0;
+}
+
+.pipeline-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--paper-line);
+  border-radius: 6px;
+  background: #fff;
+}
+
+/* The showcase reuses the qualitative carousel, so its slides need the same
+   full-width flex basis the qualitative slides get. */
+.qualitative-carousel .teaser-page {
+  flex: 0 0 100%;
+  min-width: 0;
+  /* No side padding: .qualitative-carousel already insets by 54px to clear the
+     overlaid prev/next buttons, and doubling it narrows the row until the
+     column headings no longer line up with the columns. */
+  padding: 10px 0 16px;
+}
+
+.teaser-section .showcase-carousel-mount {
+  margin-top: 4px;
+}
+
+/* Match the slide's side padding so the column headings line up with the
+   columns underneath them. */
+.teaser-section .teaser-column-headings {
+  padding-right: 54px;
+  padding-left: 54px;
+}
+
+@media (max-width: 760px) {
+  .teaser-section .teaser-column-headings {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+.teaser-section .qualitative-carousel .case {
+  padding-top: 0;
+  border-top: 0;
+}
+
+@media (max-width: 760px) {
+  .qualitative-carousel .teaser-page {
+    padding: 10px 0 16px;
+  }
+}
+
+/* ===========================================================================
+   Page polish
+   Section headings, vertical rhythm and softer carousel chrome. The palette
+   stays monochrome; only weight, spacing and depth change.
+   =========================================================================== */
+
+:root {
+  --paper-hairline: #e8eaed;
+  --paper-shadow: 0 1px 2px rgba(32, 33, 36, 0.06),
+    0 4px 16px rgba(32, 33, 36, 0.05);
+}
+
+/* --- section headings ---------------------------------------------------- */
+
+.teaser-heading {
+  width: min(100%, 1740px);
+  margin: 0 auto 22px;
+  padding: 0 54px;
+}
+
+.teaser-kicker {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--paper-muted);
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.teaser-heading h2 {
+  margin: 0;
+  color: var(--paper-ink);
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 27px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.teaser-heading p {
+  max-width: 68ch;
+  margin: 9px 0 0;
+  color: var(--paper-muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* --- vertical rhythm ----------------------------------------------------- */
+
+.teaser-section {
+  padding: 46px 4px 50px;
+  border-top: 1px solid var(--paper-hairline);
+}
+
+.teaser-section:first-of-type {
+  border-top: 0;
+}
+
+.bear-teaser-section,
+.showcase-section {
+  padding-top: 46px;
+  border-top: 1px solid var(--paper-hairline);
+}
+
+.pipeline-section {
+  padding-bottom: 8px;
+}
+
+.qualitative-section {
+  border-top: 1px solid var(--paper-hairline);
+}
+
+.qualitative-section .qualitative-progress {
+  background: #fff;
+}
+
+/* --- carousel chrome ----------------------------------------------------- */
+
+.qualitative-progress {
+  border-color: var(--paper-hairline);
+  border-radius: 12px;
+  background: var(--paper-soft);
+  box-shadow: none;
+}
+
+.qualitative-progress-item {
+  border-color: var(--paper-hairline);
+  border-radius: 10px;
+  background: #fff;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.qualitative-progress-item:hover {
+  border-color: #bdc1c6;
+}
+
+.qualitative-progress-item.is-active {
+  box-shadow: var(--paper-shadow);
+}
+
+.qualitative-carousel-button {
+  border-color: var(--paper-hairline);
+  box-shadow: var(--paper-shadow);
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.qualitative-carousel-button:not(:disabled):hover {
+  transform: translateY(-50%) scale(1.06);
+}
+
+/* --- media cards --------------------------------------------------------- */
+
+.media-frame {
+  border-color: var(--paper-hairline);
+  border-radius: 6px;
+  box-shadow: var(--paper-shadow);
+}
+
+.teaser-column-headings {
+  border-bottom-color: var(--paper-hairline);
+}
+
+.case {
+  border-top-color: var(--paper-hairline);
+}
+
+/* --- focus visibility ---------------------------------------------------- */
+
+.qualitative-carousel-button:focus-visible,
+.qualitative-progress-item:focus-visible,
+.bear-seed-button:focus-visible,
+.qualitative-carousel:focus-visible {
+  outline: 2px solid var(--paper-ink);
+  outline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+  .teaser-heading {
+    padding: 0 2px;
+  }
+
+  .teaser-heading h2 {
+    font-size: 22px;
+  }
+}
+
+/* Rows stacked inside one carousel page. */
+.teaser-page .case + .case {
+  border-top: 1px solid var(--paper-hairline);
+  padding-top: 12px;
+}
+
+/* Per-case capability badge in the rail: same wording and icons as the hero
+   strip, so a row states which of the three controls it exercises. */
+.capability {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 8px;
+}
+
+.capability-icon {
+  display: grid;
+  width: 34px;
+  height: 24px;
+  flex: none;
+  place-items: center;
+}
+
+.capability-icon img {
+  width: auto;
+  height: auto;
+  max-width: 34px;
+  max-height: 24px;
+  object-fit: contain;
+}
+
+.capability-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.capability-copy strong {
+  color: var(--paper-ink);
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: normal;
+}
+
+.capability-copy small {
+  margin-top: 1px;
+  color: var(--paper-muted);
+  font-size: 11.5px;
+  line-height: 1.3;
+  white-space: normal;
+}
+
+/* The results section stands apart from the teaser above it: its own ground,
+   full-width rules, and a heading that matches the qualitative section. */
+.showcase-section {
+  padding: 52px 4px 56px;
+  border-top: 1px solid var(--paper-line);
+  border-bottom: 1px solid var(--paper-line);
+  background: var(--paper-soft);
+}
+
+.showcase-section .teaser-heading {
+  margin-bottom: 26px;
+  text-align: center;
+}
+
+.showcase-section .teaser-heading h2 {
+  font-size: 30px;
+}
+
+.showcase-section .qualitative-progress {
+  background: #fff;
+}
+
+/* Rows here have no icon equation, so the rail is heading plus one line. */
+.showcase-section .feature-rail {
+  min-height: 0;
+}
+
+.showcase-section .feature-row-index {
+  top: 2px;
+}
+
+/* --- results section: centred heading, panels two by two ------------------ */
+
+.showcase-section .teaser-heading {
+  width: min(100%, 900px);
+  margin: 0 auto 30px;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.showcase-section .teaser-heading h2 {
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 27px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Two panels across is twice the width of a teaser column, so the whole
+   window -- navigator, arrows and slides -- is capped and centred instead of
+   running the full page width. One width, set here, drives all of it. */
+/* Same width as the Qualitative Comparison window below it, so the two
+   result sections line up. */
+.showcase-section .showcase-carousel-mount {
+  width: min(100%, 1740px);
+  margin: 4px auto 0;
+  padding: 0 24px;
+}
+
+.media-grid.is-paired {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 10px;
+}
+
+.showcase-section .case {
+  grid-template-columns: minmax(150px, 170px) minmax(0, 1fr);
+}
+
+.showcase-section .feature-rail h2 {
+  font-size: 15px;
+}
+
+/* Each panel labels itself, because a two-by-two block has no column header. */
+.feature-row.is-paired .media-title {
+  display: flex;
+  min-height: 0;
+  margin: 8px 0 0;
+  font-size: 14px;
+}
+
+.feature-row.is-paired .media-card {
+  flex-direction: column-reverse;
+}
+
+.authored-comparison-section {
+  order: 7;
+  padding: 40px 24px 46px;
+  border-top: 1px solid var(--paper-line);
+  background: #fff;
+}
+
+.authored-comparison-container {
+  width: min(100%, 1740px);
+  margin: 0 auto;
+}
+
+.authored-comparison-section .teaser-heading {
+  width: min(100%, 860px);
+  margin: 0 auto 22px;
+  text-align: center;
+}
+
+.authored-comparison-section .teaser-heading h2 {
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.authored-comparison-section .teaser-heading p {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.authored-comparison-section .media-frame {
+  aspect-ratio: 854 / 480;
+}
+
+/* The control and the video it produced read as one column, so they share an
+   edge instead of being separated by a caption and a second heading. */
+.authored-pair {
+  display: grid;
+  gap: 0;
+}
+
+.authored-pair .media-frame:first-child {
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+}
+
+.authored-pair .media-frame:last-child {
+  border-radius: 0 0 4px 4px;
+}
+
+.baseline-output-title small {
+  display: block;
+  margin-top: 4px;
+  color: var(--paper-muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+@media (max-width: 700px) {
+  .authored-comparison-section {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+}
+
+/* ===========================================================================
+   Layout consistency
+   One content width, one text width, one heading style and one vertical
+   rhythm for every section. Carousels add 2 x 54px around the content width
+   for their overlaid arrows, so their visible box matches the plain sections.
+   =========================================================================== */
+
+:root {
+  --page-wide: 1240px;
+  --page-text: 860px;
+  --carousel-gutter: 54px;
+  --section-space: 56px;
+}
+
+/* --- section headings ---------------------------------------------------- */
+
+.section-title,
+.qualitative-header h2,
+.teaser-heading h2,
+.showcase-section .teaser-heading h2,
+.authored-comparison-section .teaser-heading h2 {
+  margin: 0;
+  color: var(--paper-ink);
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.section-title {
+  margin-bottom: 20px;
+}
+
+.qualitative-header,
+.showcase-section .teaser-heading,
+.authored-comparison-section .teaser-heading {
+  width: min(100%, var(--page-text));
+  margin: 0 auto 26px;
+  padding: 0;
+}
+
+/* The section heading already names the carousel. */
+.qualitative-progress-kicker {
+  display: none;
+}
+
+.qualitative-progress-current-title {
+  margin-top: 0;
+}
+
+/* --- widths --------------------------------------------------------------- */
+
+.supplementary-figure {
+  width: min(100%, var(--page-text));
+}
+
+.pipeline-figure {
+  width: min(100%, var(--page-wide));
+  margin-top: 0;
+}
+
+main.teaser-container,
+.qualitative-container,
+.showcase-section .showcase-carousel-mount {
+  width: min(100%, calc(var(--page-wide) + 2 * var(--carousel-gutter)));
+  margin-right: auto;
+  margin-left: auto;
+  padding: 0;
+}
+
+/* The teaser is the page's first impression, so each row runs the full
+   viewport instead of sitting inside the shared content measure. */
+#teaser {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+#teaser main.teaser-container {
+  width: 100%;
+  max-width: none;
+}
+
+/* The arrows sit in their own gutters at the viewport edges, clear of the
+   rail and the media. */
+#teaser .qualitative-carousel,
+#teaser .teaser-column-headings {
+  padding-right: 50px;
+  padding-left: 50px;
+}
+
+#teaser .case {
+  grid-template-columns: 244px minmax(0, 1fr);
+}
+
+#teaser .feature-rail {
+  padding-left: 12px;
+}
+
+#teaser .teaser-column-headings {
+  grid-template-columns: 247px minmax(0, 0.5fr) repeat(3, minmax(0, 1fr));
+}
+
+#teaser .qualitative-carousel-button.is-previous {
+  left: -46px;
+}
+
+#teaser .qualitative-carousel-button.is-next {
+  right: -46px;
+}
+
+@media (max-width: 680px) {
+  #teaser .qualitative-carousel,
+  #teaser .teaser-column-headings {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  #teaser .qualitative-carousel-button.is-previous {
+    left: 6px;
+  }
+
+  #teaser .qualitative-carousel-button.is-next {
+    right: 6px;
+  }
+}
+
+.authored-comparison-container {
+  width: min(100%, var(--page-wide));
+}
+
+.qualitative-hero-row,
+.qualitative-baseline-row {
+  width: 100%;
+}
+
+.qualitative-hero-row {
+  padding: 8px 0 12px;
+}
+
+.qualitative-baseline-row {
+  padding: 4px 0 15px;
+}
+
+.qualitative-hero-row .media-title {
+  font-size: 16px;
+}
+
+.qualitative-carousel-viewport,
+.qualitative-progress {
+  border-radius: 10px;
+}
+
+/* --- vertical rhythm ------------------------------------------------------ */
+
+.teaser-section {
+  padding-top: 40px;
+  padding-bottom: var(--section-space);
+}
+
+.pipeline-section {
+  padding-bottom: var(--section-space);
+}
+
+.qualitative-section,
+.authored-comparison-section,
+.showcase-section {
+  padding-top: var(--section-space);
+  padding-bottom: var(--section-space);
+}
+
+/* --- results section ------------------------------------------------------ */
+
+/* The navigator above already shows the case name and category, so the rail
+   would only repeat it; the two-by-two panels take the full row instead. */
+.showcase-section .feature-rail {
+  display: none;
+}
+
+.showcase-section .case {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.showcase-section .media-grid.is-paired {
+  width: min(100%, 1000px);
+  margin: 0 auto;
+}
+
+@media (max-width: 760px) {
+  main.teaser-container,
+  .qualitative-container,
+  .showcase-section .showcase-carousel-mount {
+    width: 100%;
+  }
+
+  .section-title,
+  .qualitative-header h2,
+  .teaser-heading h2,
+  .showcase-section .teaser-heading h2,
+  .authored-comparison-section .teaser-heading h2 {
+    font-size: 23px;
+  }
+
+  /* Keep the interactive point cloud full width. Input images stay one
+     consistent size: half the row, matching Depth and Generated Video, and a
+     second input stacks under the first instead of shrinking it. */
+  .teaser-section:not(.showcase-section) .media-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 8px;
+  }
+
+  .teaser-section:not(.showcase-section) .teaser-input-stack,
+  .teaser-section:not(.showcase-section) .media-grid > .media-card:nth-child(2) {
+    grid-column: 1 / -1;
+  }
+
+  .teaser-section:not(.showcase-section) .teaser-input-stack {
+    grid-template-columns: minmax(0, 1fr);
+    width: calc(50% - 4px);
+    margin: 0;
+  }
+
+  .teaser-section:not(.showcase-section) .teaser-input-stack.is-single-input {
+    width: calc(50% - 4px);
+    height: auto;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .teaser-section .media-title {
+    min-height: 34px;
+    margin-top: 6px;
+    font-size: 14px;
+  }
+
+  .teaser-section .media-title small {
+    font-size: 10px;
+  }
+
+  .qualitative-baseline-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 8px;
+    overflow: visible;
+  }
+
+  .qualitative-baseline-row .media-title {
+    min-height: 32px;
+    font-size: 12px;
+  }
+
+  .qualitative-carousel .qualitative-case {
+    padding-right: 7px;
+    padding-left: 7px;
+  }
+
+  .qualitative-hero-row {
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .qualitative-case-heading {
+    margin-bottom: 20px;
+  }
+
+  .abstract-copy {
+    font-size: 14px;
+    line-height: 1.68;
+    text-align: left;
+  }
+}
+
+/* Follow-the-Blur additions on top of style_base.css */
+body { display: block; font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+html { color-scheme: light; }
+.project-name, .publication-title, .section-title, .publication-authors { font-family: "Google Sans", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+.is-interaction { --feature-color: #1f5f5b; } .is-camera { --feature-color: #e0a000; } .is-free { --feature-color: #c4623a; }
+.hero-feature-icon svg { width: 40px; height: 40px; }
+.section-lead { max-width: 880px; margin: 0 auto 6px; color: var(--paper-muted); font-size: 15px; line-height: 1.6; text-align: center; }
+.teaser-section { order: 0; } .teaser-heading { text-align: center; } .teaser-heading p { margin-left: auto; margin-right: auto; }
+.teaser-wrap { width: min(100%, 1740px); margin: 0 auto; padding: 0 54px; }
+.teaser-section .teaser-column-headings { padding-left: 0; padding-right: 0; }
+.figure-pair { display: grid; grid-template-columns: 1.55fr 1fr; gap: 18px; align-items: start; width: min(100%, 1320px); margin: 18px auto 0; }
+.figure-pair figure { margin: 0; } .figure-pair img { display: block; width: 100%; border: 1px solid var(--paper-line); border-radius: 6px; background: #fff; }
+.figure-pair figcaption { margin-top: 7px; color: var(--paper-muted); font-size: 13px; text-align: center; }
+.qualitative-section { order: 0; } .qualitative-section.is-plain { background: #fff; }
+.qualitative-context-row.is-two { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; width: min(62%, 780px); }
+.qualitative-baseline-row.is-three { grid-template-columns: repeat(3, minmax(220px, 1fr)); width: min(100%, 1240px); }
+.qualitative-baseline-row.is-four { grid-template-columns: repeat(4, minmax(200px, 1fr)); }
+.qualitative-baseline-row.is-five { grid-template-columns: repeat(5, minmax(180px, 1fr)); width: min(100%, 1560px); }
+.media-title.is-ours { color: #1f5f5b; }
+.pv { cursor: grab; touch-action: none; } .pv:active { cursor: grabbing; }
+.pv canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; display: block; }
+.pv .pv-still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #fff; }
+.pv.is-live .pv-still { display: none; }
+.pv .pv-reset { position: absolute; z-index: 3; top: 8px; right: 8px; padding: 3px 10px; border: 1px solid var(--paper-line); border-radius: 999px; background: rgba(255,255,255,.92); color: #353a47; font: 600 12px/1.5 inherit; cursor: pointer; }
+.pv .pv-hint { position: absolute; z-index: 3; left: 0; right: 0; bottom: 7px; margin: 0; color: #5f6368; font-size: 11.5px; text-align: center; pointer-events: none; }
+.pv .pv-key { position: absolute; z-index: 3; left: 9px; top: 8px; display: flex; flex-direction: column; gap: 2px; font-size: 11.5px; font-weight: 600; text-align: left; pointer-events: none; }
+.pv .pv-key span::before { content: ""; display: inline-block; width: 16px; height: 4px; margin-right: 5px; border-radius: 2px; background: currentColor; vertical-align: middle; }
+.block-title { margin: 40px 0 6px; font-family: "Google Sans", "Noto Sans", Arial, sans-serif; font-size: 21px; font-weight: 600; letter-spacing: -0.015em; text-align: center; }
+.row-case { width: min(100%, 1560px); margin: 0 auto; padding: 16px 0 4px; }
+.row-case h4 { margin: 0 0 10px; color: #353a47; font-size: 15px; font-weight: 650; text-align: center; }
+.study-table { width: min(100%, 760px); margin: 18px auto 0; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; }
+.study-table th, .study-table td { padding: 9px 14px; border-bottom: 1px solid var(--paper-line); text-align: center; }
+.study-table th:first-child, .study-table td:first-child { text-align: left; }
+.study-table th { color: #4a4d52; font-weight: 700; } .study-table th small { display: block; color: var(--paper-muted); font-size: 11.5px; font-weight: 500; }
+.study-table tr.is-ours td { color: #1f5f5b; font-weight: 700; }
+.study-section { order: 0; }
+@media (max-width: 900px) { .figure-pair { grid-template-columns: 1fr; } .teaser-wrap, .teaser-heading { padding: 0 6px; } .qualitative-context-row.is-two { width: 100%; } }
+/* Fig. 1 rows with five tiles: input | interactive point cloud | rigid depth | refined depth | video */
+.media-grid.is-five { grid-template-columns: minmax(0, 0.5fr) repeat(4, minmax(0, 1fr)); }
+.teaser-column-headings.is-five { grid-template-columns: 235px minmax(0, 0.5fr) repeat(4, minmax(0, 1fr)); }
+.teaser-column-headings.is-five .teaser-heading-rigid { grid-column: 4; } .teaser-column-headings.is-five .teaser-heading-depth { grid-column: 5; } .teaser-column-headings.is-five .teaser-heading-video { grid-column: 6; }
+.teaser-column-headings span { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+.pv.is-compact .pv-hint { font-size: 10.5px; bottom: 4px; } .pv.is-compact .pv-reset { top: 5px; right: 5px; padding: 1px 8px; font-size: 11px; }
+@media (max-width: 1100px) { .media-grid.is-five { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* Fig. 1 rows with three tiles: input | interactive point cloud | video */
+.media-grid.is-three { grid-template-columns: minmax(0, 0.5fr) repeat(2, minmax(0, 1fr)); gap: 10px; }
+.teaser-column-headings.is-three { grid-template-columns: 235px minmax(0, 0.5fr) repeat(2, minmax(0, 1fr)); gap: 10px; }
+.teaser-column-headings.is-three .teaser-heading-video { grid-column: 4; }
+.teaser-wrap { width: min(100%, 1500px); }
+@media (max-width: 1100px) { .media-grid.is-three { grid-template-columns: 1fr; } }
+/* method figures one below the other, large (user, 11-19: "method那个图太小了") */
+.method-figure { width: min(100%, 1500px); margin: 22px auto 0; } .method-figure.is-narrow { width: min(100%, 1000px); margin-top: 34px; }
+.method-figure img { display: block; width: 100%; border: 1px solid var(--paper-line); border-radius: 6px; background: #fff; }
+.method-figure figcaption { margin-top: 8px; color: var(--paper-muted); font-size: 13.5px; text-align: center; }
+/* method explained with videos: five steps in a row, arrows between them */
+.method-wrap { width: min(100%, 1640px); margin: 20px auto 0; }
+.method-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 18px; }
+.method-tab { padding: 6px 16px; border: 1px solid var(--paper-line); border-radius: 999px; background: #fff; color: #4a4d52; font: 600 14px/1.4 inherit; cursor: pointer; }
+.method-tab:hover { border-color: #9aa0a8; } .method-tab.is-active { border-color: #111; background: #111; color: #fff; }
+.method-steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 30px; align-items: start; }
+.method-steps[hidden] { display: none; }
+.method-step { position: relative; min-width: 0; }
+.method-step + .method-step::before { content: "\2192"; position: absolute; left: -25px; top: calc((100% - 0px) * 0 + 14%); color: #5f6368; font: 700 22px/1 Arial, sans-serif; }
+.method-step .media-frame > img, .method-step .media-frame > video { object-fit: cover; }
+.method-step.is-key .media-frame { border-color: #1f5f5b; box-shadow: 0 0 0 2px #1f5f5b; }
+.method-step-text { margin-top: 10px; text-align: left; }
+.method-step-num { display: inline-grid; width: 22px; height: 22px; margin-right: 7px; border-radius: 50%; background: #202124; color: #fff; font-size: 12px; font-weight: 700; place-items: center; vertical-align: 1px; }
+.method-step.is-key .method-step-num { background: #1f5f5b; }
+.method-step-text strong { font-size: 15px; } .method-step-text p { margin: 6px 0 0; color: var(--paper-muted); font-size: 13.5px; line-height: 1.5; }
+@media (max-width: 1000px) { .method-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } .method-step + .method-step::before { display: none; } }
+
+/* hero feature strip, larger (user, 11-19: "这个太不明显了"): three separate cards, big coloured titles */
+.hero-features { gap: 18px; width: min(100%, 1180px); margin-top: 34px; overflow: visible; border: 0; border-radius: 0; }
+.hero-feature, .hero-feature:first-child { flex-direction: column; gap: 10px; padding: 22px 20px 20px; border: 1px solid var(--paper-line); border-top: 5px solid var(--feature-color);
+  border-radius: 12px; background: color-mix(in srgb, var(--feature-color) 7%, #fff); text-align: center; box-shadow: 0 2px 10px rgba(32, 33, 36, 0.07); }
+.hero-feature-icon { width: 104px; height: 72px; }
+.hero-feature-icon svg { width: 62px; height: 62px; }
+.hero-feature strong { color: var(--feature-color); font-size: 23px; font-weight: 800; letter-spacing: -0.01em; }
+.is-camera strong { color: #a87400; }
+.hero-feature small { margin-top: 6px; color: #3c4043; font-size: 15.5px; line-height: 1.35; }
+@media (max-width: 760px) { .hero-features { gap: 12px; } .hero-feature strong { font-size: 20px; } }
+.hero-feature-icon img { mix-blend-mode: multiply; }
+.is-interaction .hero-feature-icon { width: 230px; }
+/* no short last lines (user, 11-19): centred and short texts are balanced, running text avoids orphans */
+p, li, figcaption, td { text-wrap: pretty; }
+h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .publication-authors, .step-desc, .mstep p, .card-caption, .case-caption, figcaption { text-wrap: balance; }
+/* carousel tabs as wide as their text, one line each */
+.qualitative-progress-item { flex: 0 0 auto; max-width: 340px; }
+.qualitative-progress-copy small { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.ftb-logo { display: block; width: 210px; height: auto; margin: -18px auto 6px; }
+.publication-links { margin: 14px 0 22px; }
+.link-button { display: inline-block; padding: 7px 20px; border-radius: 999px; background: #22232b; color: #fff; font-size: 15px; font-weight: 600; text-decoration: none; }
+.link-button:hover { background: #4338ca; }
+.publication-authors a { color: #2f5fa7; text-decoration: none; }
+</style>
 </head>
-<body data-edition="release">
-  <header class="publication-hero">
-    <div class="publication-container">
-      <img class="project-logo" src="/page_FollowTheBlur/assets/logo.png" alt="Follow-the-Blur logo">
-      <div class="project-name">Follow-the-<span class="blur">Blur</span></div>
-      <h1 class="publication-title">
-        Training-Free 4D Control of Video World Models
-      </h1>
-      <div class="publication-links">
-        <a class="link-button" href="https://github.com/VVeiCao/Follow-the-Blur">Code</a>
-      </div>
+<body>
+<header class="publication-hero">
+  <div class="publication-container">
+    <img class="ftb-logo" src="/page_FollowTheBlur/assets/logo.png" alt="Follow-the-Blur logo">
+    <div class="project-name">Follow-the-Blur</div>
+    <h1 class="publication-title">Training-Free 4D Control of Video World Models</h1>
+    <!-- AUTHORS -->
+    <div class="publication-links"><a class="link-button" href="https://github.com/VVeiCao/Follow-the-Blur">Code</a></div>
+    <div class="hero-features" aria-label="What Follow-the-Blur does">
+      <div class="hero-feature is-interaction"><span class="hero-feature-icon" aria-hidden="true"><img src="/page_FollowTheBlur/web_assets/fig/icon_objects.png" alt=""></span>
+        <span><strong>Object Interaction</strong><small>Coarse 3D trajectories in, natural contact out</small></span></div>
+      <div class="hero-feature is-camera"><span class="hero-feature-icon" aria-hidden="true"><img src="/page_FollowTheBlur/web_assets/fig/icon_camera.png" alt=""></span>
+        <span><strong>Camera Control</strong><small>Objects and camera share one 3D scene</small></span></div>
+      <div class="hero-feature is-free"><span class="hero-feature-icon" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="#c4623a" stroke-width="2.6" stroke-linecap="round"><path d="M20 4v32M6.1 12l27.8 16M6.1 28l27.8-16M20 4l-4 4M20 4l4 4M20 36l-4-4M20 36l4-4M6.1 12l5.5.4M6.1 12l2.2 5M33.9 28l-5.5-.4M33.9 28l-2.2-5M6.1 28l5.5-.4M6.1 28l2.2-5M33.9 12l-5.5.4M33.9 12l-2.2 5"/></svg></span>
+        <span><strong>Training-Free</strong><small>A frozen, pretrained video world model</small></span></div>
     </div>
-  </header>
+  </div>
+</header>
 
-  <section class="paper-section is-soft tldr-section">
-    <div class="text-container">
-      <p class="tldr">
-        <strong>TL;DR:</strong>
-        Move the objects of an image in 3D, and a pretrained video model turns
-        the rigid move into a natural video. Nothing is trained.
-      </p>
-    </div>
-  </section>
+<section class="paper-section is-soft">
+  <div class="text-container">
+    <p class="tldr"><strong>TL;DR:</strong> A 4D control only moves rigid proxies along coarse 3D trajectories. Follow-the-Blur lets a pretrained video world model follow the blur of this control and fill in the fine details of natural motion from its own prior, without training.</p>
+  </div>
+</section>
 
-  <section class="paper-section">
-    <div class="ftb-wide">
-      <h2 class="section-title">Results</h2>
-      <div class="ftb-grid">
-        <div class="head">Input image</div>
-        <div class="head">Rigid depth (the 4D control)</div>
-        <div class="head">Stage 1 — refined depth</div>
-        <div class="head">Stage 2 — output video</div>
+<section class="teaser-section" id="results">
+  <header class="teaser-heading"><span class="teaser-kicker">Fig. 1 of the paper</span><h2>From a rigid 4D control to natural motion</h2>
+    <p>One image and a rigid 4D control in, natural motion out. Drag the point clouds to orbit.</p></header>
+  <div class="teaser-wrap"><div class="teaser-column-headings is-three"><span class="teaser-heading-input">Input Image</span><span class="teaser-heading-puppet">4D Control<small>Interactive point cloud</small></span><span class="teaser-heading-video">Generated Video</span></div><article class="case feature-row" data-video-sync><div class="feature-rail"><span class="feature-row-index">01</span><h2>Camel</h2><p>Object interaction</p><p style="white-space:normal">A man mounts a camel, which stands up</p></div><div class="media-grid is-three"><div class="teaser-input-stack is-single-input"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading=lazy src=/page_FollowTheBlur/web_assets/teaser/camel_input.jpg alt=></div></figure></div><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="teaser_camel" data-zoom="objects"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title ">Generated Video</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/camel__out.mp4" data-lead></video></div></figure></div></article><article class="case feature-row" data-video-sync><div class="feature-rail"><span class="feature-row-index">02</span><h2>Back carry</h2><p>Object interaction</p><p style="white-space:normal">A boy jumps onto his father&#x27;s back</p></div><div class="media-grid is-three"><div class="teaser-input-stack is-single-input"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading=lazy src=/page_FollowTheBlur/web_assets/teaser/back_input.jpg alt=></div></figure></div><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="teaser_back" data-zoom="objects"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title ">Generated Video</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/back__out.mp4" data-lead></video></div></figure></div></article><article class="case feature-row" data-video-sync><div class="feature-rail"><span class="feature-row-index">03</span><h2>Tree climb</h2><p>Object interaction</p><p style="white-space:normal">A man climbs a tree</p></div><div class="media-grid is-three"><div class="teaser-input-stack is-single-input"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading=lazy src=/page_FollowTheBlur/web_assets/teaser/tree_input.jpg alt=></div></figure></div><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="teaser_tree" data-zoom="objects"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title ">Generated Video</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/tree__out.mp4" data-lead></video></div></figure></div></article><article class="case feature-row" data-video-sync><div class="feature-rail"><span class="feature-row-index">04</span><h2>Dog and door</h2><p>One image, 4D control A</p><p style="white-space:normal">The dog pulls a car door open and jumps in</p></div><div class="media-grid is-three"><div class="teaser-input-stack is-single-input"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading=lazy src=/page_FollowTheBlur/web_assets/teaser/door_input.jpg alt=></div></figure></div><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="teaser_door" data-zoom="objects"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title ">Generated Video</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/door__out.mp4" data-lead></video></div></figure></div></article><article class="case feature-row" data-video-sync><div class="feature-rail"><span class="feature-row-index">05</span><h2>Dog and orbit</h2><p>One image, 4D control B</p><p style="white-space:normal">The dog jumps into the trunk as the camera orbits</p></div><div class="media-grid is-three"><div class="teaser-input-stack is-single-input"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading=lazy src=/page_FollowTheBlur/web_assets/teaser/dogorb_input.jpg alt=></div></figure></div><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="teaser_dogorb" data-zoom="objects"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span><span style="color:#b88400">camera path</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title ">Generated Video</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/dogorb__out.mp4" data-lead></video></div></figure></div></article></div>
+</section>
 
-        <img src="/page_FollowTheBlur/assets/cases/camel/input.jpg" alt="Camel case: input image" loading="lazy">
-        <img src="/page_FollowTheBlur/assets/cases/camel/rigid.webp" alt="Camel case: rigid depth" loading="lazy">
-        <img src="/page_FollowTheBlur/assets/cases/camel/refined.webp" alt="Camel case: refined depth" loading="lazy">
-        <img src="/page_FollowTheBlur/assets/cases/camel/output.webp" alt="Camel case: output video" loading="lazy">
+<section class="paper-section" id="method">
+  <div class="text-container"><h2 class="section-title">Method</h2>
+    <p class="section-lead">Follow-the-Blur keeps from the 4D control only what it actually specifies, the coarse layout over time, and leaves everything else to the motion prior of a pretrained video world model. Nothing is trained. The five steps on one example:</p></div>
+  <div class="method-wrap"><div class="method-tabs" role="tablist" aria-label="Example"><button class="method-tab is-active" type="button" data-tab="camel">Camel</button><button class="method-tab" type="button" data-tab="back">Back carry</button><button class="method-tab" type="button" data-tab="tree">Tree climb</button><button class="method-tab" type="button" data-tab="door">Dog and door</button></div><div class="method-steps" data-video-sync data-tab="camel"><div class="method-step"><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/teaser/camel_input.jpg" alt=""></div><div class="method-step-text"><span class="method-step-num">1</span><strong>Input image and 4D control</strong><p>The 4D control moves rigid proxies along coarse 3D trajectories.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/camel__rigid.mp4"></video></div><div class="method-step-text"><span class="method-step-num">2</span><strong>Rigid depth</strong><p>The control is rendered as a depth video. The bodies only slide: nothing bends.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/camel__blur.mp4"></video></div><div class="method-step-text"><span class="method-step-num">3</span><strong>Its blur: the low band</strong><p>Blurred, the render only says where things are and where they go. This is all Stage 1 keeps from it.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/camel__refined.mp4"></video></div><div class="method-step-text"><span class="method-step-num">4</span><strong>Stage 1: refined depth</strong><p>In the early denoising steps the low band follows the blur; the model fills in the high band from its motion prior.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/camel__out.mp4" data-lead></video></div><div class="method-step-text"><span class="method-step-num">5</span><strong>Stage 2: video</strong><p>A depth-conditioned model turns the refined depth into the video.</p></div></div></div><div class="method-steps" data-video-sync data-tab="back" hidden><div class="method-step"><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/teaser/back_input.jpg" alt=""></div><div class="method-step-text"><span class="method-step-num">1</span><strong>Input image and 4D control</strong><p>The 4D control moves rigid proxies along coarse 3D trajectories.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/back__rigid.mp4"></video></div><div class="method-step-text"><span class="method-step-num">2</span><strong>Rigid depth</strong><p>The control is rendered as a depth video. The bodies only slide: nothing bends.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/back__blur.mp4"></video></div><div class="method-step-text"><span class="method-step-num">3</span><strong>Its blur: the low band</strong><p>Blurred, the render only says where things are and where they go. This is all Stage 1 keeps from it.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/back__refined.mp4"></video></div><div class="method-step-text"><span class="method-step-num">4</span><strong>Stage 1: refined depth</strong><p>In the early denoising steps the low band follows the blur; the model fills in the high band from its motion prior.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/back__out.mp4" data-lead></video></div><div class="method-step-text"><span class="method-step-num">5</span><strong>Stage 2: video</strong><p>A depth-conditioned model turns the refined depth into the video.</p></div></div></div><div class="method-steps" data-video-sync data-tab="tree" hidden><div class="method-step"><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/teaser/tree_input.jpg" alt=""></div><div class="method-step-text"><span class="method-step-num">1</span><strong>Input image and 4D control</strong><p>The 4D control moves rigid proxies along coarse 3D trajectories.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/tree__rigid.mp4"></video></div><div class="method-step-text"><span class="method-step-num">2</span><strong>Rigid depth</strong><p>The control is rendered as a depth video. The bodies only slide: nothing bends.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/tree__blur.mp4"></video></div><div class="method-step-text"><span class="method-step-num">3</span><strong>Its blur: the low band</strong><p>Blurred, the render only says where things are and where they go. This is all Stage 1 keeps from it.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/tree__refined.mp4"></video></div><div class="method-step-text"><span class="method-step-num">4</span><strong>Stage 1: refined depth</strong><p>In the early denoising steps the low band follows the blur; the model fills in the high band from its motion prior.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/tree__out.mp4" data-lead></video></div><div class="method-step-text"><span class="method-step-num">5</span><strong>Stage 2: video</strong><p>A depth-conditioned model turns the refined depth into the video.</p></div></div></div><div class="method-steps" data-video-sync data-tab="door" hidden><div class="method-step"><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/teaser/door_input.jpg" alt=""></div><div class="method-step-text"><span class="method-step-num">1</span><strong>Input image and 4D control</strong><p>The 4D control moves rigid proxies along coarse 3D trajectories.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/door__rigid.mp4"></video></div><div class="method-step-text"><span class="method-step-num">2</span><strong>Rigid depth</strong><p>The control is rendered as a depth video. The bodies only slide: nothing bends.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/door__blur.mp4"></video></div><div class="method-step-text"><span class="method-step-num">3</span><strong>Its blur: the low band</strong><p>Blurred, the render only says where things are and where they go. This is all Stage 1 keeps from it.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/door__refined.mp4"></video></div><div class="method-step-text"><span class="method-step-num">4</span><strong>Stage 1: refined depth</strong><p>In the early denoising steps the low band follows the blur; the model fills in the high band from its motion prior.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/door__out.mp4" data-lead></video></div><div class="method-step-text"><span class="method-step-num">5</span><strong>Stage 2: video</strong><p>A depth-conditioned model turns the refined depth into the video.</p></div></div></div></div>
+  <p class="section-lead" style="margin-top:38px">The same pipeline as in the paper:</p>
+  <figure class="method-figure"><img loading="lazy" src="/page_FollowTheBlur/web_assets/fig/overview.jpg" alt="Overview of Follow-the-Blur"><figcaption>Overview (Fig. 3 of the paper)</figcaption></figure>
+  <figure class="method-figure is-narrow"><img loading="lazy" src="/page_FollowTheBlur/web_assets/fig/dualband.jpg" alt="Dual-band denoising"><figcaption>Dual-band denoising (Fig. 4 of the paper)</figcaption></figure>
+</section>
 
-        <img src="/page_FollowTheBlur/assets/cases/back_carry/input.jpg" alt="Back-carry case: input image" loading="lazy">
-        <img src="/page_FollowTheBlur/assets/cases/back_carry/rigid.webp" alt="Back-carry case: rigid depth" loading="lazy">
-        <img src="/page_FollowTheBlur/assets/cases/back_carry/refined.webp" alt="Back-carry case: refined depth" loading="lazy">
-        <img src="/page_FollowTheBlur/assets/cases/back_carry/output.webp" alt="Back-carry case: output video" loading="lazy">
+<section class="qualitative-section" id="comparison">
+  <div class="qualitative-container">
+    <header class="qualitative-header"><h2>Qualitative Comparison</h2>
+      <p>Eight Interact4D cases: the two of Fig. 5 of the paper (cases 3 and 4 here) and the six of the qualitative comparison in the supplementary document, in the same order. Every method receives the input image, the same prompt and the same 4D control, which is reconstructed from the original clip. In the interactive view, the two rigid proxies move as the control prescribes. Ours uses Wan2.2 in both stages; VerseCrafter and SymphoMotion are built on Wan2.1, WorldDirector on Wan2.2.</p></header>
+    <div><div class="qualitative-progress"><div class="qualitative-progress-heading"><div><span class="qualitative-progress-kicker">Qualitative comparison</span><span class="qualitative-progress-current-title"></span></div><span class="qualitative-progress-count"><strong>01</strong> / 08</span></div><div class="qualitative-progress-bar" aria-hidden="true"><span></span></div><div class="qualitative-progress-list"><button class="qualitative-progress-item" type="button"><span class="qualitative-progress-number">01</span><span class="qualitative-progress-copy"><strong>A woman tips an armchair onto its back</strong><small>Case 1</small></span></button><button class="qualitative-progress-item" type="button"><span class="qualitative-progress-number">02</span><span class="qualitative-progress-copy"><strong>A boy jumps onto his father&#x27;s back; the father turns</strong><small>Case 2</small></span></button><button class="qualitative-progress-item" type="button"><span class="qualitative-progress-number">03</span><span class="qualitative-progress-copy"><strong>A plumber tips a bathtub onto its side</strong><small>Case 3</small></span></button><button class="qualitative-progress-item" type="button"><span class="qualitative-progress-number">04</span><span class="qualitative-progress-copy"><strong>A man gets on a dirt bike and rides away</strong><small>Case 4</small></span></button><button class="qualitative-progress-item" type="button"><span class="qualitative-progress-number">05</span><span class="qualitative-progress-copy"><strong>A woman steps onto a segway, glides and turns</strong><small>Case 5</small></span></button><button class="qualitative-progress-item" type="button"><span class="qualitative-progress-number">06</span><span class="qualitative-progress-copy"><strong>A boy runs behind a haystack and comes out</strong><small>Case 6</small></span></button><button class="qualitative-progress-item" type="button"><span class="qualitative-progress-number">07</span><span class="qualitative-progress-copy"><strong>An athlete flips a tractor tire end over end</strong><small>Case 7</small></span></button><button class="qualitative-progress-item" type="button"><span class="qualitative-progress-number">08</span><span class="qualitative-progress-copy"><strong>Twins take hands, spin and swap sides (the camera orbits)</strong><small>Case 8</small></span></button></div></div><div class="qualitative-carousel" tabindex="0"><div class="qualitative-carousel-stage"><div class="qualitative-carousel-viewport"><div class="qualitative-carousel-track"><article class="qualitative-case" data-video-sync data-title="A woman tips an armchair onto its back"><header class="qualitative-case-heading"><h3>A woman tips an armchair onto its back</h3><p>Case 1</p></header><div class="qualitative-context-row is-two"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/armchair_tip_s21_input.jpg" alt=""></div></figure><figure class="media-card"><figcaption class="media-title ">Original Clip</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/armchair_tip_s21__orig.mp4"></video></div></figure></div><div class="qualitative-hero-row"><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="armchair_tip_s21"><img class="pv-still" loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/armchair_tip_s21_ctl.jpg" alt="4D control of this case as a point cloud"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title is-ours">Follow-the-Blur (Ours)</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/armchair_tip_s21__ours.mp4" data-lead></video></div></figure></div><h4 class="baseline-output-title">Trained 4D Control Methods</h4><div class="qualitative-baseline-row is-three"><figure class="media-card"><figcaption class="media-title ">VerseCrafter</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/armchair_tip_s21__versecrafter.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">SymphoMotion</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/armchair_tip_s21__symphomotion.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">WorldDirector</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/armchair_tip_s21__worlddirector.mp4"></video></div></figure></div></article><article class="qualitative-case" data-video-sync data-title="A boy jumps onto his father&#x27;s back; the father turns"><header class="qualitative-case-heading"><h3>A boy jumps onto his father&#x27;s back; the father turns</h3><p>Case 2</p></header><div class="qualitative-context-row is-two"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/back_carry_turn_s2_input.jpg" alt=""></div></figure><figure class="media-card"><figcaption class="media-title ">Original Clip</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/back_carry_turn_s2__orig.mp4"></video></div></figure></div><div class="qualitative-hero-row"><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="back_carry_turn_s2"><img class="pv-still" loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/back_carry_turn_s2_ctl.jpg" alt="4D control of this case as a point cloud"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title is-ours">Follow-the-Blur (Ours)</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/back_carry_turn_s2__ours.mp4" data-lead></video></div></figure></div><h4 class="baseline-output-title">Trained 4D Control Methods</h4><div class="qualitative-baseline-row is-three"><figure class="media-card"><figcaption class="media-title ">VerseCrafter</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/back_carry_turn_s2__versecrafter.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">SymphoMotion</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/back_carry_turn_s2__symphomotion.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">WorldDirector</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/back_carry_turn_s2__worlddirector.mp4"></video></div></figure></div></article><article class="qualitative-case" data-video-sync data-title="A plumber tips a bathtub onto its side"><header class="qualitative-case-heading"><h3>A plumber tips a bathtub onto its side</h3><p>Case 3</p></header><div class="qualitative-context-row is-two"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/bathtub_tip_s1_input.jpg" alt=""></div></figure><figure class="media-card"><figcaption class="media-title ">Original Clip</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/bathtub_tip_s1__orig.mp4"></video></div></figure></div><div class="qualitative-hero-row"><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="bathtub_tip_s1"><img class="pv-still" loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/bathtub_tip_s1_ctl.jpg" alt="4D control of this case as a point cloud"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title is-ours">Follow-the-Blur (Ours)</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/bathtub_tip_s1__ours.mp4" data-lead></video></div></figure></div><h4 class="baseline-output-title">Trained 4D Control Methods</h4><div class="qualitative-baseline-row is-three"><figure class="media-card"><figcaption class="media-title ">VerseCrafter</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/bathtub_tip_s1__versecrafter.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">SymphoMotion</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/bathtub_tip_s1__symphomotion.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">WorldDirector</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/bathtub_tip_s1__worlddirector.mp4"></video></div></figure></div></article><article class="qualitative-case" data-video-sync data-title="A man gets on a dirt bike and rides away"><header class="qualitative-case-heading"><h3>A man gets on a dirt bike and rides away</h3><p>Case 4</p></header><div class="qualitative-context-row is-two"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/motorbike_road_s14_input.jpg" alt=""></div></figure><figure class="media-card"><figcaption class="media-title ">Original Clip</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/motorbike_road_s14__orig.mp4"></video></div></figure></div><div class="qualitative-hero-row"><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="motorbike_road_s14"><img class="pv-still" loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/motorbike_road_s14_ctl.jpg" alt="4D control of this case as a point cloud"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title is-ours">Follow-the-Blur (Ours)</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/motorbike_road_s14__ours.mp4" data-lead></video></div></figure></div><h4 class="baseline-output-title">Trained 4D Control Methods</h4><div class="qualitative-baseline-row is-three"><figure class="media-card"><figcaption class="media-title ">VerseCrafter</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/motorbike_road_s14__versecrafter.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">SymphoMotion</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/motorbike_road_s14__symphomotion.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">WorldDirector</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/motorbike_road_s14__worlddirector.mp4"></video></div></figure></div></article><article class="qualitative-case" data-video-sync data-title="A woman steps onto a segway, glides and turns"><header class="qualitative-case-heading"><h3>A woman steps onto a segway, glides and turns</h3><p>Case 5</p></header><div class="qualitative-context-row is-two"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/segway_lobby_s12_input.jpg" alt=""></div></figure><figure class="media-card"><figcaption class="media-title ">Original Clip</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/segway_lobby_s12__orig.mp4"></video></div></figure></div><div class="qualitative-hero-row"><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="segway_lobby_s12"><img class="pv-still" loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/segway_lobby_s12_ctl.jpg" alt="4D control of this case as a point cloud"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title is-ours">Follow-the-Blur (Ours)</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/segway_lobby_s12__ours.mp4" data-lead></video></div></figure></div><h4 class="baseline-output-title">Trained 4D Control Methods</h4><div class="qualitative-baseline-row is-three"><figure class="media-card"><figcaption class="media-title ">VerseCrafter</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/segway_lobby_s12__versecrafter.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">SymphoMotion</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/segway_lobby_s12__symphomotion.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">WorldDirector</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/segway_lobby_s12__worlddirector.mp4"></video></div></figure></div></article><article class="qualitative-case" data-video-sync data-title="A boy runs behind a haystack and comes out"><header class="qualitative-case-heading"><h3>A boy runs behind a haystack and comes out</h3><p>Case 6</p></header><div class="qualitative-context-row is-two"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/kid_behind_haystack_s1_input.jpg" alt=""></div></figure><figure class="media-card"><figcaption class="media-title ">Original Clip</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/kid_behind_haystack_s1__orig.mp4"></video></div></figure></div><div class="qualitative-hero-row"><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="kid_behind_haystack_s1"><img class="pv-still" loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/kid_behind_haystack_s1_ctl.jpg" alt="4D control of this case as a point cloud"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title is-ours">Follow-the-Blur (Ours)</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/kid_behind_haystack_s1__ours.mp4" data-lead></video></div></figure></div><h4 class="baseline-output-title">Trained 4D Control Methods</h4><div class="qualitative-baseline-row is-three"><figure class="media-card"><figcaption class="media-title ">VerseCrafter</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/kid_behind_haystack_s1__versecrafter.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">SymphoMotion</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/kid_behind_haystack_s1__symphomotion.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">WorldDirector</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/kid_behind_haystack_s1__worlddirector.mp4"></video></div></figure></div></article><article class="qualitative-case" data-video-sync data-title="An athlete flips a tractor tire end over end"><header class="qualitative-case-heading"><h3>An athlete flips a tractor tire end over end</h3><p>Case 7</p></header><div class="qualitative-context-row is-two"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/tire_flip_s11_input.jpg" alt=""></div></figure><figure class="media-card"><figcaption class="media-title ">Original Clip</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/tire_flip_s11__orig.mp4"></video></div></figure></div><div class="qualitative-hero-row"><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="tire_flip_s11"><img class="pv-still" loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/tire_flip_s11_ctl.jpg" alt="4D control of this case as a point cloud"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title is-ours">Follow-the-Blur (Ours)</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/tire_flip_s11__ours.mp4" data-lead></video></div></figure></div><h4 class="baseline-output-title">Trained 4D Control Methods</h4><div class="qualitative-baseline-row is-three"><figure class="media-card"><figcaption class="media-title ">VerseCrafter</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/tire_flip_s11__versecrafter.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">SymphoMotion</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/tire_flip_s11__symphomotion.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">WorldDirector</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/tire_flip_s11__worlddirector.mp4"></video></div></figure></div></article><article class="qualitative-case" data-video-sync data-title="Twins take hands, spin and swap sides (the camera orbits)"><header class="qualitative-case-heading"><h3>Twins take hands, spin and swap sides (the camera orbits)</h3><p>Case 8</p></header><div class="qualitative-context-row is-two"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/twins_swap_spin_orb120_cl_s1_input.jpg" alt=""></div></figure><figure class="media-card"><figcaption class="media-title ">Original Clip</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/twins_swap_spin_orb120_cl_s1__orig.mp4"></video></div></figure></div><div class="qualitative-hero-row"><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="twins_swap_spin_orb120_cl_s1"><img class="pv-still" loading="lazy" src="/page_FollowTheBlur/web_assets/cmp/twins_swap_spin_orb120_cl_s1_ctl.jpg" alt="4D control of this case as a point cloud"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span><span style="color:#b88400">camera path</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title is-ours">Follow-the-Blur (Ours)</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/twins_swap_spin_orb120_cl_s1__ours.mp4" data-lead></video></div></figure></div><h4 class="baseline-output-title">Trained 4D Control Methods</h4><div class="qualitative-baseline-row is-three"><figure class="media-card"><figcaption class="media-title ">VerseCrafter</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/twins_swap_spin_orb120_cl_s1__versecrafter.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">SymphoMotion</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/twins_swap_spin_orb120_cl_s1__symphomotion.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">WorldDirector</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cmp/twins_swap_spin_orb120_cl_s1__worlddirector.mp4"></video></div></figure></div></article></div></div><button class="qualitative-carousel-button is-previous" type="button" aria-label="Previous case">&lsaquo;</button><button class="qualitative-carousel-button is-next" type="button" aria-label="Next case">&rsaquo;</button></div></div></div>
+  </div>
+</section>
 
-        <img src="/page_FollowTheBlur/assets/cases/tree_climb/input.jpg" alt="Tree-climb case: input image" loading="lazy">
-        <img src="/page_FollowTheBlur/assets/cases/tree_climb/rigid.webp" alt="Tree-climb case: rigid depth" loading="lazy">
-        <img src="/page_FollowTheBlur/assets/cases/tree_climb/refined.webp" alt="Tree-climb case: refined depth" loading="lazy">
-        <img src="/page_FollowTheBlur/assets/cases/tree_climb/output.webp" alt="Tree-climb case: output video" loading="lazy">
-      </div>
-    </div>
-  </section>
+<section class="qualitative-section is-plain" id="camera">
+  <div class="qualitative-container">
+    <header class="qualitative-header"><h2>Camera Control</h2>
+      <p>The objects and the camera share one 3D scene, so the 4D control can also move the camera. The two cases of Fig. 6 of the paper against the trained methods; the camera path is drawn in yellow.</p></header>
+    <div><div class="qualitative-progress"><div class="qualitative-progress-heading"><div><span class="qualitative-progress-kicker">Camera control (Fig. 6)</span><span class="qualitative-progress-current-title"></span></div><span class="qualitative-progress-count"><strong>01</strong> / 02</span></div><div class="qualitative-progress-bar" aria-hidden="true"><span></span></div><div class="qualitative-progress-list"><button class="qualitative-progress-item" type="button"><span class="qualitative-progress-number">01</span><span class="qualitative-progress-copy"><strong>A woman mounts a horse from a block</strong><small>The camera rises to an oblique view</small></span></button><button class="qualitative-progress-item" type="button"><span class="qualitative-progress-number">02</span><span class="qualitative-progress-copy"><strong>A passenger gets into a taxi</strong><small>The camera orbits by 120°</small></span></button></div></div><div class="qualitative-carousel" tabindex="0"><div class="qualitative-carousel-stage"><div class="qualitative-carousel-viewport"><div class="qualitative-carousel-track"><article class="qualitative-case" data-video-sync data-title="A woman mounts a horse from a block"><header class="qualitative-case-heading"><h3>A woman mounts a horse from a block</h3><p>The camera rises to an oblique view</p></header><div class="qualitative-context-row is-two"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/cam6/horse_block_stableyard_s73-obl45_input.jpg" alt=""></div></figure><figure class="media-card"><figcaption class="media-title ">4D Control (rigid depth)</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cam6/horse_block_stableyard_s73-obl45__rigid.mp4"></video></div></figure></div><div class="qualitative-hero-row"><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="horse_block_stableyard_s73-obl45"><img class="pv-still" loading="lazy" src="/page_FollowTheBlur/web_assets/cam6/horse_block_stableyard_s73-obl45_input.jpg" alt="4D control of this case as a point cloud"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span><span style="color:#b88400">camera path</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title is-ours">Follow-the-Blur (Ours)</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cam6/horse_block_stableyard_s73-obl45__ours.mp4" data-lead></video></div></figure></div><h4 class="baseline-output-title">Trained 4D Control Methods</h4><div class="qualitative-baseline-row is-three"><figure class="media-card"><figcaption class="media-title ">VerseCrafter</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cam6/horse_block_stableyard_s73-obl45__versecrafter.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">SymphoMotion</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cam6/horse_block_stableyard_s73-obl45__symphomotion.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">WorldDirector</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cam6/horse_block_stableyard_s73-obl45__worlddirector.mp4"></video></div></figure></div></article><article class="qualitative-case" data-video-sync data-title="A passenger gets into a taxi"><header class="qualitative-case-heading"><h3>A passenger gets into a taxi</h3><p>The camera orbits by 120°</p></header><div class="qualitative-context-row is-two"><figure class="media-card"><figcaption class="media-title ">Input Image</figcaption><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/cam6/taxi_rear_door_s73-orb120_input.jpg" alt=""></div></figure><figure class="media-card"><figcaption class="media-title ">4D Control (rigid depth)</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cam6/taxi_rear_door_s73-orb120__rigid.mp4"></video></div></figure></div><div class="qualitative-hero-row"><figure class="media-card"><figcaption class="media-title">4D Control<small>Interactive point cloud</small></figcaption><div class="media-frame pv" data-cloud="taxi_rear_door_s73-orb120"><img class="pv-still" loading="lazy" src="/page_FollowTheBlur/web_assets/cam6/taxi_rear_door_s73-orb120_input.jpg" alt="4D control of this case as a point cloud"><div class="pv-key"><span style="color:#1f5f5b">object 1</span><span style="color:#c4623a">object 2</span><span style="color:#b88400">camera path</span></div><button class="pv-reset" type="button">Reset view</button><p class="pv-hint">Drag to orbit &middot; right-drag to pan &middot; Ctrl/&#8984; + scroll to zoom</p></div></figure><figure class="media-card"><figcaption class="media-title is-ours">Follow-the-Blur (Ours)</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cam6/taxi_rear_door_s73-orb120__ours.mp4" data-lead></video></div></figure></div><h4 class="baseline-output-title">Trained 4D Control Methods</h4><div class="qualitative-baseline-row is-three"><figure class="media-card"><figcaption class="media-title ">VerseCrafter</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cam6/taxi_rear_door_s73-orb120__versecrafter.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">SymphoMotion</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cam6/taxi_rear_door_s73-orb120__symphomotion.mp4"></video></div></figure><figure class="media-card"><figcaption class="media-title ">WorldDirector</figcaption><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/cam6/taxi_rear_door_s73-orb120__worlddirector.mp4"></video></div></figure></div></article></div></div><button class="qualitative-carousel-button is-previous" type="button" aria-label="Previous case">&lsaquo;</button><button class="qualitative-carousel-button is-next" type="button" aria-label="Next case">&rsaquo;</button></div></div></div>
+  </div>
+</section>
 
-  <section class="paper-section is-soft">
-    <div class="ftb-wide">
-      <h2 class="section-title">How It Works</h2>
-      <div class="ftb-steps">
-        <div class="ftb-step">
-          <div>
-            <h3><span class="num">1</span>The 4D control</h3>
-            <p>
-              The objects of the image are lifted to 3D proxies. The user gives
-              each proxy one rigid transform per frame, and a camera path. Here
-              the dog walks round the car and jumps in. The proxies only slide
-              and turn: the dog never moves a leg.
-            </p>
-          </div>
-          <img src="/page_FollowTheBlur/assets/steps/scene.webp" alt="The dog scene as a point cloud, the dog moving along its path" loading="lazy">
-        </div>
-        <div class="ftb-step">
-          <div>
-            <h3><span class="num">2</span>Render the rigid depth</h3>
-            <p>
-              The posed proxies are rendered over the background depth, frame by
-              frame. The result is the rigid depth: the placement of every
-              object is exact, but the motion is that of a statue.
-            </p>
-          </div>
-          <img src="/page_FollowTheBlur/assets/cases/dog_door/rigid.webp" alt="Rigid depth of the dog case" loading="lazy">
-        </div>
-        <div class="ftb-step">
-          <div>
-            <h3><span class="num">3</span>Follow the blur, then generate</h3>
-            <p>
-              Stage 1 lets the video model redraw the depth while it follows
-              only the blur of the render, so the dog rears up, grips the handle
-              and jumps. Stage 2 generates the video from this refined depth and
-              the input image.
-            </p>
-          </div>
-          <div class="pair">
-            <div>
-              <img src="/page_FollowTheBlur/assets/cases/dog_door/refined.webp" alt="Refined depth of the dog case" loading="lazy">
-              <div class="cap">Stage 1 — refined depth</div>
-            </div>
-            <div>
-              <img src="/page_FollowTheBlur/assets/cases/dog_door/output.webp" alt="Output video of the dog case" loading="lazy">
-              <div class="cap">Stage 2 — output video</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<section class="paper-section study-section" id="study">
+  <div class="text-container"><h2 class="section-title">User Study</h2>
+    <p class="section-lead">Twenty participants compared the four methods on 20 Interact4D cases, among them the eight above, without method names and in random order, and picked one video for each of three questions. Share of the 400 votes per question (Tab. 2 of the paper).</p>
+    <table class="study-table">
+      <tr><th>Method</th><th>Fidelity<small>motion closest to the reference</small></th><th>Naturalness<small>most natural motion</small></th><th>Quality<small>best-looking video</small></th></tr>
+      <tr><td>VerseCrafter</td><td>7.0%</td><td>8.8%</td><td>12.5%</td></tr>
+      <tr><td>SymphoMotion</td><td>8.3%</td><td>7.3%</td><td>11.3%</td></tr>
+      <tr><td>WorldDirector</td><td>17.5%</td><td>16.0%</td><td>18.5%</td></tr>
+      <tr class="is-ours"><td>Follow-the-Blur (Ours)</td><td>67.3%</td><td>68.0%</td><td>57.8%</td></tr>
+    </table>
+  </div>
+</section>
+<footer class="site-footer">All videos are muted and loop; the videos of a case play in step.</footer>
+<script src="/page_FollowTheBlur/web_assets/lib/three.min.js"></script>
+<script src="/page_FollowTheBlur/web_assets/lib/OrbitControls.js"></script>
+<script src="/page_FollowTheBlur/web_assets/lib/viewer.js"></script>
+<script src="/page_FollowTheBlur/web_assets/lib/page.js"></script>
 
-  <section class="paper-section abstract-section">
-    <div class="text-container">
-      <h2 class="section-title">Abstract</h2>
-      <p class="abstract-copy">
-        Controlling a video world model with text keeps its motion natural but
-        leaves the placement of objects and the camera ambiguous. Existing 4D
-        control methods resolve this ambiguity with 3D trajectories for objects
-        and the camera, but these trajectories are coarse, so the methods
-        struggle with complex motion such as interactions between objects. To
-        obtain both precise placement and natural motion, we introduce
-        <strong>Follow-the-Blur</strong>, a training-free framework that
-        combines the spatial control of 4D trajectories with the motion prior of
-        a pretrained video world model. Our key insight is that the coarse
-        trajectories given by 4D control carry only low-frequency information,
-        whereas the high-frequency details of natural motion, such as bending
-        limbs and bodies in contact, are already encoded in this motion prior.
-        To harness this prior, we render the 4D control as a depth video and
-        refine it by our proposed <em>dual-band denoising</em>. In the low band,
-        the model <strong>follows the blur</strong> of the render, while in the
-        high band it synthesizes fine details from its prior. A second stage
-        then generates the final video from the refined depth, in which bodies
-        move and interact naturally. Experiments on Interact4D, our new
-        benchmark of interactions among people, animals, and objects, show that
-        Follow-the-Blur follows the 4D control more closely and yields more
-        natural interactions than trained 4D control methods.
-      </p>
-    </div>
-  </section>
 </body>
 </html>
