@@ -4,8 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RetakeBench: Can Video Models Retake Dynamic Scenes from Extreme Viewpoints?</title>
-<link rel="icon" type="image/png" href="web_assets/icons/small_icon.png">
-<link rel="apple-touch-icon" href="web_assets/icons/small_icon.png">
+<link rel="icon" href="web_assets/icons/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="web_assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="web_assets/icons/apple-touch-icon.png">
 <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,600,700|Noto+Sans:400,500,600,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -61,13 +62,17 @@
     margin: 0 auto 22px;
   }
   .hero h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
+    text-wrap: balance;
     font-weight: 600;
     margin: 6px auto 14px;
     letter-spacing: -0.012em;
     line-height: 1.22;
     color: var(--text);
   }
+  .brand { display: inline-flex; align-items: center; gap: 14px; margin: 0 auto 4px; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 700; font-size: 2.3rem; letter-spacing: -0.01em; color: var(--text); }
+  .brand img { height: 72px; width: 72px; display: block; }
+  @media (max-width: 700px) { .brand { font-size: 1.7rem; gap: 10px; } .brand img { height: 52px; width: 52px; } }
   .hero .subtitle {
     font-size: 1.1rem;
     font-weight: 400;
@@ -89,9 +94,10 @@
   .affil .institution { display: inline-block; margin: 0 10px; white-space: nowrap; }
   .affil sup { color: var(--text); font-weight: 500; font-size: 0.85em; }
   .affil-logos { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 18px 44px; margin: 4px 0 28px; }
-  .affil-logos img { display: block; width: auto; height: 42px; max-width: 100%; }
-  .affil-logos .lg-tum { height: 30px; }
-  .affil-logos .lg-netflix { height: 26px; }
+  .affil-logos img { display: block; width: auto; height: 58px; max-width: 100%; }
+  .affil-logos .lg-tum { height: 42px; }
+  .affil-logos .lg-netflix { height: 36px; }
+  @media (max-width: 700px) { .hero h1 { font-size: 2.1rem; } .affil .institution { white-space: normal; } .affil-logos img { height: 44px; } .affil-logos .lg-tum { height: 32px; } .affil-logos .lg-netflix { height: 27px; } }
 
   .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 22px; }
   .btn {
@@ -740,8 +746,8 @@
     .rel-grid .rel-map { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 968 / 660; }
   }
 
-  /* user 2026-11-20: 网页横着占得太满了 -> narrower than the supp page's 1440px; 2026-11-22: 再宽一点 -> 1280px */
-  .container, .container-wide { max-width: 1280px; }
+  /* user 2026-11-20: 网页横着占得太满了 -> narrower than the supp page's 1440px; 2026-11-22: 再宽一点 -> 1280px -> 1400px */
+  .container, .container-wide { max-width: 1400px; }
   /* the full per-case table then needs a slightly tighter grid to fit without scrolling */
   .cmp-table { min-width: 0; table-layout: auto; }
   .cmp-table th, .cmp-table td { padding: 6px 2px; font-size: 0.78rem; }
@@ -755,6 +761,7 @@
 <body>
 <header class="hero">
   <div class="container-wide">
+    <div class="brand"><img src="web_assets/icons/retakebench_mark.png" alt=""><span>RetakeBench</span></div>
     <h1>Can Video Models Retake Dynamic Scenes from Extreme Viewpoints?</h1>
     <div class="authors">
       <span class="author"><a href="https://vveicao.github.io/">Wei Cao</a><sup>1</sup>,</span>
