@@ -364,7 +364,7 @@
   }
   .motiv-table {
     width: 100%;
-    min-width: 1100px;
+    min-width: 1000px;
     border-collapse: collapse;
     background: var(--bg);
     table-layout: fixed;
@@ -378,6 +378,8 @@
   }
   .motiv-table th:last-child, .motiv-table td:last-child { border-right: none; }
   .motiv-table tbody tr:last-child td { border-bottom: none; }
+  /* user 2026-11-24: Motivation 的表格可以更窄一点 -> centred, 1080px (the videos above keep the full width) */
+  #motivation .motiv-table-wrap, #motivation .motiv-table-wrap + .metric-note { max-width: 1080px; margin-left: auto; margin-right: auto; }
   .motiv-table thead th {
     background: var(--bg-elev);
     color: var(--text-dim);
