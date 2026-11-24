@@ -746,8 +746,9 @@
     .rel-grid .rel-map { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 968 / 660; }
   }
 
-  /* user 2026-11-20: 网页横着占得太满了 -> narrower than the supp page's 1440px; 2026-11-22: 再宽一点 -> 1280px -> 1400px */
-  .container, .container-wide { max-width: 1400px; }
+  /* user 2026-11-20: 网页横着占得太满了 -> narrower than the supp page's 1440px; 2026-11-22: 再宽一点 -> 1280px -> 1400px;
+     2026-11-24: 可以宽一点再 -> 1520px */
+  .container, .container-wide { max-width: 1520px; }
   /* the full per-case table then needs a slightly tighter grid to fit without scrolling */
   .cmp-table { min-width: 0; table-layout: auto; }
   .cmp-table th, .cmp-table td { padding: 6px 2px; font-size: 0.78rem; }
@@ -1060,6 +1061,26 @@
       </div>
       <p class="metric-note">CLIP-T/F/V and VBench (SC, BG, TF, MS, AQ, IQ, OC), higher is better; green: the higher of the two.</p>
     </div>
+  </div>
+</section>
+
+<section id="pipeline">
+  <div class="container">
+    <h2 class="section-title">Construction Pipeline</h2>
+    <p class="section-desc"><strong>Training-free.</strong> Web clip &rarr; masks &rarr; 4D reconstruction &rarr; target camera path &rarr; pseudo-GT mask and depth.</p>
+    <figure class="asset-figure">
+      <img class="asset-img" src="web_assets/kept/images/construction_pipeline.png" alt="Construction pipeline">
+    </figure>
+  </div>
+</section>
+
+<section id="metrics">
+  <div class="container">
+    <h2 class="section-title">Metric Protocol</h2>
+    <p class="section-desc"><strong>Two questions per video.</strong> Did the camera follow the path? Is the subject intact and in place?</p>
+    <figure class="asset-figure">
+      <img class="asset-img" src="web_assets/kept/images/metric_protocol.png" alt="Metric protocol">
+    </figure>
   </div>
 </section>
 
@@ -1840,26 +1861,6 @@
     tabs.forEach(t => t.addEventListener('click', () => activate(t.dataset.case)));
   })();
 </script>
-
-<section id="pipeline">
-  <div class="container">
-    <h2 class="section-title">Construction Pipeline</h2>
-    <p class="section-desc"><strong>Training-free.</strong> Web clip &rarr; masks &rarr; 4D reconstruction &rarr; target camera path &rarr; pseudo-GT mask and depth.</p>
-    <figure class="asset-figure">
-      <img class="asset-img" src="web_assets/kept/images/construction_pipeline.png" alt="Construction pipeline">
-    </figure>
-  </div>
-</section>
-
-<section id="metrics">
-  <div class="container">
-    <h2 class="section-title">Metric Protocol</h2>
-    <p class="section-desc"><strong>Two questions per video.</strong> Did the camera follow the path? Is the subject intact and in place?</p>
-    <figure class="asset-figure">
-      <img class="asset-img" src="web_assets/kept/images/metric_protocol.png" alt="Metric protocol">
-    </figure>
-  </div>
-</section>
 
 <section id="data">
   <div class="container-wide">
