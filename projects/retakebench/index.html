@@ -737,6 +737,8 @@
   .tz-scene { position: relative; min-height: 0; }
   .tz-scene .tz-still { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; }
   @media (max-width: 900px) { .tz-scene .tz-still { position: static; height: auto; } }   /* stacked: as on the original page */
+  /* user 2026-11-24: 引入的视频好像有点太大了 -> the teaser keeps 1200px (as its caption) inside the 1520px page */
+  .teaser-sec .tz-top, .teaser-sec .tz-question, .teaser-sec .tz-retakes { max-width: 1200px; margin-left: auto; margin-right: auto; }
   /* Reliability: one grid; the top view takes 2 x 2 tiles, the caption fills the last slot */
   .rel-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; align-items: start; }
   .rel-grid .rel-map { grid-column: 1 / 3; grid-row: 1 / 3; align-self: stretch; position: relative; margin: 0; max-width: none;
