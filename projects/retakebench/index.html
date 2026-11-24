@@ -631,7 +631,7 @@
   .tz-top { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; align-items: stretch; }
   .tz-col { display: flex; flex-direction: column; min-width: 0; }
   /* user 2026-11-24: real 视频之前，再一句话说一下 task */
-  .tz-task { max-width: 1200px; margin: 0 auto 24px; text-align: center; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 600; font-size: 1.5rem; line-height: 1.4; color: #e0524f; }   /* 2026-11-24: 太长了，用红色、短一点，和可视化里的红色相机路径对应 */
+  .tz-task { max-width: 1200px; margin: 0 auto 24px; text-align: center; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 600; font-size: 1.8rem; line-height: 1.35; color: #e0524f; }   /* 2026-11-24: 太长了，用红色、短一点，和可视化里的红色相机路径对应；和下面的问句一样大，都再大一点 -> 1.8rem */
   .tz-task strong { font-weight: 700; }
   .tz-title { margin: 0 0 10px; text-align: center; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 600; font-size: 1.15rem; color: var(--text); }
   .tz-card { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 10px 10px 12px; border-radius: 14px; min-width: 0; }
@@ -655,7 +655,8 @@
   .data-case-cell .pv { width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--border); border-radius: 6px; }
   .data-case-cell .pv-lab { font-size: 0.82rem; }
   .data-case-cell .pv-reset { top: 6px; right: 6px; padding: 1px 8px; font-size: 0.68rem; }
-  .tz-question { margin: 32px 0 14px; text-align: center; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 600; font-size: 1.6rem; color: #e0524f; }   /* user 2026-11-24: 这句话应该大一点 (1.2rem -> 1.6rem) */
+  .tz-question { margin: 32px 0 14px; text-align: center; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 600; font-size: 1.8rem; line-height: 1.35; color: #e0524f; }   /* user 2026-11-24: 这句话应该大一点 (1.2rem -> 1.6rem); 和 task 一样大，都再大一点 -> 1.8rem */
+  @media (max-width: 700px) { .tz-task, .tz-question { font-size: 1.35rem; } }   /* phones: one or two lines instead of three */
   .tz-retakes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .tz-a { background: #efe8f6; } .tz-a .tz-card-label { color: #6b4c9a; }
   .tz-b { background: #fbf1df; } .tz-b .tz-card-label { color: #9a6a12; }
