@@ -2068,6 +2068,12 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
 #results .teaser-column-headings.is-three .teaser-heading-video { grid-column: 3; }
 #results .case.feature-row + .case.feature-row { margin-top: 26px; }
 /* /ftb-rows */
+/* ftb-logos */
+.ftb-logos { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px 46px; margin: 18px 0 6px; }
+.ftb-logos img { display: block; width: auto; height: 46px; max-width: 100%; }
+.ftb-logos .lg-stability { height: 34px; }
+@media (max-width: 700px) { .ftb-logos img { height: 36px; } .ftb-logos .lg-stability { height: 26px; } }
+/* /ftb-logos */
 </style>
 </head>
 <body>
@@ -2077,13 +2083,14 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
     <div class="project-name">Follow-the-Blur</div>
     <h1 class="publication-title">Training-Free 4D Control of Video World Models</h1>
     <div class="publication-authors"><span class="author-block"><a href="https://vveicao.github.io/">Wei Cao</a><sup>1,2</sup>,</span>
-      <span class="author-block">Vikram Voleti<sup>1</sup>,</span>
+      <span class="author-block"><a href="https://voletiv.github.io/">Vikram Voleti</a><sup>1</sup>,</span>
       <span class="author-block"><a href="https://haoz19.github.io/">Hao Zhang</a><sup>2</sup>,</span>
-      <span class="author-block">Mallikarjun Byrasandra Ramalinga Reddy<sup>1</sup>,</span>
-      <span class="author-block">Shimon Vainer<sup>1</sup>,</span>
-      <span class="author-block">Mark Boss<sup>1</sup>,</span>
+      <span class="author-block"><a href="https://scholar.google.com/citations?user=NlAB4EsAAAAJ">Mallikarjun Byrasandra Ramalinga Reddy</a><sup>1</sup>,</span>
+      <span class="author-block"><a href="https://scholar.google.com/citations?user=aX-ruVYAAAAJ">Shimon Vainer</a><sup>1</sup>,</span>
+      <span class="author-block"><a href="https://markboss.me/">Mark Boss</a><sup>1</sup>,</span>
       <span class="author-block"><a href="https://yaoyaoliu.web.illinois.edu/">Yaoyao Liu</a><sup>2</sup></span></div>
-    <div class="publication-authors ftb-affil"><span class="author-block"><sup>1</sup>Stability AI</span> <span class="author-block"><sup>2</sup>University of Illinois Urbana-Champaign</span></div>
+    <div class="publication-authors ftb-affil"><span class="author-block"><sup>1</sup>Stability AI</span> <span class="author-block"><sup>2</sup>University of Illinois at Urbana-Champaign</span></div>
+    <div class="ftb-logos"><a href="https://stability.ai/"><img class="lg-stability" src="/page_FollowTheBlur/assets/brand/stability-ai.svg" alt="Stability AI"></a><a href="https://illinois.edu/"><img class="lg-uiuc" src="/page_FollowTheBlur/assets/brand/uiuc.svg" alt="University of Illinois at Urbana-Champaign"></a></div>
     <div class="publication-links"><a class="link-button" href="https://github.com/VVeiCao/Follow-the-Blur">Code</a></div>
   </div>
 </header>
