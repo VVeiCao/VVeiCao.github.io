@@ -806,6 +806,18 @@
     #toc-fab .r0 { fill: none; stroke: var(--border); stroke-width: 3; }
     #toc-fab .r1 { fill: none; stroke: #e0524f; stroke-width: 3; stroke-linecap: round; }
   }
+
+  /* Motivation summary: what traditional metrics cannot do, in one line */
+  .motiv-summary { max-width: 1080px; margin: 34px auto 0; text-align: center; }
+  .motiv-summary .ms-main { margin: 0 0 8px; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-weight: 700; font-size: 1.6rem; line-height: 1.35; color: var(--text); text-wrap: balance; }
+  .motiv-summary .ms-sub { margin: 0; font-size: 1.15rem; color: var(--text-dim); }
+  @media (max-width: 700px) { .motiv-summary .ms-main { font-size: 1.25rem; } .motiv-summary .ms-sub { font-size: 1rem; } }
+  /* Data Case: 4 cases shown, the rest behind a button */
+  .dc-toggle-wrap { text-align: center; margin-top: 6px; }
+  .dc-toggle { font: inherit; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-dim); background: var(--bg-card);
+               border: 1px solid var(--border); border-radius: 999px; padding: 8px 22px; cursor: pointer; }
+  .dc-toggle:hover { color: var(--text); border-color: var(--text-mute); }
+  .dc-toggle:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; }
 </style>
 </head>
 <body>
@@ -837,15 +849,15 @@
     </div>
 
     <div class="links">
-      <span class="btn soon"><span class="icon"><i class="fas fa-file-pdf"></i></span><span>PDF (coming soon)</span></span>
-      <span class="btn soon"><span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv (coming soon)</span></span>
-      <span class="btn soon"><span class="icon"><i class="fab fa-github"></i></span><span>Code (coming soon)</span></span>
+      <span class="btn soon" title="Coming soon"><span class="icon"><i class="fas fa-file-pdf"></i></span><span>PDF</span></span>
+      <span class="btn soon" title="Coming soon"><span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span></span>
+      <span class="btn soon" title="Coming soon"><span class="icon"><i class="fab fa-github"></i></span><span>Code</span></span>
       <a class="btn" href="#video"><span class="icon"><i class="fas fa-video"></i></span><span>Video</span></a>
       <a class="btn" href="https://huggingface.co/datasets/vveicao/RetakeBench" target="_blank" rel="noopener"><span class="icon">🤗</span><span>Dataset</span></a>
       <a class="btn" href="#bibtex"><span class="icon"><i class="fas fa-quote-left"></i></span><span>BibTeX</span></a>
     </div>
     <p class="tldr">
-      <strong>TL;DR:</strong> RetakeBench is a scalable benchmark for camera redirection of monocular dynamic videos, with per-clip pseudo-4D ground truth that directly measures camera following and subject placement.
+      <strong>TL;DR:</strong> A benchmark for camera redirection on real videos, scored against pseudo-4D ground truth.
     </p>
   </div>
 </header>
@@ -876,7 +888,7 @@
         <div class="tz-card tz-b"><p class="tz-card-label">Video model B</p><video autoplay muted loop playsinline preload="auto"><source src="web_assets/teaser/b.mp4" type="video/mp4"></video></div>
         <div class="tz-card tz-c"><p class="tz-card-label">Video model C</p><video autoplay muted loop playsinline preload="auto"><source src="web_assets/teaser/c.mp4" type="video/mp4"></video></div>
     </div>
-    <p class="tz-caption" id="tzCaption"><span class="tz-blue">Blue</span>: source camera &middot; <span class="tz-red">red</span>: new camera &middot; drag the 4D scene to orbit</p>
+    <p class="tz-caption" id="tzCaption"><span class="tz-blue">Blue</span>: source camera &middot; <span class="tz-red">red</span>: new camera</p>
   </div>
 </section>
 <script src="web_assets/lib/three.min.js"></script>
@@ -1065,21 +1077,10 @@
 </script>
 
 
-<section id="video">
-  <div class="container-wide">
-    <h2 class="section-title">Video</h2>
-    <div class="video-wrap">
-      <video controls preload="metadata" playsinline poster="web_assets/video/poster.jpg">
-        <source src="web_assets/video/RetakeBench_video.mp4" type="video/mp4">
-      </video>
-    </div>
-  </div>
-</section>
-
 <section id="motivation">
   <div class="container-wide">
     <h2 class="section-title">Motivation</h2>
-    <p class="section-desc"><strong>Higher CLIP and VBench scores, wrong retake.</strong> Method A wins 9 of the 10 columns; the visual check says wrong view, robot collapses.</p>
+    <p class="section-desc"><strong>Higher CLIP and VBench scores, wrong retake.</strong></p>
 
     <div class="motiv-block">
       <div class="cmp-videos mot-grid">
@@ -1122,6 +1123,21 @@
       </table>
       </div>
       <p class="metric-note">CLIP-T/F/V and VBench (SC, BG, TF, MS, AQ, IQ, OC), higher is better; green: the higher of the two.</p>
+      <div class="motiv-summary">
+        <p class="ms-main">Traditional metrics <span class="tz-red">cannot</span> tell whether the camera follows the new path, or whether the subject stays intact and in place.</p>
+        <p class="ms-sub">RetakeBench checks both, against pseudo-4D ground truth built from the real video.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="video">
+  <div class="container-wide">
+    <h2 class="section-title">Video</h2>
+    <div class="video-wrap">
+      <video controls preload="metadata" playsinline poster="web_assets/video/poster.jpg">
+        <source src="web_assets/video/RetakeBench_video.mp4" type="video/mp4">
+      </video>
     </div>
   </div>
 </section>
@@ -1129,7 +1145,7 @@
 <section id="pipeline">
   <div class="container">
     <h2 class="section-title">Construction Pipeline</h2>
-    <p class="section-desc"><strong>Training-free.</strong> Web clip &rarr; masks &rarr; 4D reconstruction &rarr; target camera path &rarr; pseudo-GT mask and depth.</p>
+    <p class="section-desc"><strong>Training-free.</strong> Pseudo-4D ground truth from a single web clip.</p>
     <figure class="asset-figure">
       <div class="pipe-fig" style="position:relative;width:100%;aspect-ratio:1840/860;">
         <iframe src="web_assets/figures/pipeline.html" title="Construction pipeline (animated, cow case)" loading="lazy" scrolling="no"
@@ -1959,61 +1975,64 @@
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_zf/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
       <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_zf/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
     </div>
-    <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/tiger/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Tiger</p></div>
-      <div class="data-case-cell"><div class="pv" data-cloud="tiger"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/tiger/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/tiger/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
-    </div>
-    <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cow/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Cow</p></div>
-      <div class="data-case-cell"><div class="pv" data-cloud="cow"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cow/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cow/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
-    </div>
+    <div class="dc-more" id="dcMore" hidden>
       <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot029/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #3</p></div>
-      <div class="data-case-cell"><div class="pv" data-cloud="robot029"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot029/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot029/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/tiger/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Tiger</p></div>
+        <div class="data-case-cell"><div class="pv" data-cloud="tiger"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/tiger/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/tiger/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      </div>
+      <div class="data-case-row">
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cow/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Cow</p></div>
+        <div class="data-case-cell"><div class="pv" data-cloud="cow"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cow/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cow/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      </div>
+        <div class="data-case-row">
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot029/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #3</p></div>
+        <div class="data-case-cell"><div class="pv" data-cloud="robot029"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot029/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot029/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      </div>
+      <div class="data-case-row">
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_9qZ/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #4</p></div>
+        <div class="data-case-cell"><div class="pv" data-cloud="robot_9qZ"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_9qZ/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_9qZ/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      </div>
+      <div class="data-case-row">
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_drnc/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #5</p></div>
+        <div class="data-case-cell"><div class="pv" data-cloud="robot_drnc"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_drnc/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_drnc/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      </div>
+      <div class="data-case-row">
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cat/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Cat</p></div>
+        <div class="data-case-cell"><div class="pv" data-cloud="cat"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cat/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cat/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      </div>
+  
+      <div class="data-case-row">
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_snuf/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #6</p></div>
+        <div class="data-case-cell"><div class="pv" data-cloud="robot_snuf"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_snuf/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_snuf/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      </div>
+      <div class="data-case-row">
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_evlq/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #7</p></div>
+        <div class="data-case-cell"><div class="pv" data-cloud="robot_evlq"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_evlq/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_evlq/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      </div>
+      <div class="data-case-row">
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/deer2/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Deer #2</p></div>
+        <div class="data-case-cell"><div class="pv" data-cloud="deer2"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/deer2/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
+        <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/deer2/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
+      </div>
     </div>
-    <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_9qZ/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #4</p></div>
-      <div class="data-case-cell"><div class="pv" data-cloud="robot_9qZ"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_9qZ/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_9qZ/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
-    </div>
-    <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_drnc/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #5</p></div>
-      <div class="data-case-cell"><div class="pv" data-cloud="robot_drnc"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_drnc/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_drnc/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
-    </div>
-    <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cat/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Cat</p></div>
-      <div class="data-case-cell"><div class="pv" data-cloud="cat"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cat/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/cat/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
-    </div>
-
-    <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_snuf/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #6</p></div>
-      <div class="data-case-cell"><div class="pv" data-cloud="robot_snuf"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_snuf/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_snuf/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
-    </div>
-    <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_evlq/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Robot #7</p></div>
-      <div class="data-case-cell"><div class="pv" data-cloud="robot_evlq"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_evlq/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/robot_evlq/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
-    </div>
-    <div class="data-case-row">
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/deer2/source.mp4" type="video/mp4"></video><p class="dc-label">Source RGB &middot; Deer #2</p></div>
-      <div class="data-case-cell"><div class="pv" data-cloud="deer2"><canvas aria-label="Dynamic 4D point cloud with the source (blue) and target (red) camera paths; drag to orbit"></canvas><p class="pv-wait">3D view loads when scrolled into view</p><span class="pv-lab pv-lab-src">source</span><span class="pv-lab pv-lab-new">target</span><button class="pv-reset" type="button">Reset</button></div><p class="dc-label">4D reconstruction (interactive)</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/deer2/target_mask.mp4" type="video/mp4"></video><p class="dc-label">Target pseudo-GT mask</p></div>
-      <div class="data-case-cell"><video autoplay muted loop playsinline><source src="web_assets/kept/cases/deer2/target_depth.mp4" type="video/mp4"></video><p class="dc-label">Target rendered depth</p></div>
-    </div>
+    <div class="dc-toggle-wrap"><button class="dc-toggle" id="dcToggle" type="button" aria-controls="dcMore" aria-expanded="false">Show all 13 cases</button></div>
 
   </div>
 </section>
@@ -2119,6 +2138,22 @@
     window.addEventListener('resize', req);
     window.addEventListener('load', req);
     update();
+  })();
+</script>
+
+<script>
+  // Data Case: show / hide the remaining cases (their 3D views load when they come into view)
+  (function () {
+    const btn = document.getElementById('dcToggle'), more = document.getElementById('dcMore');
+    if (!btn || !more) return;
+    const label = btn.textContent;
+    btn.addEventListener('click', () => {
+      const open = more.hidden;
+      more.hidden = !open;
+      btn.textContent = open ? 'Show fewer cases' : label;
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (!open) document.getElementById('data').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
   })();
 </script>
 </body>
