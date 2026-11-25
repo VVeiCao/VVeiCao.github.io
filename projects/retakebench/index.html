@@ -100,7 +100,8 @@
   .affil-logos img { display: block; width: auto; height: 58px; max-width: 100%; }
   .affil-logos .lg-tum { height: 46px; }
   .affil-logos .lg-netflix { height: 56px; }
-  @media (max-width: 700px) { .hero h1 { font-size: 2.1rem; } .affil .institution { white-space: normal; } .affil-logos img { height: 44px; } .affil-logos .lg-tum { height: 35px; } .affil-logos .lg-netflix { height: 42px; } }
+  .affil-logos .lg-tue { height: 62px; }
+  @media (max-width: 700px) { .hero h1 { font-size: 2.1rem; } .affil .institution { white-space: normal; } .affil-logos img { height: 44px; } .affil-logos .lg-tum { height: 35px; } .affil-logos .lg-netflix { height: 42px; } .affil-logos .lg-tue { height: 46px; } }
 
   .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 22px; }
   .btn {
@@ -815,6 +816,9 @@
   .motiv-summary .ms-tag { display: block; margin: 0 0 6px; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #e0524f; }
   .motiv-summary .ms-main { margin: 0; font-size: 1.45rem; font-weight: 500; line-height: 1.45; color: #334155; }
   .motiv-summary .ms-main strong { color: var(--text); font-weight: 700; }
+  .motiv-summary .nw { white-space: nowrap; }
+  .motiv-summary .ms-n { display: inline-flex; align-items: center; justify-content: center; width: 1.45em; height: 1.45em; border-radius: 50%; background: #e0524f; color: #fff;
+                         font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 0.72em; font-weight: 700; vertical-align: 0.18em; }
   @media (max-width: 700px) { .motiv-summary { padding: 16px 18px 18px; } .motiv-summary .ms-main { font-size: 1.15rem; } }
   /* Data Case: 4 cases shown, the rest behind a button */
   .dc-toggle-wrap { text-align: center; margin-top: 6px; }
@@ -848,6 +852,7 @@
     <div class="affil-logos">
       <img class="lg-uiuc" src="web_assets/brand/uiuc.svg" alt="University of Illinois Urbana-Champaign">
       <img class="lg-tum" src="web_assets/brand/tum.svg" alt="Technical University of Munich">
+      <img class="lg-tue" src="web_assets/brand/tuebingen.svg" alt="University of T&uuml;bingen">
       <img class="lg-netflix" src="web_assets/brand/netflix.svg" alt="Netflix">
     </div>
 
@@ -1136,8 +1141,8 @@
       </div>
       <p class="metric-note">CLIP-T/F/V and VBench (SC, BG, TF, MS, AQ, IQ, OC), higher is better; green: the higher of the two.</p>
       <div class="motiv-summary">
-        <span class="ms-tag">Takeaway</span>
-        <p class="ms-main">Traditional metrics <span class="tz-red">cannot</span> tell whether the camera follows the new path or the subject stays intact; <strong>RetakeBench checks both.</strong></p>
+        <span class="ms-tag">Key idea</span>
+        <p class="ms-main">Without a ground-truth video, traditional metrics <span class="tz-red">cannot</span> tell a good retake from a bad one; <strong>RetakeBench solves this with</strong> <span class="nw"><span class="ms-n">1</span>&nbsp;pseudo-4D</span> ground truth built from the real video and <span class="nw"><span class="ms-n">2</span>&nbsp;new</span> metrics for camera accuracy and object fidelity.</p>
       </div>
     </div>
   </div>
