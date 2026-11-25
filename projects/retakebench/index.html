@@ -96,8 +96,8 @@
   .affil-logos { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 18px 44px; margin: 4px 0 28px; }
   .affil-logos img { display: block; width: auto; height: 58px; max-width: 100%; }
   .affil-logos .lg-tum { height: 46px; }
-  .affil-logos .lg-netflix { height: 46px; }
-  @media (max-width: 700px) { .hero h1 { font-size: 2.1rem; } .affil .institution { white-space: normal; } .affil-logos img { height: 44px; } .affil-logos .lg-tum { height: 35px; } .affil-logos .lg-netflix { height: 35px; } }
+  .affil-logos .lg-netflix { height: 56px; }
+  @media (max-width: 700px) { .hero h1 { font-size: 2.1rem; } .affil .institution { white-space: normal; } .affil-logos img { height: 44px; } .affil-logos .lg-tum { height: 35px; } .affil-logos .lg-netflix { height: 42px; } }
 
   .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 22px; }
   .btn {
@@ -765,6 +765,46 @@
   .cmp-table th.col-he, .cmp-table td.col-he { min-width: 90px; }
   .btn.soon { opacity: 0.55; cursor: default; }
   .btn.soon:hover { background: #363636; border-color: #363636; }
+
+  /* Video section: the paper video, as wide as the teaser */
+  .video-wrap { max-width: 1200px; margin: 0 auto; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #0f172a; border: 1px solid var(--border); }
+  .video-wrap video { width: 100%; height: 100%; display: block; }
+
+  /* Floating section nav (right edge): labels + dots on wide screens, dots only (label on hover) on medium screens,
+     a round button with a progress ring that opens the list on phones. The red line fills with the reading progress. */
+  #toc { position: fixed; right: 22px; top: 50%; transform: translateY(-50%); z-index: 50; font-family: 'Google Sans', 'Noto Sans', sans-serif; }
+  #toc ul { list-style: none; margin: 0; padding: 0; position: relative; }
+  #toc .track { position: absolute; right: 5px; width: 2px; background: var(--border); border-radius: 2px; }
+  #toc .fill { position: absolute; left: 0; top: 0; width: 100%; height: 0; background: #e0524f; border-radius: 2px; }
+  #toc a { position: relative; display: flex; align-items: center; justify-content: flex-end; gap: 12px; padding: 6px 0; color: var(--text-mute);
+           font-size: 0.85rem; font-weight: 500; line-height: 1.2; white-space: nowrap; text-decoration: none; }
+  #toc a:hover { color: var(--text); text-decoration: none; }
+  #toc a:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 3px; border-radius: 6px; }
+  #toc .dot { flex: none; position: relative; z-index: 1; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid #cbd5e1;
+              transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease; }
+  #toc a.passed .dot { border-color: #e0524f; }
+  #toc a.on { color: var(--text); font-weight: 700; }
+  #toc a.on .dot { background: #e0524f; border-color: #e0524f; transform: scale(1.3); }
+  #toc-fab { display: none; }
+  @media (max-width: 1799px) {
+    #toc { right: 8px; }
+    #toc .lab { position: absolute; right: 24px; padding: 3px 10px; border-radius: 999px; background: var(--text); color: #fff; font-size: 0.8rem;
+                font-weight: 500; opacity: 0; pointer-events: none; transition: opacity 0.15s ease; }
+    #toc a:hover .lab, #toc a:focus-visible .lab { opacity: 1; }
+  }
+  @media (max-width: 900px) {
+    #toc { display: none; top: auto; bottom: 76px; right: 16px; transform: none; padding: 8px 16px; background: #fff; border: 1px solid var(--border);
+           border-radius: 14px; box-shadow: 0 10px 28px rgba(15, 23, 42, 0.14); }
+    #toc.open { display: block; }
+    #toc .track { display: none; }
+    #toc a { flex-direction: row-reverse; justify-content: flex-end; font-size: 1rem; padding: 7px 0; }
+    #toc .lab { position: static; opacity: 1; padding: 0; background: none; color: inherit; font-size: inherit; font-weight: inherit; }
+    #toc-fab { display: flex; position: fixed; right: 16px; bottom: 16px; z-index: 51; width: 50px; height: 50px; padding: 0; border-radius: 50%;
+               border: 1px solid var(--border); background: #fff; box-shadow: 0 6px 18px rgba(15, 23, 42, 0.16); align-items: center; justify-content: center; cursor: pointer; }
+    #toc-fab svg.ring { position: absolute; inset: 2px; width: 44px; height: 44px; transform: rotate(-90deg); }
+    #toc-fab .r0 { fill: none; stroke: var(--border); stroke-width: 3; }
+    #toc-fab .r1 { fill: none; stroke: #e0524f; stroke-width: 3; stroke-linecap: round; }
+  }
 </style>
 </head>
 <body>
@@ -799,6 +839,7 @@
       <span class="btn soon"><span class="icon"><i class="fas fa-file-pdf"></i></span><span>PDF (coming soon)</span></span>
       <span class="btn soon"><span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv (coming soon)</span></span>
       <span class="btn soon"><span class="icon"><i class="fab fa-github"></i></span><span>Code (coming soon)</span></span>
+      <a class="btn" href="#video"><span class="icon"><i class="fas fa-video"></i></span><span>Video</span></a>
       <a class="btn" href="https://huggingface.co/datasets/vveicao/RetakeBench" target="_blank" rel="noopener"><span class="icon">🤗</span><span>Dataset</span></a>
       <a class="btn" href="#bibtex"><span class="icon"><i class="fas fa-quote-left"></i></span><span>BibTeX</span></a>
     </div>
@@ -1022,6 +1063,18 @@
 })();
 </script>
 
+
+<section id="video">
+  <div class="container-wide">
+    <h2 class="section-title">Video</h2>
+    <p class="section-desc"><strong>RetakeBench in two minutes.</strong> Task, pseudo-4D ground truth, metrics and results.</p>
+    <div class="video-wrap">
+      <video controls preload="metadata" playsinline poster="web_assets/video/poster.jpg">
+        <source src="web_assets/video/RetakeBench_video.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
 
 <section id="motivation">
   <div class="container-wide">
@@ -2005,5 +2058,68 @@
   </div>
 </footer>
 
+
+<script>
+  // floating section nav: built from the sections on the page; the active one is the last whose top is above 35% of the
+  // window; the red line fills dot by dot, plus how far the active section has been read
+  (function () {
+    const LABELS = { overview: 'Overview', video: 'Video', motivation: 'Motivation', pipeline: 'Pipeline', metrics: 'Metrics',
+                     comparison: 'Comparison', reliability: 'Reliability', data: 'Data case', bibtex: 'BibTeX' };
+    const secs = Array.from(document.querySelectorAll('section[id]')).filter((x) => LABELS[x.id]);
+    if (secs.length < 2) return;
+    const nav = document.createElement('nav'); nav.id = 'toc'; nav.setAttribute('aria-label', 'Sections');
+    const ul = document.createElement('ul');
+    const track = document.createElement('span'); track.className = 'track';
+    const fill = document.createElement('span'); fill.className = 'fill'; track.appendChild(fill);
+    const fab = document.createElement('button'); fab.id = 'toc-fab'; fab.type = 'button';
+    fab.setAttribute('aria-label', 'Sections'); fab.setAttribute('aria-expanded', 'false');
+    const C = 2 * Math.PI * 19;
+    fab.innerHTML = '<svg class="ring" viewBox="0 0 44 44" aria-hidden="true"><circle class="r0" cx="22" cy="22" r="19"/>' +
+      '<circle class="r1" cx="22" cy="22" r="19" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + C.toFixed(1) + '"/></svg>' +
+      '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>';
+    const ring = fab.querySelector('.r1');
+    const links = secs.map((sec) => {
+      const li = document.createElement('li'), a = document.createElement('a');
+      a.href = '#' + sec.id;
+      a.innerHTML = '<span class="lab">' + LABELS[sec.id] + '</span><span class="dot"></span>';
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.replaceState(null, '', '#' + sec.id);
+        nav.classList.remove('open'); fab.setAttribute('aria-expanded', 'false');
+      });
+      li.appendChild(a); ul.appendChild(li); return a;
+    });
+    nav.appendChild(track); nav.appendChild(ul);
+    document.body.appendChild(nav); document.body.appendChild(fab);
+    fab.addEventListener('click', () => { const o = nav.classList.toggle('open'); fab.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+    document.addEventListener('click', (e) => { if (!nav.contains(e.target) && !fab.contains(e.target)) { nav.classList.remove('open'); fab.setAttribute('aria-expanded', 'false'); } });
+    let pending = false;
+    function update() {
+      pending = false;
+      const vh = window.innerHeight, line = vh * 0.35;
+      let k = 0;
+      secs.forEach((sec, i) => { if (sec.getBoundingClientRect().top <= line) k = i; });
+      const max = document.documentElement.scrollHeight - vh;
+      const atEnd = max > 0 && window.scrollY >= max - 2;
+      if (atEnd) k = secs.length - 1;
+      const r = secs[k].getBoundingClientRect();
+      const f = atEnd ? 1 : Math.max(0, Math.min(1, (line - r.top) / Math.max(1, r.height)));
+      links.forEach((a, i) => { a.classList.toggle('on', i === k); a.classList.toggle('passed', i < k); });
+      // the track runs from the first dot to the last
+      const d0 = links[0].querySelector('.dot').getBoundingClientRect(), d1 = links[links.length - 1].querySelector('.dot').getBoundingClientRect();
+      const top = d0.top + d0.height / 2 - ul.getBoundingClientRect().top, len = (d1.top + d1.height / 2) - (d0.top + d0.height / 2);
+      track.style.top = top + 'px'; track.style.height = len + 'px';
+      const seg = links.length > 1 ? len / (links.length - 1) : 0;
+      fill.style.height = Math.min(len, (k + (k < links.length - 1 ? f : 0)) * seg) + 'px';
+      ring.setAttribute('stroke-dashoffset', (C * (1 - (max > 0 ? Math.min(1, window.scrollY / max) : 0))).toFixed(1));
+    }
+    const req = () => { if (!pending) { pending = true; requestAnimationFrame(update); } };
+    window.addEventListener('scroll', req, { passive: true });
+    window.addEventListener('resize', req);
+    window.addEventListener('load', req);
+    update();
+  })();
+</script>
 </body>
 </html>
