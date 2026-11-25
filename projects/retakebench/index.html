@@ -818,9 +818,13 @@
   .motiv-summary .ms-tag { display: block; margin: 0 0 6px; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #e0524f; }
   .motiv-summary .ms-main { margin: 0; font-size: 1.45rem; font-weight: 500; line-height: 1.45; color: #334155; }
   .motiv-summary .ms-main strong { color: var(--text); font-weight: 700; }
-  .motiv-summary .nw { white-space: nowrap; }
-  .motiv-summary .ms-n { display: inline-flex; align-items: center; justify-content: center; width: 1.45em; height: 1.45em; border-radius: 50%; background: #e0524f; color: #fff;
-                         font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 0.72em; font-weight: 700; vertical-align: 0.18em; }
+  .motiv-summary .ms-lead { margin-top: 12px; }
+  .motiv-summary .ms-steps { list-style: none; margin: 8px 0 0; padding: 0; }
+  .motiv-summary .ms-steps li { display: flex; align-items: center; gap: 14px; margin: 0; font-size: 1.35rem; font-weight: 500; line-height: 1.45; color: var(--text); }
+  .motiv-summary .ms-steps li + li { margin-top: 8px; }
+  .motiv-summary .ms-n { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: #e0524f; color: #fff;
+                         font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 1.05rem; font-weight: 700; }
+  @media (max-width: 700px) { .motiv-summary .ms-steps li { font-size: 1.05rem; gap: 10px; align-items: flex-start; } .motiv-summary .ms-n { width: 26px; height: 26px; font-size: 0.9rem; } }
   @media (max-width: 700px) { .motiv-summary { padding: 16px 18px 18px; } .motiv-summary .ms-main { font-size: 1.15rem; } }
   /* Data Case: 4 cases shown, the rest behind a button */
   .dc-toggle-wrap { text-align: center; margin-top: 6px; }
@@ -1144,7 +1148,12 @@
       <p class="metric-note">CLIP-T/F/V and VBench (SC, BG, TF, MS, AQ, IQ, OC), higher is better; green: the higher of the two.</p>
       <div class="motiv-summary">
         <span class="ms-tag">Key idea</span>
-        <p class="ms-main">Without a ground-truth video, traditional metrics <span class="tz-red">cannot</span> tell a good retake from a bad one; <strong>RetakeBench solves this with</strong> <span class="nw"><span class="ms-n">1</span>&nbsp;pseudo-4D</span> ground truth built from the real video and <span class="nw"><span class="ms-n">2</span>&nbsp;new</span> metrics for camera accuracy and object fidelity.</p>
+        <p class="ms-main">Without a ground-truth video, traditional metrics <span class="tz-red">cannot</span> tell a good retake from a bad one.</p>
+        <p class="ms-main ms-lead"><strong>RetakeBench solves this with:</strong></p>
+        <ol class="ms-steps">
+          <li><span class="ms-n">1</span><span>Pseudo-4D ground truth built from the real video</span></li>
+          <li><span class="ms-n">2</span><span>New metrics for camera accuracy and object fidelity</span></li>
+        </ol>
       </div>
     </div>
   </div>
