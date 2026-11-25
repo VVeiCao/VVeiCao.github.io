@@ -2072,25 +2072,16 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
       <span class="author-block"><a href="https://yaoyaoliu.web.illinois.edu/">Yaoyao Liu</a><sup>2</sup></span></div>
     <div class="publication-authors ftb-affil"><span class="author-block"><sup>1</sup>Stability AI</span> <span class="author-block"><sup>2</sup>University of Illinois Urbana-Champaign</span></div>
     <div class="publication-links"><a class="link-button" href="https://github.com/VVeiCao/Follow-the-Blur">Code</a></div>
-    <div class="hero-features" aria-label="What Follow-the-Blur does">
-      <div class="hero-feature is-interaction"><span class="hero-feature-icon" aria-hidden="true"><img src="/page_FollowTheBlur/web_assets/fig/icon_objects.png" alt=""></span>
-        <span><strong>Object Interaction</strong><small>Coarse 3D trajectories in, natural contact out</small></span></div>
-      <div class="hero-feature is-camera"><span class="hero-feature-icon" aria-hidden="true"><img src="/page_FollowTheBlur/web_assets/fig/icon_camera.png" alt=""></span>
-        <span><strong>Camera Control</strong><small>Objects and camera share one 3D scene</small></span></div>
-      <div class="hero-feature is-free"><span class="hero-feature-icon" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="#c4623a" stroke-width="2.6" stroke-linecap="round"><path d="M20 4v32M6.1 12l27.8 16M6.1 28l27.8-16M20 4l-4 4M20 4l4 4M20 36l-4-4M20 36l4-4M6.1 12l5.5.4M6.1 12l2.2 5M33.9 28l-5.5-.4M33.9 28l-2.2-5M6.1 28l5.5-.4M6.1 28l2.2-5M33.9 12l-5.5.4M33.9 12l-2.2 5"/></svg></span>
-        <span><strong>Training-Free</strong><small>A frozen, pretrained video world model</small></span></div>
-    </div>
   </div>
 </header>
 
 <section class="paper-section is-soft">
   <div class="text-container">
-    <p class="tldr"><strong>TL;DR:</strong> A 4D control only moves rigid proxies along coarse 3D trajectories. Follow-the-Blur lets a pretrained video world model follow the blur of this control and fill in the fine details of natural motion from its own prior, without training.</p>
+    <p class="tldr"><strong>TL;DR:</strong> A pretrained video world model follows only the blur of a rigid 4D control and adds natural motion itself, without training.</p>
   </div>
 </section>
 
 <section class="paper-section" id="video">
-  <div class="text-container"><h2 class="section-title">Video</h2></div>
   <div class="ftb-video-wrap"><video controls preload="metadata" playsinline poster="/page_FollowTheBlur/web_assets/video/poster.jpg"><source src="/page_FollowTheBlur/web_assets/video/FollowTheBlur_video.mp4" type="video/mp4"></video></div>
   <p class="ftb-video-credit">Music: &ldquo;Inspired&rdquo; by Kevin MacLeod (incompetech.com), licensed under CC BY 4.0.</p>
 </section>
