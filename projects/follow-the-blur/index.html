@@ -1997,7 +1997,7 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
 .hero-feature strong { font-size: 17px; }
 .hero-feature small { margin-top: 2px; font-size: 13px; }
 :root, body, .qualitative-section, .authored-comparison-section { --page-wide: 1640px; }
-.teaser-wrap { width: min(100%, 1800px); padding: 0 28px; }
+.teaser-wrap { width: min(100%, 1640px); padding: 0 clamp(12px, 5.5vw, 96px); }
 .teaser-column-headings.is-three { grid-template-columns: 200px repeat(3, minmax(0, 1fr)); gap: 12px; }
 .teaser-column-headings.is-three .teaser-heading-video { grid-column: 4; }
 .media-grid.is-three { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -2098,7 +2098,7 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
 </section>
 
 <section class="paper-section" id="video">
-  <div class="ftb-video-wrap"><video controls preload="metadata" playsinline poster="/page_FollowTheBlur/web_assets/video/poster.jpg"><source src="/page_FollowTheBlur/web_assets/video/FollowTheBlur_video.mp4" type="video/mp4"></video></div>
+  <div class="ftb-video-wrap"><video controls preload="metadata" playsinline poster="/page_FollowTheBlur/web_assets/video/cover.jpg"><source src="/page_FollowTheBlur/web_assets/video/FollowTheBlur_video.mp4" type="video/mp4"></video></div>
   <p class="ftb-video-credit">Music: &ldquo;Inspired&rdquo; by Kevin MacLeod (incompetech.com), licensed under CC BY 4.0.</p>
 </section>
 
