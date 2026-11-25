@@ -760,7 +760,9 @@
 
   /* user 2026-11-20: 网页横着占得太满了 -> narrower than the supp page's 1440px; 2026-11-22: 再宽一点 -> 1280px -> 1400px;
      2026-11-24: 可以宽一点再 -> 1520px */
-  .container, .container-wide { max-width: 1520px; }
+  /* 2026-11-25: 两边留点空间 -> content 1280px (1360 incl. 40px side padding) */
+  .container, .container-wide { max-width: 1360px; padding-left: 40px; padding-right: 40px; }
+  @media (max-width: 900px) { .container, .container-wide { padding-left: 20px; padding-right: 20px; } }
   /* the full per-case table then needs a slightly tighter grid to fit without scrolling */
   .cmp-table { min-width: 0; table-layout: auto; }
   .cmp-table th, .cmp-table td { padding: 6px 2px; font-size: 0.78rem; }
@@ -790,7 +792,7 @@
   #toc a.on { color: var(--text); font-weight: 700; }
   #toc a.on .dot { background: #e0524f; border-color: #e0524f; transform: scale(1.3); }
   #toc-fab { display: none; }
-  @media (max-width: 1799px) {
+  @media (max-width: 1599px) {
     #toc { right: 8px; }
     #toc .lab { position: absolute; right: 24px; padding: 3px 10px; border-radius: 999px; background: var(--text); color: #fff; font-size: 0.8rem;
                 font-weight: 500; opacity: 0; pointer-events: none; transition: opacity 0.15s ease; }
