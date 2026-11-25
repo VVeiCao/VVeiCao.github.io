@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RetakeBench metric protocol (animated)</title>
+<link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,600,700|Noto+Sans:400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  /* Animated version of the metric-protocol figure, embedded with an <iframe> on the project page and the
+     supplementary page, next to the animated pipeline figure (same canvas, colours and controls). One case and one
+     method all the way through: the cow case (yaw -120) and Gen3C. Every number comes from the paper's evaluation
+     outputs (metrics/data.js, written by _build/metric_figure_2026-11-25/make_metric_assets.py). Design canvas
+     1840 x 860 (figure 780 + controls), scaled to the frame width. Works from file:// (no fetch). */
+  :root { --text: #0f172a; --dim: #475569; --mute: #94a3b8; --panel: #f1f5f9; --line: #e2e8f0;
+          --red: #dc2626; --blue: #2563eb; --green: #059669; --amber: #f2a33a; --bad: #dc2626; --good: #16a34a; }
+  html, body { margin: 0; padding: 0; background: #ffffff; overflow: hidden; }
+  body { font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--text); }
+  #stage { position: absolute; left: 0; top: 0; width: 1840px; height: 860px; transform-origin: 0 0; }
+  .panel { position: absolute; border-radius: 18px; background: var(--panel); }
+  .ptitle { position: absolute; left: 22px; top: 12px; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 32px; font-weight: 700; white-space: nowrap; }
+  .ptitle .n { color: var(--red); margin-right: 10px; }
+  .img { position: absolute; border-radius: 8px; overflow: hidden; background: #e2e8f0; }
+  .img video { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .white { background: #ffffff; }
+  .cap { position: absolute; font-size: 26px; color: var(--dim); text-align: center; white-space: nowrap; }
+  .blk { position: absolute; border-radius: 12px; color: #fff; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 28px; font-weight: 700;
+         display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.15; box-shadow: 6px 6px 0 rgba(15,23,42,0.08); }
+  .plus { position: absolute; font-size: 40px; font-weight: 700; color: var(--mute); }
+  svg text { font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  #arrows { position: absolute; left: 0; top: 0; width: 1840px; height: 780px; overflow: visible; pointer-events: none; }
+  #arrows path { fill: none; stroke: #94a3b8; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+  /* frame pill on the overlay video */
+  .pill { position: absolute; padding: 2px 12px; border-radius: 999px; background: rgba(255,255,255,0.94); font-size: 22px; font-weight: 700;
+          color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.15); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .legend { position: absolute; display: flex; gap: 26px; font-size: 22px; color: var(--dim); white-space: nowrap; }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .legend i { display: inline-block; width: 30px; height: 18px; border-radius: 4px; box-sizing: border-box; }
+  /* per-frame checks */
+  .chk { position: absolute; left: 600px; width: 480px; height: 66px; display: flex; align-items: center; gap: 14px; border-bottom: 2px solid var(--line); }
+  .chk .no { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--text); color: #fff; font-size: 22px; font-weight: 700;
+             display: inline-flex; align-items: center; justify-content: center; }
+  .chk .wh { display: flex; flex-direction: column; line-height: 1.15; }
+  .chk .what { font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 28px; font-weight: 700; }
+  .chk .how { font-size: 19px; color: var(--mute); white-space: nowrap; }
+  .chk .val { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .chk .val.ok { color: var(--good); } .chk .val.bad { color: var(--bad); }
+  .chk.dim { opacity: 0.35; }
+  #fscore { position: absolute; left: 600px; top: 690px; width: 480px; display: flex; align-items: baseline; gap: 12px; white-space: nowrap; }
+  #fscore .lab { font-size: 24px; font-weight: 700; color: var(--dim); }
+  #fscore .big { font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 52px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
+  #fscore .big.zero { color: var(--bad); }
+  #fscore .note { font-size: 20px; color: var(--mute); }
+  /* scores */
+  .chips { position: absolute; display: flex; gap: 12px; }
+  .chip { flex: 1; border-radius: 12px; background: #ffffff; border: 2px solid var(--line); padding: 6px 10px 8px; text-align: center; }
+  .chip .k { font-size: 20px; font-weight: 700; color: var(--dim); white-space: nowrap; }
+  .chip .v { font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 38px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .chip.main { border-color: var(--red); background: #fef2f2; }
+  .chip.main .k, .chip.main .v { color: var(--red); }
+  /* staged reveal */
+  .s { transition: opacity 0.45s ease, transform 0.45s ease; }
+  .s.off { opacity: 0; transform: translateY(10px); }
+  /* controls */
+  #ctl { position: absolute; left: 0; top: 800px; width: 1840px; height: 56px; display: flex; align-items: center; gap: 14px; }
+  #ctl button { font: inherit; font-size: 24px; border: 1.5px solid var(--line); background: #fff; color: var(--dim); border-radius: 999px;
+                padding: 6px 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; }
+  #ctl button:hover { border-color: var(--mute); color: var(--text); }
+  #ctl button.on { border-color: var(--red); color: var(--red); background: #fef2f2; }
+  #ctl button:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+  #ctl .sep { flex: 1; }
+  @media (prefers-reduced-motion: reduce) { .s { transition: none; } }
+</style>
+</head>
+<body>
+<div id="stage">
+  <!-- generate: the evaluated method gets the source video and the target trajectory -->
+  <div class="panel s" data-at="0.3" style="left:0;top:0;width:1000px;height:365px"><div class="ptitle">Generate the retake</div></div>
+  <div class="img s" data-at="0.6" style="left:24px;top:72px;width:280px;height:161px"><video src="pipeline/source.mp4" muted playsinline loop preload="auto"></video></div>
+  <div class="cap s" data-at="0.6" style="left:24px;top:244px;width:280px">source video</div>
+  <div class="plus s" data-at="1.0" style="left:314px;top:122px">+</div>
+  <div class="img white s" data-at="1.0" style="left:348px;top:72px;width:161px;height:161px"><svg id="tgt" width="161" height="161" viewBox="0 0 161 161"></svg></div>
+  <div class="cap s" data-at="1.0" style="left:318px;top:244px;width:220px">target trajectory</div>
+  <div class="blk s" data-at="1.6" style="left:549px;top:62px;width:112px;height:180px;background:#be185d;flex-direction:column;gap:6px">Gen3C<small style="font-size:18px;font-weight:500;opacity:0.9;line-height:1.2">evaluated<br>method</small></div>
+  <div class="img s" data-at="2.2" style="left:697px;top:72px;width:280px;height:161px"><video src="metrics/output.mp4" muted playsinline loop preload="auto"></video></div>
+  <div class="cap s" data-at="2.2" style="left:697px;top:244px;width:280px">generated video</div>
+
+  <!-- #1 camera accuracy -->
+  <div class="panel s" data-at="3.4" style="left:1030px;top:0;width:810px;height:365px"><div class="ptitle"><span class="n">1</span>Camera accuracy</div></div>
+  <div class="blk s" data-at="3.7" style="left:1058px;top:62px;width:104px;height:180px;background:#475569">ViPE</div>
+  <div class="img white s" data-at="4.2" style="left:1196px;top:58px;width:290px;height:290px"><svg id="sk" width="290" height="290" viewBox="0 0 290 290"></svg></div>
+  <div class="img white s" data-at="5.0" style="left:1512px;top:58px;width:304px;height:168px"><svg id="rot" width="304" height="168" viewBox="0 0 304 168"></svg></div>
+  <div class="chips s" data-at="6.4" style="left:1512px;top:242px;width:304px">
+    <div class="chip"><div class="k">RotErr</div><div class="v" id="v-rot"></div></div>
+    <div class="chip"><div class="k">TransErr</div><div class="v" id="v-trans"></div></div>
+  </div>
+
+  <!-- #2 object fidelity -->
+  <div class="panel s" data-at="7.6" style="left:0;top:395px;width:1840px;height:385px"><div class="ptitle" style="left:112px"><span class="n">2</span>Object fidelity, in every frame</div></div>
+  <div class="blk s" data-at="7.9" style="left:24px;top:460px;width:102px;height:231px;background:#059669;white-space:nowrap">SAM 3</div>
+  <div class="img s" data-at="8.4" style="left:154px;top:460px;width:400px;height:231px"><video id="ov" src="metrics/overlay.mp4" muted playsinline loop preload="auto"></video></div>
+  <div class="pill s" data-at="8.4" id="fpill" style="left:164px;top:470px">frame 0</div>
+  <div class="legend s" data-at="8.4" style="left:154px;top:704px">
+    <span><i style="background:rgba(242,163,58,0.85)"></i>predicted mask</span>
+    <span><i style="border:4px solid var(--red)"></i>pseudo GT</span>
+  </div>
+  <div class="chk s" data-at="9.0" id="c1" style="top:450px"><span class="no">1</span><span class="wh"><span class="what">Detect</span><span class="how">SAM 3 finds the subject</span></span><span class="val" id="v1"></span></div>
+  <div class="chk s" data-at="9.3" id="c2" style="top:530px"><span class="no">2</span><span class="wh"><span class="what">Recognize</span><span class="how">Qwen3-VL: not badly broken</span></span><span class="val" id="v2"></span></div>
+  <div class="chk s" data-at="9.6" id="c3" style="top:610px"><span class="no">3</span><span class="wh"><span class="what">Locate</span><span class="how">MaskIoU with the pseudo GT</span></span><span class="val" id="v3"></span></div>
+  <div class="s" data-at="10.0" id="fscore"><span class="lab">frame score</span><span class="big" id="fsv">0.00</span><span class="note" id="fsn"></span></div>
+  <div class="img white s" data-at="10.2" style="left:1130px;top:450px;width:686px;height:236px"><svg id="bars" width="686" height="236" viewBox="0 0 686 236"></svg></div>
+  <div class="chips s" data-at="16.6" style="left:1130px;top:698px;width:686px">
+    <div class="chip"><div class="k">D (detected)</div><div class="v" id="v-d"></div></div>
+    <div class="chip"><div class="k">R (recognized)</div><div class="v" id="v-r"></div></div>
+    <div class="chip"><div class="k">cMaskIoU</div><div class="v" id="v-c"></div></div>
+    <div class="chip main"><div class="k">R·cMaskIoU</div><div class="v" id="v-rc"></div></div>
+  </div>
+
+  <svg id="arrows" viewBox="0 0 1840 780">
+    <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94a3b8" stroke="none"/></marker></defs>
+    <path class="s" data-at="1.6" d="M513 152 H543" marker-end="url(#ah)"/>
+    <path class="s" data-at="2.2" d="M665 152 H691" marker-end="url(#ah)"/>
+    <path class="s" data-at="3.7" d="M981 152 H1052" marker-end="url(#ah)"/>
+    <path class="s" data-at="4.2" d="M1166 152 H1190" marker-end="url(#ah)"/>
+    <path class="s" data-at="5.0" d="M1490 142 H1506" marker-end="url(#ah)"/>
+    <path class="s" data-at="7.9" d="M837 280 V380 H71 V454" marker-end="url(#ah)"/>
+    <path class="s" data-at="8.4" d="M129 575 H148" marker-end="url(#ah)"/>
+    <path class="s" data-at="9.0" d="M558 575 H592" marker-end="url(#ah)"/>
+    <path class="s" data-at="10.2" d="M1090 575 H1124" marker-end="url(#ah)"/>
+  </svg>
+
+  <div id="ctl">
+    <button id="b-play" type="button" aria-label="Replay the animation"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z" fill="currentColor"/></svg>Replay</button>
+    <span class="sep"></span>
+    <button type="button" data-stage="0" data-end="3.0">Generate</button>
+    <button type="button" data-stage="1" data-end="7.2">1 Camera</button>
+    <button type="button" data-stage="2" data-end="17.2">2 Object</button>
+  </div>
+</div>
+
+<script src="metrics/data.js"></script>
+<script>
+(function () {
+  const stage = document.getElementById("stage");
+  function fit() { stage.style.transform = "scale(" + (window.innerWidth / 1840) + ")"; }
+  window.addEventListener("resize", fit); fit();
+  const $ = (id) => document.getElementById(id);
+  const NS = "http://www.w3.org/2000/svg";
+  const mk = (svg, tag, attrs, txt) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (txt != null) e.textContent = txt; svg.appendChild(e); return e; };
+  const M = window.METRIC_FIG, N = M.n;
+
+  // ---- staged reveal ------------------------------------------------------------------------------------------
+  const items = Array.from(document.querySelectorAll(".s")).map((el) => ({ el, at: parseFloat(el.dataset.at) }));
+  const stages = Array.from(document.querySelectorAll("[data-stage]"));
+  const STARTS = [0, 3.4, 7.6], T_BARS = 10.2, T_ALL = 16.6;
+  let t0 = null, elapsed = 0, playing = false;
+  function apply() {
+    items.forEach((o) => o.el.classList.toggle("off", elapsed < o.at));
+    let cur = 0; STARTS.forEach((s, i) => { if (elapsed >= s) cur = i; });
+    stages.forEach((b, i) => b.classList.toggle("on", playing ? i === cur : false));
+  }
+  function play(from) { elapsed = from || 0; t0 = performance.now() - elapsed * 1000; playing = true; seen.clear(); apply(); }
+  $("b-play").addEventListener("click", () => play(0));
+  stages.forEach((b) => b.addEventListener("click", () => {
+    playing = false; elapsed = parseFloat(b.dataset.end); apply();
+    stages.forEach((x) => x.classList.toggle("on", x === b));
+  }));
+
+  // ---- videos (all 45 frames at 15 fps, shown at half speed, kept in step); the frame index drives everything ----
+  const vids = Array.from(document.querySelectorAll("video"));
+  vids.forEach((v) => { v.playbackRate = 0.5; v.defaultPlaybackRate = 0.5; });
+  const clockVid = $("ov");
+  function startVids() { vids.forEach((v) => { v.currentTime = 0; const p = v.play(); if (p && p.catch) p.catch(() => {}); }); }
+  const frameNow = () => Math.floor((clockVid.currentTime || 0) * 15 + 1e-6) % N;
+
+  // ---- top views: subject in the middle, source camera below, the target turns 120 degrees to the left -----------
+  // a camera sits on the circle at the angle it has turned (yaw relative to frame 0, the rotation RotErr compares)
+  function topView(svg, cx, cy, rr, camSize) {
+    const pt = (deg, r) => { const a = Math.PI + deg * Math.PI / 180; return [cx + (r || rr) * Math.sin(a), cy - (r || rr) * Math.cos(a)]; };
+    const cam = (deg) => {
+      const [x, y] = pt(deg), dx = cx - x, dy = cy - y, L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L, d = camSize, w = camSize * 0.5;
+      return [[x, y], [x + ux * d - uy * w, y + uy * d + ux * w], [x + ux * d + uy * w, y + uy * d - ux * w]].map((q) => q[0].toFixed(1) + "," + q[1].toFixed(1)).join(" ");
+    };
+    const path = (arr, n) => "M" + arr.slice(0, n + 1).map((v) => pt(v).map((q) => q.toFixed(1)).join(" ")).join(" L");
+    return { pt, cam, path };
+  }
+  // small sketch in the generate panel: the whole target trajectory
+  (function () {
+    const svg = $("tgt"), T = topView(svg, 80, 74, 52, 20);
+    mk(svg, "circle", { cx: 80, cy: 74, r: 13, fill: "#e2e8f0", stroke: "#94a3b8", "stroke-width": 2 });
+    mk(svg, "path", { d: T.path(M.target_turn, N - 1), fill: "none", stroke: "#dc2626", "stroke-width": 4, "stroke-linecap": "round" });
+    mk(svg, "polygon", { points: T.cam(0), fill: "rgba(37,99,235,0.18)", stroke: "#2563eb", "stroke-width": 2.5, "stroke-linejoin": "round" });
+    mk(svg, "polygon", { points: T.cam(M.target_turn[N - 1]), fill: "rgba(220,38,38,0.15)", stroke: "#dc2626", "stroke-width": 2.5, "stroke-linejoin": "round" });
+    mk(svg, "text", { x: 80, y: 152, fill: "#2563eb", "font-size": 15, "font-weight": 700, "text-anchor": "middle" }, "source");
+    const e = T.pt(M.target_turn[N - 1], 52);
+    mk(svg, "text", { x: e[0] - 4, y: e[1] - 22, fill: "#dc2626", "font-size": 15, "font-weight": 700, "text-anchor": "middle" }, "target");
+  })();
+  // camera panel: target (red, dashed) against the camera ViPE recovers from the generated video (blue)
+  const sk = (function () {
+    const svg = $("sk"), T = topView(svg, 156, 128, 92, 30);
+    mk(svg, "text", { x: 14, y: 26, fill: "#475569", "font-size": 18, "font-weight": 700 }, "top view");
+    mk(svg, "path", { d: T.path(M.target_turn, N - 1), fill: "none", stroke: "#dc2626", "stroke-width": 4, "stroke-dasharray": "10 8", "stroke-linecap": "round" });
+    mk(svg, "path", { d: T.path(M.rec_turn, N - 1), fill: "none", stroke: "#2563eb", "stroke-width": 4, "stroke-linecap": "round", opacity: 0.22 });
+    const recPath = mk(svg, "path", { d: "M0 0", fill: "none", stroke: "#2563eb", "stroke-width": 5, "stroke-linecap": "round", "stroke-linejoin": "round" });
+    mk(svg, "circle", { cx: 156, cy: 128, r: 17, fill: "#e2e8f0", stroke: "#94a3b8", "stroke-width": 2 });
+    mk(svg, "text", { x: 184, y: 230, fill: "#2563eb", "font-size": 17, "font-weight": 700 }, "source");
+    const tc = mk(svg, "polygon", { points: T.cam(0), fill: "rgba(220,38,38,0.15)", stroke: "#dc2626", "stroke-width": 3, "stroke-linejoin": "round" });
+    const rc = mk(svg, "polygon", { points: T.cam(0), fill: "rgba(37,99,235,0.85)", stroke: "#2563eb", "stroke-width": 3, "stroke-linejoin": "round" });
+    const lg = (y, color, dash, label) => {
+      mk(svg, "path", { d: `M16 ${y} H52`, stroke: color, "stroke-width": 4, "stroke-dasharray": dash, "stroke-linecap": "round" });
+      mk(svg, "text", { x: 60, y: y + 6, fill: "#475569", "font-size": 17 }, label);
+    };
+    lg(252, "#dc2626", "8 6", "target");
+    lg(276, "#2563eb", "none", "recovered by ViPE");
+    return (k) => { recPath.setAttribute("d", T.path(M.rec_turn, k)); tc.setAttribute("points", T.cam(M.target_turn[k])); rc.setAttribute("points", T.cam(M.rec_turn[k])); };
+  })();
+  // per-frame rotation error with its mean (= RotErr of the case)
+  const rotChart = (function () {
+    const svg = $("rot"), L = 44, R = 292, TOP = 40, BOT = 140, YMAX = 30;
+    const x = (i) => L + (R - L) * i / (N - 1), y = (v) => BOT - (BOT - TOP) * Math.min(v, YMAX) / YMAX;
+    mk(svg, "text", { x: 12, y: 24, fill: "#475569", "font-size": 18, "font-weight": 700 }, "rotation error per frame");
+    [0, 15, 30].forEach((v) => {
+      mk(svg, "line", { x1: L, x2: R, y1: y(v), y2: y(v), stroke: "#e2e8f0", "stroke-width": 1.5 });
+      mk(svg, "text", { x: L - 8, y: y(v) + 6, fill: "#94a3b8", "font-size": 15, "text-anchor": "end" }, v + "°");
+    });
+    mk(svg, "text", { x: L, y: 160, fill: "#94a3b8", "font-size": 15 }, "frame 0");
+    mk(svg, "text", { x: R, y: 160, fill: "#94a3b8", "font-size": 15, "text-anchor": "end" }, "44");
+    mk(svg, "path", { d: "M" + M.rot_err.map((v, i) => x(i).toFixed(1) + " " + y(v).toFixed(1)).join(" L"), fill: "none", stroke: "#2563eb", "stroke-width": 3, "stroke-linejoin": "round" });
+    const ym = y(M.RotErr);
+    mk(svg, "line", { x1: L, x2: R, y1: ym, y2: ym, stroke: "#dc2626", "stroke-width": 2.5, "stroke-dasharray": "8 6" });
+    mk(svg, "text", { x: L + 6, y: ym - 8, fill: "#dc2626", "font-size": 16, "font-weight": 700 }, "mean " + M.RotErr.toFixed(1) + "°");
+    const dot = mk(svg, "circle", { cx: x(0), cy: y(0), r: 6, fill: "#2563eb", stroke: "#fff", "stroke-width": 2 });
+    return (k) => { dot.setAttribute("cx", x(k)); dot.setAttribute("cy", y(M.rot_err[k])); };
+  })();
+  $("v-rot").textContent = M.RotErr.toFixed(1) + "°";
+  $("v-trans").textContent = M.TransErr.toFixed(3);
+
+  // ---- object fidelity: per-frame checks and score bars -------------------------------------------------------
+  const OK = '<svg width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="#16a34a"/><path d="M9 15.5 L13.5 20 L21.5 10.5" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const NO = '<svg width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="#dc2626"/><path d="M10 10 L20 20 M20 10 L10 20" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/></svg>';
+  const bars = $("bars"), BL = 40, BW = 8, PITCH = 12.4, BASE = 186, HMAX = 150, BR = BL + PITCH * N;
+  mk(bars, "text", { x: 12, y: 24, fill: "#475569", "font-size": 18, "font-weight": 700 }, "score per frame: MaskIoU if recognized, else 0");
+  [0, 0.5, 1].forEach((v) => {
+    mk(bars, "line", { x1: BL, x2: BR, y1: BASE - v * HMAX, y2: BASE - v * HMAX, stroke: v ? "#e2e8f0" : "#cbd5e1", "stroke-width": v ? 1.5 : 2 });
+    mk(bars, "text", { x: BL - 8, y: BASE - v * HMAX + 5, fill: "#94a3b8", "font-size": 15, "text-anchor": "end" }, v.toFixed(1));
+  });
+  mk(bars, "text", { x: BL, y: 226, fill: "#94a3b8", "font-size": 15 }, "frame 0");
+  mk(bars, "text", { x: BR, y: 226, fill: "#94a3b8", "font-size": 15, "text-anchor": "end" }, "44");
+  const barEls = [];
+  for (let i = 0; i < N; i++) {
+    const sc = M.rec[i] ? M.iou[i] : 0, xx = BL + 2 + i * PITCH;
+    const r = mk(bars, "rect", { x: xx, y: BASE - sc * HMAX, width: BW, height: Math.max(0.01, sc * HMAX), rx: 3, fill: "#94a3b8" });
+    const m = M.rec[i] ? null : mk(bars, "text", { x: xx + BW / 2, y: BASE + 17, fill: "#dc2626", "font-size": 15, "font-weight": 700, "text-anchor": "middle" }, "✕");
+    barEls.push({ r, m });
+  }
+  const ym = BASE - M.RcIoU * HMAX;
+  const meanL = mk(bars, "line", { x1: BL, x2: BR + 8, y1: ym, y2: ym, stroke: "#dc2626", "stroke-width": 2.5, "stroke-dasharray": "8 6" });
+  const meanT = mk(bars, "text", { x: BR + 14, y: ym - 4, fill: "#dc2626", "font-size": 16, "font-weight": 700 });
+  [["mean", 0], [M.RcIoU.toFixed(2), 22]].forEach(([t, dy]) => mk(meanT, "tspan", { x: BR + 14, dy: dy ? 22 : 0, "font-size": dy ? 22 : 16 }, t));
+  const brokenT = mk(bars, "text", { x: 674, y: 24, fill: "#dc2626", "font-size": 16, "font-weight": 700, "text-anchor": "end" }, "✕ broken");
+  $("v-d").textContent = M.D.toFixed(2); $("v-r").textContent = M.R.toFixed(2);
+  $("v-c").textContent = M.cIoU.toFixed(2); $("v-rc").textContent = M.RcIoU.toFixed(2);
+  const seen = new Set();
+  let lastK = -1, lastAll = null;
+  function fidelity(k) {
+    const all = elapsed >= T_ALL;
+    if (elapsed >= T_BARS) seen.add(k);
+    if (k === lastK && all === lastAll) return;
+    lastK = k; lastAll = all;
+    $("fpill").textContent = "frame " + k;
+    const d = M.det[k], r = M.rec[k], iou = M.iou[k];
+    $("v1").className = "val " + (d ? "ok" : "bad"); $("v1").innerHTML = (d ? OK : NO) + (d ? "found" : "lost");
+    $("v2").className = "val " + (r ? "ok" : "bad"); $("v2").innerHTML = (r ? OK : NO) + (r ? "intact" : "broken");
+    $("v3").className = "val"; $("v3").textContent = "IoU " + iou.toFixed(2);
+    $("c3").classList.toggle("dim", !r);
+    $("fsv").textContent = (r ? iou : 0).toFixed(2); $("fsv").className = "big" + (r ? "" : " zero");
+    $("fsn").textContent = r ? "= MaskIoU" : "not recognized";
+    barEls.forEach((b, i) => {
+      const on = all || seen.has(i);
+      b.r.setAttribute("opacity", on ? 1 : 0); b.r.setAttribute("fill", i === k ? "#0f172a" : "#94a3b8");
+      if (b.m) b.m.setAttribute("opacity", on ? 1 : 0);
+    });
+    [meanL, meanT].forEach((e) => e.setAttribute("opacity", all ? 1 : 0));
+    brokenT.setAttribute("opacity", seen.size || all ? 1 : 0);
+  }
+
+  // ---- loop: only while the figure is on screen --------------------------------------------------------------
+  let visible = false, started = false;
+  function tick(now) {
+    if (playing) { elapsed = (now - t0) / 1000; if (elapsed > 17.4) { playing = false; elapsed = 99; } apply(); }
+    if (visible) { const k = frameNow(); sk(k); rotChart(k); fidelity(k); }
+    requestAnimationFrame(tick);
+  }
+  const io = new IntersectionObserver((es) => {
+    visible = es.some((x) => x.isIntersecting);
+    if (visible && !started) { started = true; startVids(); play(0); }
+    vids.forEach((v) => { if (visible) { const p = v.play(); if (p && p.catch) p.catch(() => {}); } else v.pause(); });
+  }, { threshold: 0.25 });
+  io.observe(stage);
+  elapsed = 0; apply(); sk(0); rotChart(0); fidelity(0);
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
