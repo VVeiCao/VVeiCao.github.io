@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RetakeBench construction pipeline (animated)</title>
+<link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,600,700|Noto+Sans:400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  /* Animated version of the construction-pipeline figure, embedded with an <iframe> on the project page and the
+     supplementary page. Design canvas 1840 x 860 (figure 780 + controls), scaled to the frame width. Colours follow
+     the page (--text, --text-dim, --accent-*). Works from file:// (no fetch; scripts by <script src>). */
+  :root { --text: #0f172a; --dim: #475569; --mute: #94a3b8; --panel: #f1f5f9; --line: #e2e8f0;
+          --red: #dc2626; --blue: #2563eb; --green: #059669; }
+  html, body { margin: 0; padding: 0; background: #ffffff; overflow: hidden; }
+  body { font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--text); }
+  #stage { position: absolute; left: 0; top: 0; width: 1840px; height: 860px; transform-origin: 0 0; }
+  .panel { position: absolute; border-radius: 18px; background: var(--panel); }
+  .ptitle { position: absolute; left: 22px; top: 12px; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 32px; font-weight: 700; white-space: nowrap; }
+  .ptitle .n { color: var(--red); margin-right: 10px; }
+  .img { position: absolute; border-radius: 8px; overflow: hidden; background: #e2e8f0; }
+  .img video, .img canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .white { background: #ffffff; }
+  .cap { position: absolute; font-size: 26px; color: var(--dim); text-align: center; white-space: nowrap; }
+  .blk { position: absolute; border-radius: 12px; color: #fff; font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 28px; font-weight: 700;
+         display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.15; box-shadow: 6px 6px 0 rgba(15,23,42,0.08); }
+  #gt-frame { position: absolute; left: 1572px; top: 526px; width: 252px; height: 150px; border-radius: 10px; border: 5px solid var(--red); box-sizing: border-box; }
+  #gt-lab { position: absolute; left: 1620px; top: 684px; padding: 3px 14px; border-radius: 999px; background: var(--red); color: #fff;
+            font-family: 'Google Sans', 'Noto Sans', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: 0.06em; }
+  #arrows { position: absolute; left: 0; top: 0; width: 1840px; height: 780px; overflow: visible; pointer-events: none; }
+  #arrows path { fill: none; stroke: #94a3b8; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+  /* staged reveal */
+  .s { transition: opacity 0.45s ease, transform 0.45s ease; }
+  .s.off { opacity: 0; transform: translateY(10px); }
+  /* controls */
+  #ctl { position: absolute; left: 0; top: 800px; width: 1840px; height: 56px; display: flex; align-items: center; gap: 14px; }
+  #ctl button { font: inherit; font-size: 24px; border: 1.5px solid var(--line); background: #fff; color: var(--dim); border-radius: 999px;
+                padding: 6px 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; }
+  #ctl button:hover { border-color: var(--mute); color: var(--text); }
+  #ctl button.on { border-color: var(--red); color: var(--red); background: #fef2f2; }
+  #ctl button:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+  #ctl .sep { flex: 1; }
+  @media (prefers-reduced-motion: reduce) { .s { transition: none; } }
+</style>
+</head>
+<body>
+<div id="stage">
+  <!-- 1 complete the subject -->
+  <div class="panel s" data-at="0.3" style="left:0;top:0;width:1120px;height:365px"><div class="ptitle"><span class="n">1</span>Complete the subject</div></div>
+  <div class="img s" data-at="0.7" style="left:30px;top:90px;width:300px;height:173px"><video src="pipeline/object.mp4" muted playsinline loop preload="auto"></video></div>
+  <div class="cap s" data-at="0.7" style="left:30px;top:270px;width:300px">masked subject</div>
+  <div class="blk s" data-at="1.4" style="left:370px;top:78px;width:118px;height:196px;background:#7c3aed">SV4D<br>2.0</div>
+  <div class="img white s" data-at="2.0" style="left:526px;top:50px;width:126px;height:126px"><video src="pipeline/sv4d_v1.mp4" muted playsinline loop preload="auto"></video></div>
+  <div class="img white s" data-at="2.0" style="left:660px;top:50px;width:126px;height:126px"><video src="pipeline/sv4d_v2.mp4" muted playsinline loop preload="auto"></video></div>
+  <div class="img white s" data-at="2.0" style="left:526px;top:184px;width:126px;height:126px"><video src="pipeline/sv4d_v3.mp4" muted playsinline loop preload="auto"></video></div>
+  <div class="img white s" data-at="2.0" style="left:660px;top:184px;width:126px;height:126px"><video src="pipeline/sv4d_v4.mp4" muted playsinline loop preload="auto"></video></div>
+  <div class="cap s" data-at="2.0" style="left:526px;top:316px;width:260px">4 new views</div>
+  <div class="blk s" data-at="3.0" style="left:824px;top:78px;width:104px;height:196px;background:#0d9488">VGGT</div>
+  <div class="img white s" data-at="3.5" style="left:952px;top:50px;width:156px;height:260px"><canvas id="cA" width="312" height="520"></canvas></div>
+  <div class="cap s" data-at="3.5" style="left:910px;top:316px;width:240px">complete subject</div>
+  <!-- 2 reconstruct the background -->
+  <div class="panel s" data-at="4.8" style="left:1150px;top:0;width:690px;height:365px"><div class="ptitle"><span class="n">2</span>Reconstruct the background</div></div>
+  <div class="img s" data-at="5.1" style="left:1180px;top:90px;width:280px;height:161px"><video src="pipeline/source.mp4" muted playsinline loop preload="auto"></video></div>
+  <div class="cap s" data-at="5.1" style="left:1180px;top:270px;width:280px">source video</div>
+  <div class="blk s" data-at="5.7" style="left:1500px;top:78px;width:104px;height:196px;background:#475569">ViPE</div>
+  <div class="img white s" data-at="6.2" style="left:1634px;top:50px;width:186px;height:260px"><canvas id="cB" width="372" height="520"></canvas></div>
+  <div class="cap s" data-at="6.2" style="left:1597px;top:316px;width:260px">points + <b style="color:var(--blue)">cameras</b></div>
+  <!-- 3 merge -->
+  <div class="panel s" data-at="8.0" style="left:0;top:395px;width:670px;height:385px"><div class="ptitle"><span class="n">3</span>Merge into one 4D scene</div></div>
+  <div class="img white s" data-at="8.3" style="left:24px;top:446px;width:622px;height:316px"><canvas id="cC" width="1244" height="632"></canvas></div>
+  <!-- 4 render along the target trajectory -->
+  <div class="panel s" data-at="11.4" style="left:700px;top:395px;width:1140px;height:385px"><div class="ptitle"><span class="n">4</span>Render along the <span style="color:var(--red)">target trajectory</span></div></div>
+  <div class="img s" data-at="11.8" style="left:728px;top:450px;width:250px;height:144px"><video src="pipeline/depth.mp4" muted playsinline loop preload="auto"></video></div>
+  <div class="cap s" data-at="11.8" style="left:728px;top:596px;width:250px">depth</div>
+  <div class="img s" data-at="11.8" style="left:728px;top:630px;width:250px;height:120px"><video src="pipeline/mask.mp4" muted playsinline loop preload="auto"></video></div>
+  <div class="cap s" data-at="11.8" style="left:990px;top:640px;width:200px;text-align:left">rough mask</div>
+  <div class="blk s" data-at="12.7" style="left:1018px;top:450px;width:118px;height:144px;background:#ea580c">Wan2.2<br>VACE</div>
+  <div class="img s" data-at="13.2" style="left:1174px;top:450px;width:250px;height:144px"><video src="pipeline/vace.mp4" muted playsinline loop preload="auto"></video></div>
+  <div class="cap s" data-at="13.2" style="left:1174px;top:596px;width:250px">synthesized view</div>
+  <div class="blk s" data-at="14.2" style="left:1450px;top:490px;width:94px;height:220px;background:#059669">SAM 3</div>
+  <div class="img s" data-at="14.8" style="left:1577px;top:531px;width:242px;height:140px"><video src="pipeline/pseudo_gt.mp4" muted playsinline loop preload="auto"></video></div>
+  <div id="gt-frame" class="s" data-at="15.4"></div>
+  <div id="gt-lab" class="s" data-at="15.4">PSEUDO GT</div>
+
+  <svg id="arrows" viewBox="0 0 1840 780">
+    <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94a3b8" stroke="none"/></marker></defs>
+    <path class="s" data-at="1.4" d="M334 176 H364" marker-end="url(#ah)"/>
+    <path class="s" data-at="2.0" d="M492 176 H520" marker-end="url(#ah)"/>
+    <path class="s" data-at="3.0" d="M790 176 H818" marker-end="url(#ah)"/>
+    <path class="s" data-at="3.5" d="M932 176 H948" marker-end="url(#ah)"/>
+    <path class="s" data-at="5.7" d="M1464 176 H1494" marker-end="url(#ah)"/>
+    <path class="s" data-at="6.2" d="M1608 176 H1630" marker-end="url(#ah)"/>
+    <path class="s" data-at="7.7" d="M560 365 V440" marker-end="url(#ah)"/>
+    <path class="s" data-at="7.7" d="M1495 365 V380 H560"/>
+    <path class="s" data-at="11.8" d="M650 600 H722" marker-end="url(#ah)"/>
+    <path class="s" data-at="12.7" d="M982 522 H1012" marker-end="url(#ah)"/>
+    <path class="s" data-at="13.2" d="M1140 522 H1168" marker-end="url(#ah)"/>
+    <path class="s" data-at="14.2" d="M1428 522 H1444" marker-end="url(#ah)"/>
+    <path class="s" data-at="14.2" d="M982 690 H1444" marker-end="url(#ah)"/>
+    <path class="s" data-at="14.8" d="M1548 601 H1566" marker-end="url(#ah)"/>
+  </svg>
+
+  <div id="ctl">
+    <button id="b-play" type="button" aria-label="Replay the animation"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z" fill="currentColor"/></svg>Replay</button>
+    <span class="sep"></span>
+    <button type="button" data-stage="0" data-end="4.6">1 Complete</button>
+    <button type="button" data-stage="1" data-end="7.0">2 Background</button>
+    <button type="button" data-stage="2" data-end="11.2">3 Merge</button>
+    <button type="button" data-stage="3" data-end="16.0">4 Render</button>
+  </div>
+</div>
+
+<script src="../lib/three.min.js"></script>
+<script src="../clouds/cow.js"></script>
+<script>
+(function () {
+  const stage = document.getElementById("stage");
+  function fit() { stage.style.transform = "scale(" + (window.innerWidth / 1840) + ")"; }
+  window.addEventListener("resize", fit); fit();
+
+  // ---- staged reveal ------------------------------------------------------------------------------------------
+  const items = Array.from(document.querySelectorAll(".s")).map((el) => ({ el, at: parseFloat(el.dataset.at) }));
+  const stages = Array.from(document.querySelectorAll("[data-stage]"));
+  const STARTS = [0, 4.8, 7.7, 11.4];
+  let t0 = null, elapsed = 0, playing = false;
+  function apply() {
+    items.forEach((o) => o.el.classList.toggle("off", elapsed < o.at));
+    let cur = 0; STARTS.forEach((s, i) => { if (elapsed >= s) cur = i; });
+    stages.forEach((b, i) => b.classList.toggle("on", playing ? i === cur : false));
+  }
+  function play(from) { elapsed = from || 0; t0 = performance.now() - elapsed * 1000; playing = true; apply(); }
+  document.getElementById("b-play").addEventListener("click", () => play(0));
+  stages.forEach((b) => b.addEventListener("click", () => {
+    playing = false; elapsed = parseFloat(b.dataset.end); apply();
+    stages.forEach((x) => x.classList.toggle("on", x === b));
+  }));
+
+  // ---- videos (all 45 frames at 15 fps, shown at half speed, kept in step) -------------------------------------
+  const vids = Array.from(document.querySelectorAll("video"));
+  vids.forEach((v) => { v.playbackRate = 0.5; v.defaultPlaybackRate = 0.5; });
+  const clockVid = vids[0];
+  function startVids() { vids.forEach((v) => { v.currentTime = 0; const p = v.play(); if (p && p.catch) p.catch(() => {}); }); }
+
+  // ---- point clouds (the supplementary viewer's cow.js) ---------------------------------------------------------
+  const J = window.SCENE_CLOUDS && window.SCENE_CLOUDS["cow"];
+  let render = () => {};
+  if (window.THREE && J) {
+    const C = J.meta, bin = atob(J.data), u8 = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    const buf = u8.buffer, lo = C.lo, hi = C.hi, N = C.frames, R = C.radius;
+    const sec = (s) => {
+      const q = new Int16Array(buf.slice(s.pos, s.pos + s.n * 6)), pos = new Float32Array(s.n * 3);
+      for (let i = 0; i < s.n * 3; i++) { const a = i % 3, v = lo[a] + (q[i] + 32768) / 65535 * (hi[a] - lo[a]); pos[i] = a === 0 ? v : -v; }
+      return { pos, rgb: new Uint8Array(buf.slice(s.rgb, s.rgb + s.n * 3)) };
+    };
+    const bg = sec(C.sections[0]), fgs = C.sections.slice(1).map(sec);
+    const conv = (p) => new THREE.Vector3(p[0], -p[1], -p[2]);
+    const nMax = Math.max(...fgs.map((f) => f.pos.length / 3));
+    const cen = (arr) => { const c = new THREE.Vector3(); for (let i = 0; i < arr.length; i += 3) { c.x += arr[i]; c.y += arr[i + 1]; c.z += arr[i + 2]; } return c.multiplyScalar(3 / arr.length); };
+    const fcs = fgs.map((f) => cen(f.pos)), fc = fcs[0], bc = cen(bg.pos);
+    const SEG = [[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [2, 3], [3, 4], [4, 1]];
+    function view(id) {
+      const cv = document.getElementById(id), r = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+      r.setPixelRatio(1); r.setSize(cv.width, cv.height, false); r.setClearColor(0xffffff);
+      return { r, scene: new THREE.Scene(), cam: new THREE.PerspectiveCamera(40, cv.width / cv.height, R * 0.01, R * 100) };
+    }
+    function fgGeom(scene, size) {
+      const g = new THREE.BufferGeometry();
+      g.setAttribute("position", new THREE.BufferAttribute(new Float32Array(nMax * 3), 3));
+      g.setAttribute("color", new THREE.BufferAttribute(new Uint8Array(nMax * 3), 3, true));
+      const p = new THREE.Points(g, new THREE.PointsMaterial({ size, vertexColors: true })); p.frustumCulled = false; scene.add(p);
+      return g;
+    }
+    function setFg(g, k) {
+      const s = fgs[k]; g.attributes.position.array.set(s.pos); g.attributes.color.array.set(s.rgb);
+      g.setDrawRange(0, s.pos.length / 3); g.attributes.position.needsUpdate = g.attributes.color.needsUpdate = true;
+    }
+    function bgPts(scene, size) {
+      const g = new THREE.BufferGeometry();
+      g.setAttribute("position", new THREE.BufferAttribute(bg.pos, 3)); g.setAttribute("color", new THREE.BufferAttribute(bg.rgb, 3, true));
+      scene.add(new THREE.Points(g, new THREE.PointsMaterial({ size, vertexColors: true })));
+    }
+    function frustum(scene, color) {
+      const l = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color }));
+      l.geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(16 * 3), 3)); l.frustumCulled = false; scene.add(l);
+      return l;
+    }
+    function setFrustum(l, pts, s) {
+      const p = pts.map(conv), a = l.geometry.attributes.position, c = p[0];
+      for (let i = 1; i < 5; i++) p[i] = c.clone().add(p[i].clone().sub(c).multiplyScalar(s));
+      SEG.forEach((g, i) => { p[g[0]].toArray(a.array, i * 6); p[g[1]].toArray(a.array, i * 6 + 3); }); a.needsUpdate = true;
+    }
+    const A = view("cA"), gA = fgGeom(A.scene, R * 0.03);
+    const B = view("cB"); bgPts(B.scene, R * 0.035); const fB = frustum(B.scene, 0x2563eb);
+    const Cv = view("cC"), gC = fgGeom(Cv.scene, R * 0.03); bgPts(Cv.scene, R * 0.032);
+    const fCs = frustum(Cv.scene, 0x2563eb), fCn = frustum(Cv.scene, 0xdc2626);
+    const curve = new THREE.CatmullRomCurve3(C.tgt.map((f) => conv(f[0])));
+    const arc = new THREE.Mesh(new THREE.TubeGeometry(curve, 200, R * 0.009, 8, false), new THREE.MeshBasicMaterial({ color: 0xdc2626 }));
+    Cv.scene.add(arc);
+    const src0 = conv(C.src[0][0]), arcMid = conv(C.tgt[Math.floor(N / 2)][0]), cow = conv(C.target);
+    const az0 = Math.atan2(src0.x - fc.x, src0.z - fc.z);
+    const lookC = new THREE.Vector3(cow.x * 0.55 + arcMid.x * 0.45 + 0.05, -0.03, cow.z * 0.6 + arcMid.z * 0.4);
+    const ease = (x) => (x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x));
+    render = (wall, e) => {
+      const k = Math.floor((clockVid.currentTime || 0) * 15 + 1e-6) % N;
+      setFg(gA, k);
+      const az = az0 + 2 * Math.PI * (wall / 9), ck = fcs[k];
+      A.cam.position.set(ck.x + Math.sin(az) * R * 2.2, ck.y + R * 0.45, ck.z + Math.cos(az) * R * 2.2);
+      A.cam.lookAt(ck); A.r.render(A.scene, A.cam);
+      setFrustum(fB, C.src[k], 3.0);
+      const bz = az0 + THREE.MathUtils.degToRad(20 - 10 * Math.sin(wall / 6));
+      B.cam.position.set(bc.x + Math.sin(bz) * R * 2.0, bc.y + R * 2.6, bc.z + Math.cos(bz) * R * 2.0);
+      B.cam.lookAt(bc); B.r.render(B.scene, B.cam);
+      setFg(gC, k); setFrustum(fCs, C.src[k], 2.4);
+      const grow = ease((e - 9.0) / 2.0);
+      arc.geometry.setDrawRange(0, Math.floor(grow * 200) * 48);
+      fCn.visible = e >= 11.2; if (fCn.visible) setFrustum(fCn, C.tgt[k], 2.4);
+      const EL = THREE.MathUtils.degToRad(55), cz = THREE.MathUtils.degToRad(10 - 8 * Math.sin(wall / 8));
+      Cv.cam.position.set(lookC.x + Math.sin(cz) * Math.cos(EL) * 1.45, lookC.y + Math.sin(EL) * 1.45, lookC.z + Math.cos(cz) * Math.cos(EL) * 1.45);
+      Cv.cam.lookAt(lookC); Cv.r.render(Cv.scene, Cv.cam);
+    };
+  }
+
+  // ---- loop: only while the figure is on screen --------------------------------------------------------------
+  let visible = false, started = false;
+  function tick(now) {
+    if (playing) { elapsed = (now - t0) / 1000; if (elapsed > 16.2) { playing = false; elapsed = 99; } apply(); }
+    if (visible) render(now / 1000, elapsed);
+    requestAnimationFrame(tick);
+  }
+  const io = new IntersectionObserver((es) => {
+    visible = es.some((x) => x.isIntersecting);
+    if (visible && !started) { started = true; startVids(); play(0); }
+    vids.forEach((v) => { if (visible) { const p = v.play(); if (p && p.catch) p.catch(() => {}); } else v.pause(); });
+  }, { threshold: 0.25 });
+  io.observe(stage);
+  elapsed = 0; apply();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
