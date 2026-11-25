@@ -1984,7 +1984,14 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
 .qualitative-progress-copy small { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .ftb-logo { display: block; width: 210px; height: auto; margin: -18px auto 6px; }
-.publication-links { margin: 14px 0 22px; }
+.publication-links { margin: 14px 0 22px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.link-button.is-soon { background: #c9cbd1; cursor: default; } .link-button.is-soon:hover { background: #c9cbd1; }
+.ftb-bib { width: min(100% - 32px, 900px); margin: 0 auto; }
+.ftb-bib h2 { margin: 0 0 14px; text-align: center; font-family: "Google Sans", "Noto Sans", sans-serif; font-size: 32px; font-weight: 600; letter-spacing: -0.025em; }
+.ftb-bib-block { position: relative; border: 1px solid var(--paper-line); border-radius: 8px; background: var(--paper-soft); }
+.ftb-bib-block pre { margin: 0; padding: 18px 20px; overflow-x: auto; font: 13.5px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--paper-ink); background: none; }
+.ftb-bib-copy { position: absolute; top: 10px; right: 10px; padding: 4px 12px; border: 1px solid var(--paper-line); border-radius: 999px; background: #fff; color: var(--paper-muted); font-size: 12.5px; cursor: pointer; }
+.ftb-bib-copy:hover { color: var(--paper-ink); border-color: var(--paper-ink); }
 .link-button { display: inline-block; padding: 7px 20px; border-radius: 999px; background: #22232b; color: #fff; font-size: 15px; font-weight: 600; text-decoration: none; }
 .link-button:hover { background: #4338ca; }
 .publication-authors a { color: #2f5fa7; text-decoration: none; }
@@ -2087,7 +2094,7 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
       <span class="author-block"><a href="https://yaoyaoliu.web.illinois.edu/">Yaoyao Liu</a><sup>2</sup></span></div>
     <div class="publication-authors ftb-affil"><span class="author-block"><sup>1</sup>Stability AI</span> <span class="author-block"><sup>2</sup>University of Illinois at Urbana-Champaign</span></div>
     <div class="ftb-logos"><a href="https://stability.ai/"><img class="lg-stability" src="/page_FollowTheBlur/assets/brand/stability-ai.svg" alt="Stability AI"></a><a href="https://illinois.edu/"><img class="lg-uiuc" src="/page_FollowTheBlur/assets/brand/uiuc.svg" alt="University of Illinois at Urbana-Champaign"></a></div>
-    <div class="publication-links"><a class="link-button" href="https://github.com/VVeiCao/Follow-the-Blur">Code</a></div>
+    <div class="publication-links"><span class="link-button is-soon" title="Coming soon">arXiv</span><a class="link-button" href="https://github.com/VVeiCao/Follow-the-Blur">Code</a><a class="link-button" href="#video">Video</a><a class="link-button" href="#bibtex">BibTeX</a></div>
   </div>
 </header>
 
@@ -2135,6 +2142,18 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
   </div>
 </section>
 
+<section class="paper-section" id="bibtex" style="order: 8">
+  <div class="ftb-bib"><h2>BibTeX</h2>
+    <div class="ftb-bib-block"><button class="ftb-bib-copy" id="ftbBibCopy" type="button">Copy</button>
+<pre id="ftbBibText">@misc{cao2026followtheblur,
+  title  = {Follow-the-Blur: Training-Free 4D Control of Video World Models},
+  author = {Wei Cao and Vikram Voleti and Hao Zhang and Mallikarjun Byrasandra Ramalinga Reddy and Shimon Vainer and Mark Boss and Yaoyao Liu},
+  year   = {2026},
+}</pre></div></div>
+</section>
+<script>(function () { var b = document.getElementById("ftbBibCopy"), t = document.getElementById("ftbBibText"); if (!b || !t) return;
+  b.addEventListener("click", function () { var done = function (m) { b.textContent = m; setTimeout(function () { b.textContent = "Copy"; }, 1600); };
+    try { navigator.clipboard.writeText(t.innerText).then(function () { done("Copied!"); }, function () { done("Copy failed"); }); } catch (e) { done("Copy failed"); } }); })();</script>
 <footer class="site-footer">All videos are muted and loop; the videos of a case play in step.</footer>
 <script src="/page_FollowTheBlur/web_assets/lib/three.min.js"></script>
 <script src="/page_FollowTheBlur/web_assets/lib/OrbitControls.js"></script>
