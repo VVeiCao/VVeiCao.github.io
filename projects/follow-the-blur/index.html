@@ -2047,14 +2047,6 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
 .ftb-video-wrap video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #000; border-radius: 14px; box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18); }
 .ftb-video-credit { width: min(100% - 32px, 1120px); margin: 10px auto 0; text-align: right; font-size: 12.5px; color: #80868b; }
 /* /ftb-video */
-/* ftb-anim */
-.ftb-anim { width: min(100% - 32px, 1120px); margin: 20px auto 0; }
-.ftb-anim video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #07070c; border-radius: 14px; box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18); }
-.ftb-anim-next { width: min(100% - 32px, 1120px); margin: 34px auto 0; text-align: center; }
-.ftb-affil { margin-top: 4px; font-size: 16px; }
-.ftb-affil .author-block { margin: 0 10px; }
-.publication-authors sup { font-size: 0.68em; margin-left: 1px; }
-/* /ftb-anim */
 /* ftb-rows */
 /* results: the case name sits above its row, the whole width goes to the image, the point cloud and the video */
 #results .case.feature-row { display: block; }
@@ -2074,6 +2066,10 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
 .ftb-logos .lg-stability { height: 34px; }
 @media (max-width: 700px) { .ftb-logos img { height: 36px; } .ftb-logos .lg-stability { height: 26px; } }
 /* /ftb-logos */
+.ftb-affil { margin-top: 4px; font-size: 16px; } .ftb-affil .author-block { margin: 0 10px; } .publication-authors sup { font-size: 0.68em; margin-left: 1px; }
+/* ftb-pipefig */
+.ftb-pipefig { width: min(100% - 32px, 1500px); margin: 22px auto 0; }
+/* /ftb-pipefig */
 </style>
 </head>
 <body>
@@ -2114,39 +2110,13 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
 
 <section class="paper-section" id="method">
   <div class="text-container"><h2 class="section-title">Method</h2>
-    <p class="section-lead">Follow-the-Blur keeps from the 4D control only what it actually specifies, the coarse layout over time, and leaves everything else to the motion prior of a pretrained video world model. Nothing is trained. The method in four steps:</p></div>
-  <div class="ftb-anim"><video autoplay muted loop playsinline preload="metadata" poster="/page_FollowTheBlur/web_assets/video/method_steps_poster.jpg"><source src="/page_FollowTheBlur/web_assets/video/method_steps.mp4" type="video/mp4"></video></div>
-  <p class="section-lead ftb-anim-next">The same steps on four examples:</p>
-  <div class="method-wrap"><div class="method-tabs" role="tablist" aria-label="Example"><button class="method-tab is-active" type="button" data-tab="camel">Camel</button><button class="method-tab" type="button" data-tab="back">Back carry</button><button class="method-tab" type="button" data-tab="tree">Tree climb</button><button class="method-tab" type="button" data-tab="door">Dog and door</button></div><div class="method-steps" data-video-sync data-tab="camel"><div class="method-step"><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/teaser/camel_input.jpg" alt=""></div><div class="method-step-text"><span class="method-step-num">1</span><strong>Input image and 4D control</strong><p>The 4D control moves rigid proxies along coarse 3D trajectories.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/camel__rigid.mp4"></video></div><div class="method-step-text"><span class="method-step-num">2</span><strong>Rigid depth</strong><p>The control is rendered as a depth video. The bodies only slide: nothing bends.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/camel__blur.mp4"></video></div><div class="method-step-text"><span class="method-step-num">3</span><strong>Its blur: the low band</strong><p>Blurred, the render only says where things are and where they go. This is all Stage 1 keeps from it.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/camel__refined.mp4"></video></div><div class="method-step-text"><span class="method-step-num">4</span><strong>Stage 1: refined depth</strong><p>In the early denoising steps the low band follows the blur; the model fills in the high band from its motion prior.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/camel__out.mp4" data-lead></video></div><div class="method-step-text"><span class="method-step-num">5</span><strong>Stage 2: video</strong><p>A depth-conditioned model turns the refined depth into the video.</p></div></div></div><div class="method-steps" data-video-sync data-tab="back" hidden><div class="method-step"><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/teaser/back_input.jpg" alt=""></div><div class="method-step-text"><span class="method-step-num">1</span><strong>Input image and 4D control</strong><p>The 4D control moves rigid proxies along coarse 3D trajectories.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/back__rigid.mp4"></video></div><div class="method-step-text"><span class="method-step-num">2</span><strong>Rigid depth</strong><p>The control is rendered as a depth video. The bodies only slide: nothing bends.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/back__blur.mp4"></video></div><div class="method-step-text"><span class="method-step-num">3</span><strong>Its blur: the low band</strong><p>Blurred, the render only says where things are and where they go. This is all Stage 1 keeps from it.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/back__refined.mp4"></video></div><div class="method-step-text"><span class="method-step-num">4</span><strong>Stage 1: refined depth</strong><p>In the early denoising steps the low band follows the blur; the model fills in the high band from its motion prior.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/back__out.mp4" data-lead></video></div><div class="method-step-text"><span class="method-step-num">5</span><strong>Stage 2: video</strong><p>A depth-conditioned model turns the refined depth into the video.</p></div></div></div><div class="method-steps" data-video-sync data-tab="tree" hidden><div class="method-step"><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/teaser/tree_input.jpg" alt=""></div><div class="method-step-text"><span class="method-step-num">1</span><strong>Input image and 4D control</strong><p>The 4D control moves rigid proxies along coarse 3D trajectories.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/tree__rigid.mp4"></video></div><div class="method-step-text"><span class="method-step-num">2</span><strong>Rigid depth</strong><p>The control is rendered as a depth video. The bodies only slide: nothing bends.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/tree__blur.mp4"></video></div><div class="method-step-text"><span class="method-step-num">3</span><strong>Its blur: the low band</strong><p>Blurred, the render only says where things are and where they go. This is all Stage 1 keeps from it.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/tree__refined.mp4"></video></div><div class="method-step-text"><span class="method-step-num">4</span><strong>Stage 1: refined depth</strong><p>In the early denoising steps the low band follows the blur; the model fills in the high band from its motion prior.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/tree__out.mp4" data-lead></video></div><div class="method-step-text"><span class="method-step-num">5</span><strong>Stage 2: video</strong><p>A depth-conditioned model turns the refined depth into the video.</p></div></div></div><div class="method-steps" data-video-sync data-tab="door" hidden><div class="method-step"><div class="media-frame"><img loading="lazy" src="/page_FollowTheBlur/web_assets/teaser/door_input.jpg" alt=""></div><div class="method-step-text"><span class="method-step-num">1</span><strong>Input image and 4D control</strong><p>The 4D control moves rigid proxies along coarse 3D trajectories.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/door__rigid.mp4"></video></div><div class="method-step-text"><span class="method-step-num">2</span><strong>Rigid depth</strong><p>The control is rendered as a depth video. The bodies only slide: nothing bends.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/door__blur.mp4"></video></div><div class="method-step-text"><span class="method-step-num">3</span><strong>Its blur: the low band</strong><p>Blurred, the render only says where things are and where they go. This is all Stage 1 keeps from it.</p></div></div><div class="method-step is-key"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/method/door__refined.mp4"></video></div><div class="method-step-text"><span class="method-step-num">4</span><strong>Stage 1: refined depth</strong><p>In the early denoising steps the low band follows the blur; the model fills in the high band from its motion prior.</p></div></div><div class="method-step"><div class="media-frame"><video muted loop playsinline preload="none" data-src="/page_FollowTheBlur/web_assets/teaser/door__out.mp4" data-lead></video></div><div class="method-step-text"><span class="method-step-num">5</span><strong>Stage 2: video</strong><p>A depth-conditioned model turns the refined depth into the video.</p></div></div></div></div>
-  <p class="section-lead" style="margin-top:38px">The same pipeline as in the paper:</p>
-  <figure class="method-figure"><img loading="lazy" src="/page_FollowTheBlur/web_assets/fig/overview.jpg" alt="Overview of Follow-the-Blur"><figcaption>Overview (Fig. 3 of the paper)</figcaption></figure>
-  <div class="dbd" id="dualband-demo" data-base="/page_FollowTheBlur/web_assets/steps/camel/" data-first="4" data-last="40" data-follow-end="24">
-    <h3 class="dbd-title">Dual-band denoising, step by step</h3>
-    <p class="section-lead">Stage 1 on the camel case. At every Follow step the low band of the sample is put back to the blur of the rigid depth, and the model keeps drawing the high band. Then the constraint is released. Drag the slider or press play.</p>
-    <div class="dbd-stage">
-      <div class="dbd-labels">
-        <span>Rigid depth</span>
-        <span class="is-low">Low band<small>the blur of the rigid depth</small></span>
-        <span class="is-high">High band<small>drawn by the model</small></span>
-        <span class="is-out">Prediction at step <b class="dbd-k">4</b></span>
-      </div>
-      <div class="dbd-frame">
-        <video class="dbd-video is-on" muted loop playsinline preload="auto"></video>
-        <video class="dbd-video" muted loop playsinline preload="auto"></video>
-        <div class="dbd-boxes" aria-hidden="true"><i></i><i class="is-low"></i><i class="is-high"></i><i class="is-out"></i></div>
-        <div class="dbd-ops" aria-hidden="true"><b>blur</b><b>+</b><b>=</b></div>
-      </div>
+    <p class="section-lead">Follow-the-Blur keeps from the 4D control only what it actually specifies, the coarse layout over time, and leaves everything else to the motion prior of a pretrained video world model. Nothing is trained.</p></div>
+  <figure class="ftb-pipefig">
+    <div style="position:relative;width:100%;aspect-ratio:1840/760;">
+      <iframe src="/page_FollowTheBlur/web_assets/figures/pipeline.html" title="Follow-the-Blur pipeline (animated, back-carry case)" loading="lazy" scrolling="no"
+              style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
     </div>
-    <div class="dbd-controls">
-      <button class="dbd-play" type="button" aria-label="Pause">❚❚</button>
-      <div class="dbd-track">
-        <div class="dbd-phases"><span class="is-follow">Follow the blur</span><span class="is-release">Release</span></div>
-        <input class="dbd-range" type="range" min="4" max="40" step="1" value="4" aria-label="Denoising step">
-      </div>
-      <div class="dbd-readout"><strong>Step <span class="dbd-k">4</span> / 40</strong><span class="dbd-phase">Follow the blur</span></div>
-    </div>
-    <p class="dbd-note"></p>
-  </div>
+  </figure>
 </section>
 
 <section class="qualitative-section" id="comparison">
