@@ -2042,6 +2042,11 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
 .dbd-note { width: min(100%, 860px); min-height: 3.2em; margin: 14px auto 0; text-align: center; color: var(--paper-muted, #5f6368); font-size: 15px; line-height: 1.6; }
 @media (max-width: 760px) { .dbd-labels span { font-size: 11px; } .dbd-labels small { display: none; } .dbd-ops b { min-width: 18px; height: 18px; font-size: 10px; padding: 0 3px; } .dbd-ops b:first-child { font-size: 8px; }
   .dbd-controls { grid-template-columns: auto minmax(0, 1fr); } .dbd-readout { grid-column: 1 / -1; flex-direction: row; gap: 10px; justify-content: center; } }
+/* ftb-video */
+.ftb-video-wrap { width: min(100% - 32px, 1120px); margin: 18px auto 0; }
+.ftb-video-wrap video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #000; border-radius: 14px; box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18); }
+.ftb-video-credit { width: min(100% - 32px, 1120px); margin: 10px auto 0; text-align: right; font-size: 12.5px; color: #80868b; }
+/* /ftb-video */
 </style>
 </head>
 <body>
@@ -2067,6 +2072,12 @@ h1, h2, h3, h4, .tldr, .section-lead, .teaser-heading p, .hero-feature small, .p
   <div class="text-container">
     <p class="tldr"><strong>TL;DR:</strong> A 4D control only moves rigid proxies along coarse 3D trajectories. Follow-the-Blur lets a pretrained video world model follow the blur of this control and fill in the fine details of natural motion from its own prior, without training.</p>
   </div>
+</section>
+
+<section class="paper-section" id="video">
+  <div class="text-container"><h2 class="section-title">Video</h2></div>
+  <div class="ftb-video-wrap"><video controls preload="metadata" playsinline poster="/page_FollowTheBlur/web_assets/video/poster.jpg"><source src="/page_FollowTheBlur/web_assets/video/FollowTheBlur_video.mp4" type="video/mp4"></video></div>
+  <p class="ftb-video-credit">Music: &ldquo;Inspired&rdquo; by Kevin MacLeod (incompetech.com), licensed under CC BY 4.0.</p>
 </section>
 
 <section class="teaser-section" id="results">
